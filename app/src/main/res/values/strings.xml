@@ -5,10 +5,27 @@
     <!-- Hints -->
     <string name="benutzername_hint">Email</string>
     <string name="passwort_hint">Passwort</string>
+    <string name="vorname_hint">Vorname</string>
+    <string name="nachname_hint">Nachname</string>
+    <string name="strasse_hint">Straße</string>
+    <string name="nummer_hint">Hausnummer</string>
+    <string name="plz_hint">Postleitzahl</string>
+    <string name="ort_hint">Ort</string>
+    <string name="email_hint">Email</string>
+
+    <!-- Array für Auswahl Anrede -->
+    <string-array name="anrede">
+        <item>Herr</item>
+        <item>Frau</item>
+    </string-array>
 
     <!--Strings für Buttons -->
     <string name="login">Login</string>
     <string name="registrieren">Registrieren</string>
+    <string name="weiter">Weiter</string>
+
+    <!-- Text für Checkbox -->
+    <string name="agb">Ich akzeptiere die AGB und Datenschutz-Richtlinien</string>
 
     <!-- Aus Datei generiert -->
     <string name="action_settings">Einstellungen</string>

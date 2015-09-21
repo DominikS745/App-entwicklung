@@ -48,7 +48,7 @@ public class RegistrierenActivity extends AppCompatActivity {
     public void logIn(View v) {
 
         EditText eingabeUser = (EditText) findViewById(R.id.benutzername);
-        EditText eingabePasswort = (EditText) findViewById(R.id.passwort);
+        EditText eingabePasswort = (EditText) findViewById(R.id.passwort_login);
 
         if(user.equals(eingabeUser.getText().toString()) && password.equals(eingabePasswort.getText().toString())){
             Toast success = Toast.makeText(this, "Login erfolgreich!", Toast.LENGTH_SHORT);

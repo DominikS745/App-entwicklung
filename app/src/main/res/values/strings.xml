@@ -1,6 +1,15 @@
 <resources>
+    <!-- APP  NAME -->
     <string name="app_name">PizzaButler</string>
 
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <!-- Hints -->
+    <string name="benutzername_hint">Email</string>
+    <string name="passwort_hint">Passwort</string>
+
+    <!--Strings für Buttons -->
+    <string name="login">Login</string>
+    <string name="registrieren">Registrieren</string>
+
+    <!-- Aus Datei generiert -->
+    <string name="action_settings">Einstellungen</string>
 </resources>

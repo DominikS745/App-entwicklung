@@ -2,6 +2,9 @@
     <!-- APP  NAME -->
     <string name="app_name">PizzaButler</string>
 
+    <!-- Name für Activities -->
+    <string name="nutzerDaten">Ihre Daten</string>
+
     <!-- Hints -->
     <string name="benutzername_hint">Email</string>
     <string name="passwort_hint">Passwort</string>
@@ -12,6 +15,12 @@
     <string name="plz_hint">Postleitzahl</string>
     <string name="ort_hint">Ort</string>
     <string name="email_hint">Email</string>
+
+    <!-- Texte für die Nutzerdaten -->
+    <string name="name">Ihr Name: </string>
+    <string name="adresse">Ihre Adresse: </string>
+    <string name="email">Ihre Email: </string>
+    <string name="zustimmungAGB">Sie haben unseren AGBs und der Datenschutserklärung zugestimmt.</string>
 
     <!-- Array für Auswahl Anrede -->
     <string-array name="anrede">

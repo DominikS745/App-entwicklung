@@ -6,7 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class RegistrierenActivity extends AppCompatActivity {
@@ -44,8 +46,31 @@ public class RegistrierenActivity extends AppCompatActivity {
      *
      * @param v Standard View
      */
-    public void registrierungAbschliessen (View v) {
-        Intent nutzerDaten = new Intent(this, NutzerDatenActivity.class);
-        startActivity(nutzerDaten);
+    public void registrierungAbschliessen(View v) {
+        //Benutzereingaben abgreifen
+        Spinner anredeSp = (Spinner) findViewById(R.id.spinner_anrede);
+        EditText vornameET = (EditText) findViewById(R.id.vorname);
+        EditText nachnameET = (EditText) findViewById(R.id.nachname);
+        EditText strasseET = (EditText) findViewById(R.id.strasse);
+        EditText hausnummerET = (EditText) findViewById(R.id.hausnummer);
+        EditText plzET = (EditText) findViewById(R.id.plz);
+        EditText ortET = (EditText) findViewById(R.id.ort);
+        EditText emailET = (EditText) findViewById(R.id.email);
+        EditText passwortET = (EditText) findViewById(R.id.passwort_register);
+        CheckBox agb_check_CB = (CheckBox) findViewById(R.id.agb_check);
+
+        //Uebergabe der Daten in die NutzerDaten Aktivitaet
+        Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
+        nutzerDatenAnzeigen.putExtra("anrede", anredeSp.getSelectedItem().toString());
+        nutzerDatenAnzeigen.putExtra("vorname", vornameET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("nachname", nachnameET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("strasse", strasseET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("hausnummer", hausnummerET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("plz", plzET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("ort", ortET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("email", emailET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("passwort", passwortET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("agb_check", agb_check_CB.isChecked());
+        startActivity(nutzerDatenAnzeigen);
     }
 }

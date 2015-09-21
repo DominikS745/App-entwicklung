@@ -5,13 +5,34 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 public class NutzerDatenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registrieren);
+        setContentView(R.layout.activity_nutzerdaten);
+
+        String anrede = getIntent().getStringExtra("anrede");
+        String vorname = getIntent().getStringExtra("vorname");
+        String nachname = getIntent().getStringExtra("nachname");
+        String strasse = getIntent().getStringExtra("strasse");
+        String hausnummer = getIntent().getStringExtra("hausnummer");
+        String plz = getIntent().getStringExtra("plz");
+        String ort = getIntent().getStringExtra("ort");
+        String email = getIntent().getStringExtra("email");
+        String passwort = getIntent().getStringExtra("passwort");
+        boolean agb_check = getIntent().getBooleanExtra("agb_check", false);
+
+        String nameDisplayText = getString(R.string.name);
+        String adresseDisplayText = getString(R.string.adresse);
+        String emailDisplayText = getString(R.string.email);
+        String agbCheckDisplayText = getString(R.string.zustimmungAGB);
+
+        TextView nutzerDaten = (TextView) findViewById(R.id.nutzerdaten);
+        nutzerDaten.setText(nameDisplayText + anrede + " " + vorname + " " + nachname + "\n" + adresseDisplayText + strasse + " " + hausnummer + " " + plz + " " + ort + "\n" + emailDisplayText + email + "\n" + agbCheckDisplayText);
+
     }
 
     @Override

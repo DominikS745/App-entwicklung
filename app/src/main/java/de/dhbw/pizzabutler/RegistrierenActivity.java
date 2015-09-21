@@ -1,15 +1,14 @@
 package de.dhbw.pizzabutler;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class LoginActivity extends AppCompatActivity {
+public class RegistrierenActivity extends AppCompatActivity {
 
     private String user = "test@mail.com";
     private String password = "password";
@@ -17,7 +16,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_registrieren);
     }
 
     @Override
@@ -44,8 +43,6 @@ public class LoginActivity extends AppCompatActivity {
 
     public void registrieren(View v) {
 
-        Intent registrieren = new Intent(this, RegistrierenActivity.class);
-        startActivity(registrieren);
     }
 
     public void logIn(View v) {

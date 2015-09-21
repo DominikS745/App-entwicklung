@@ -1,15 +1,12 @@
 package de.dhbw.pizzabutler;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 
-public class RegistrierenActivity extends AppCompatActivity {
+public class NutzerDatenActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,13 +36,4 @@ public class RegistrierenActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * Weiterleitung zur Aktivität NutzerdatenActivity
-     *
-     * @param v Standard View
-     */
-    public void registrierungAbschliessen (View v) {
-        Intent nutzerDaten = new Intent(this, NutzerDatenActivity.class);
-        startActivity(nutzerDaten);
-    }
 }

@@ -42,12 +42,22 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Aufruf der Aktivitaet RegistrierenActivity
+     *
+     * @param v Standard View
+     */
     public void registrieren(View v) {
 
         Intent registrieren = new Intent(this, RegistrierenActivity.class);
         startActivity(registrieren);
     }
 
+    /**
+     * Ueberpruefung des LogIn und entsprechende Reaktion
+     *
+     * @param v Standard View
+     */
     public void logIn(View v) {
 
         EditText eingabeUser = (EditText) findViewById(R.id.benutzername);

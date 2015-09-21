@@ -2,32 +2,32 @@
 <items version="2" >
 
     <item
-        jar="/Users/Marvin/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
-        <dex dex="/Users/Marvin/Programming/AndroidStudioProjects/App-entwicklung/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.1-0b71646432fcc0fada81c091704184129d0a4f97.jar" />
-    </item>
-    <item
-        jar="/Users/Marvin/Programming/AndroidStudioProjects/App-entwicklung/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/classes.jar"
+        jar="/Users/David_Win/Coding/AppDevelopment/App-entwicklung/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="c31e21b53ff2f74664e498248d01453a32e32d48">
-        <dex dex="/Users/Marvin/Programming/AndroidStudioProjects/App-entwicklung/app/build/intermediates/pre-dexed/debug/classes-dce1f2488e02f5bd7271868f5a8809b0a735eb4f.jar" />
+        <dex dex="/Users/David_Win/Coding/AppDevelopment/App-entwicklung/app/build/intermediates/pre-dexed/debug/classes-059e7394e80eb2420338bc1c3f920d3ecda01b86.jar" />
     </item>
     <item
-        jar="/Users/Marvin/Programming/AndroidStudioProjects/App-entwicklung/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/libs/internal_impl-23.0.1.jar"
-        jumboMode="false"
-        revision="23.0.1"
-        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
-        <dex dex="/Users/Marvin/Programming/AndroidStudioProjects/App-entwicklung/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.1-f07c190da2d8808d49d5d8720082ebd16f2e8e4a.jar" />
-    </item>
-    <item
-        jar="/Users/Marvin/Programming/AndroidStudioProjects/App-entwicklung/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars/classes.jar"
+        jar="/Users/David_Win/Coding/AppDevelopment/App-entwicklung/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.1/jars/classes.jar"
         jumboMode="false"
         revision="23.0.1"
         sha1="d86429b0f0b3f3cafbeb78dda1b9d89119ccb05d">
-        <dex dex="/Users/Marvin/Programming/AndroidStudioProjects/App-entwicklung/app/build/intermediates/pre-dexed/debug/classes-458673eefa2dfd1e665bf5b9e80817d1df34a916.jar" />
+        <dex dex="/Users/David_Win/Coding/AppDevelopment/App-entwicklung/app/build/intermediates/pre-dexed/debug/classes-3fdd972c117ec3d24489d27c665d5b4df9077158.jar" />
+    </item>
+    <item
+        jar="/Users/david/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/23.0.1/support-annotations-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="1fce89a6428c51467090d7f424e4c9c3dbd55f7e">
+        <dex dex="/Users/David_Win/Coding/AppDevelopment/App-entwicklung/app/build/intermediates/pre-dexed/debug/support-annotations-23.0.1-1cbff1c80e8f1ad623b320014c6a6b52b941a2a5.jar" />
+    </item>
+    <item
+        jar="/Users/David_Win/Coding/AppDevelopment/App-entwicklung/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.0.1/jars/libs/internal_impl-23.0.1.jar"
+        jumboMode="false"
+        revision="23.0.1"
+        sha1="aa92916125166649d8ad4ba3940c3dd7515596d3">
+        <dex dex="/Users/David_Win/Coding/AppDevelopment/App-entwicklung/app/build/intermediates/pre-dexed/debug/internal_impl-23.0.1-fbbf716fd92e871b3fb1bc504d58c41ff7732017.jar" />
     </item>
 
 </items>

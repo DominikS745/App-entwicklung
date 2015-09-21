@@ -6,8 +6,8 @@ android {
 
     defaultConfig {
         applicationId "de.dhbw.pizzabutler"
-        minSdkVersion 19
-        targetSdkVersion 23
+        minSdkVersion 16                        //16 = Jelly Beans
+        targetSdkVersion 23                     //23 = Lollipop
         versionCode 1
         versionName "1.0"
     }

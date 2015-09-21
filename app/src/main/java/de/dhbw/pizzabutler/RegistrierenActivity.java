@@ -1,17 +1,17 @@
 package de.dhbw.pizzabutler;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 public class RegistrierenActivity extends AppCompatActivity {
-
-    private String user = "test@mail.com";
-    private String password = "password";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,21 +41,36 @@ public class RegistrierenActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void registrieren(View v) {
+    /**
+     * Weiterleitung zur Aktivität NutzerdatenActivity
+     *
+     * @param v Standard View
+     */
+    public void registrierungAbschliessen(View v) {
+        //Benutzereingaben abgreifen
+        Spinner anredeSp = (Spinner) findViewById(R.id.spinner_anrede);
+        EditText vornameET = (EditText) findViewById(R.id.vorname);
+        EditText nachnameET = (EditText) findViewById(R.id.nachname);
+        EditText strasseET = (EditText) findViewById(R.id.strasse);
+        EditText hausnummerET = (EditText) findViewById(R.id.hausnummer);
+        EditText plzET = (EditText) findViewById(R.id.plz);
+        EditText ortET = (EditText) findViewById(R.id.ort);
+        EditText emailET = (EditText) findViewById(R.id.email);
+        EditText passwortET = (EditText) findViewById(R.id.passwort_register);
+        CheckBox agb_check_CB = (CheckBox) findViewById(R.id.agb_check);
 
-    }
-
-    public void logIn(View v) {
-
-        EditText eingabeUser = (EditText) findViewById(R.id.benutzername);
-        EditText eingabePasswort = (EditText) findViewById(R.id.passwort_login);
-
-        if(user.equals(eingabeUser.getText().toString()) && password.equals(eingabePasswort.getText().toString())){
-            Toast success = Toast.makeText(this, "Login erfolgreich!", Toast.LENGTH_SHORT);
-            success.show();
-        } else {
-            Toast failure = Toast.makeText(this, "Email oder Passwort falsch", Toast.LENGTH_SHORT);
-            failure.show();
-        }
+        //Uebergabe der Daten in die NutzerDaten Aktivitaet
+        Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
+        nutzerDatenAnzeigen.putExtra("anrede", anredeSp.getSelectedItem().toString());
+        nutzerDatenAnzeigen.putExtra("vorname", vornameET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("nachname", nachnameET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("strasse", strasseET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("hausnummer", hausnummerET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("plz", plzET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("ort", ortET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("email", emailET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("passwort", passwortET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("agb_check", agb_check_CB.isChecked());
+        startActivity(nutzerDatenAnzeigen);
     }
 }

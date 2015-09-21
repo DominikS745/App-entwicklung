@@ -42,20 +42,30 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * Aufruf der Aktivitaet RegistrierenActivity
+     *
+     * @param v Standard View
+     */
     public void registrieren(View v) {
 
         Intent registrieren = new Intent(this, RegistrierenActivity.class);
         startActivity(registrieren);
     }
 
+    /**
+     * Ueberpruefung des LogIn und entsprechende Reaktion
+     *
+     * @param v Standard View
+     */
     public void logIn(View v) {
 
         EditText eingabeUser = (EditText) findViewById(R.id.benutzername);
         EditText eingabePasswort = (EditText) findViewById(R.id.passwort_login);
 
         if(user.equals(eingabeUser.getText().toString()) && password.equals(eingabePasswort.getText().toString())){
-            Toast success = Toast.makeText(this, "Login erfolgreich!", Toast.LENGTH_SHORT);
-            success.show();
+            Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
+            startActivity(nutzerDatenAnzeigen);
         } else {
             Toast failure = Toast.makeText(this, "Email oder Passwort falsch", Toast.LENGTH_SHORT);
             failure.show();

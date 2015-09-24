@@ -20,7 +20,7 @@
     <string name="name">Ihr Name: </string>
     <string name="adresse">Ihre Adresse: </string>
     <string name="email">Ihre Email: </string>
-    <string name="zustimmungAGB">Sie haben unseren AGBs und der Datenschutserklärung zugestimmt.</string>
+    <string name="zustimmungAGB">Sie haben unseren AGBs und der Datenschutzerklärung zugestimmt.</string>
 
     <!-- Array für Auswahl Anrede -->
     <string-array name="anrede">

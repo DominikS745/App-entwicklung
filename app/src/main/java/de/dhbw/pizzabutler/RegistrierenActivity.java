@@ -11,6 +11,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.regex.Pattern;
+
 public class RegistrierenActivity extends AppCompatActivity {
 
     @Override
@@ -71,6 +73,61 @@ public class RegistrierenActivity extends AppCompatActivity {
         nutzerDatenAnzeigen.putExtra("email", emailET.getText().toString());
         nutzerDatenAnzeigen.putExtra("passwort", passwortET.getText().toString());
         nutzerDatenAnzeigen.putExtra("agb_check", agb_check_CB.isChecked());
-        startActivity(nutzerDatenAnzeigen);
+
+        //Validierung der Eingabedaten
+        String meldung = registrierungValidieren(vornameET.getText().toString(), nachnameET.getText().toString(), strasseET.getText().toString(), hausnummerET.getText().toString(), plzET.getText().toString(), ortET.getText().toString(), emailET.getText().toString(), passwortET.getText().toString(), agb_check_CB.isChecked());
+
+        if (!meldung.isEmpty()) {
+            Toast failure = Toast.makeText(this, meldung, Toast.LENGTH_SHORT);
+            failure.show();
+        } else {
+            startActivity(nutzerDatenAnzeigen);
+        }
+    }
+
+    //Validierung der Eingabedaten
+    public String registrierungValidieren(String vorname, String nachname, String strasse, String hausnummer, String plz, String ort, String email, String passwort, boolean agb_check) {
+        String regexName = "^[A-ZÖÜÄ]{1}[a-züäöß]+$";
+        String regexPlz = "^[0-9]+$";
+        String regexHnr = "^[0-9]+[a-z]?$";
+        String fehler = "";
+
+        if (!Pattern.matches(regexName, vorname)) {
+            fehler += "Bitte geben Sie einen gültigen Vornamen ein.";
+        }
+
+        if (!Pattern.matches(regexName, nachname)) {
+            fehler += "Bitte geben Sie einen gültigen Nachnamen ein.";
+        }
+
+        if (strasse.isEmpty()) {
+            fehler += "Bitte geben Sie eine Straße ein.";
+        }
+
+        if (!Pattern.matches(regexHnr, hausnummer) || hausnummer.length() > 5) {
+            fehler += "Bitte geben Sie eine gültige Hausnummer ein.";
+        }
+
+        if (!Pattern.matches(regexPlz, plz) || plz.length() != 5) {
+            fehler += "Bitte geben Sie eine gültige PLZ ein.";
+        }
+
+        if (!Pattern.matches(regexName, ort)) {
+            fehler += "Bitte geben Sie einen gültigen Wohnort ein.";
+        }
+
+        if (!(email.contains("@") && email.contains("."))) {
+            fehler += "Bitte geben Sie eine gültige Email-Adresse ein.";
+        }
+
+        if (passwort.isEmpty()) {
+            fehler += "Bitte geben Sie ein Passwort ein.";
+        }
+
+        if (agb_check == false) {
+            fehler += "Bitte akzeptieren Sie die AGB's und Datenschutzrichtlinien.";
+        }
+
+        return fehler;
     }
 }

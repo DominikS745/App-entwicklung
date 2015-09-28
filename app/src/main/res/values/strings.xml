@@ -38,4 +38,12 @@
 
     <!-- Aus Datei generiert -->
     <string name="action_settings">Einstellungen</string>
+
+    <!-- Fehlermeldungen REST Service -->
+    <string name="status_code_1">Email oder Passwort falsch</string>
+    <string name="status_code_2">User nicht vorhanden</string>
+    <string name="status_code_404">Bitte überprüfen Sie Ihre Internet-Verbindung</string>
+    <string name="status_code_500">Ups, unsere Server werden gerade gewartet</string>
+    <string name="status_code_else">Etwas ist schrecklich schief gelaufen, bitte versuchen Sie es später noch einmal</string>
+    <string name="catch_block">Ein unerwarteter Fehler ist aufgetreten, bitte versuchen Sie es erneut</string>
 </resources>

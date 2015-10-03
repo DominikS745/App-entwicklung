@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -28,23 +29,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.ClientProtocolException;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.DefaultBHttpClientConnection;
+import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private String user = "test@mail.com";
-    private String password = "password";
-
-    private EditText eingabeUser;
-    private EditText eingabePasswort;
-
     //Variablen für die Backend-Anbindung
     Gson gson;
     ResponseLogin responseLoginObject;
-    private String urlLogin="http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login";
     AsyncHttpClient client;
+    private String user = "test";
+    private String password = "test";
+    private EditText eingabeUser;
+    private EditText eingabePasswort;
+    private String urlLogin = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login";
     private boolean loginErfolgreich = false;
 
     @Override
@@ -95,14 +102,14 @@ public class LoginActivity extends AppCompatActivity {
      * @param v Standard View
      */
     public void logIn(View v) {
-        if(user.equals(eingabeUser.getText().toString()) && password.equals(eingabePasswort.getText().toString())){
+        if (user.equals(eingabeUser.getText().toString()) && password.equals(eingabePasswort.getText().toString())) {
             Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
-            RequestParams params = new RequestParams();
+            RequestParams params = new RequestParams("?email", eingabeUser.getText().toString());
             params.put("passwort", eingabePasswort.getText().toString());
-            params.put("email", eingabeUser.getText().toString());
             if (backendConnection(params)) {
                 startActivity(nutzerDatenAnzeigen);
-            };
+            }
+            ;
         } else {
             Toast failure = Toast.makeText(this, "Email oder Passwort falsch", Toast.LENGTH_SHORT);
             failure.show();
@@ -110,6 +117,26 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     public boolean backendConnection(RequestParams params) {
+
+        DefaultHttpClient httpClient = new DefaultHttpClient();
+        HttpPost httpPost = new HttpPost("http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login");
+
+        try {
+            List<NameValuePair> parameters = new ArrayList<NameValuePair>(); 
+            parameters.add(new BasicNameValuePair("email", eingabeUser.getText().toString())); 
+            parameters.add(new BasicNameValuePair("passwort", eingabePasswort.getText().toString()));
+            httpPost.setEntity(new UrlEncodedFormEntity(parameters));
+
+            HttpResponse response = httpClient.execute(httpPost);
+
+            loginErfolgreich = true;
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        /*
         client = new AsyncHttpClient();
         Log.i("Params", params.toString());
         Log.i("URL", urlLogin);
@@ -134,7 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, getString(R.string.status_code_else), Toast.LENGTH_SHORT).show();
                 }
             }
-        });
+        }); */
 
         return loginErfolgreich;
     }

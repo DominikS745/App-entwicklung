@@ -1,6 +1,7 @@
 package de.dhbw.pizzabutler;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +11,8 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
@@ -17,17 +20,40 @@ import com.loopj.android.http.RequestParams;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
+
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.ClientProtocolException;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 public class LoginActivity extends AppCompatActivity {
 
     private String user = "test@mail.com";
     private String password = "password";
 
+    private EditText eingabeUser;
+    private EditText eingabePasswort;
+
+    //Variablen für die Backend-Anbindung
+    Gson gson;
+    ResponseLogin responseLoginObject;
+    private String urlLogin="http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login";
+    AsyncHttpClient client;
+    private boolean loginErfolgreich = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        eingabeUser = (EditText) findViewById(R.id.benutzername);
+        eingabePasswort = (EditText) findViewById(R.id.passwort_login);
     }
 
     @Override
@@ -69,57 +95,39 @@ public class LoginActivity extends AppCompatActivity {
      * @param v Standard View
      */
     public void logIn(View v) {
-
-        EditText eingabeUser = (EditText) findViewById(R.id.benutzername);
-        EditText eingabePasswort = (EditText) findViewById(R.id.passwort_login);
-
-        RequestParams params = new RequestParams();
-        params.put("email",eingabeUser.getText().toString());
-        params.put("passwort",eingabePasswort.getText().toString());
-        invokeWS(params);
-
         if(user.equals(eingabeUser.getText().toString()) && password.equals(eingabePasswort.getText().toString())){
             Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
-            startActivity(nutzerDatenAnzeigen);
+            RequestParams params = new RequestParams();
+            params.put("passwort", eingabePasswort.getText().toString());
+            params.put("email", eingabeUser.getText().toString());
+            if (backendConnection(params)) {
+                startActivity(nutzerDatenAnzeigen);
+            };
         } else {
             Toast failure = Toast.makeText(this, "Email oder Passwort falsch", Toast.LENGTH_SHORT);
             failure.show();
         }
     }
 
-    public void invokeWS(RequestParams params) {
-        //Aufruf des Client + Uebergabe der Eingabewerte
-        AsyncHttpClient loginConnect = new AsyncHttpClient();
-        String uri = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login";
-        loginConnect.post(uri, params, new AsyncHttpResponseHandler() {
+    public boolean backendConnection(RequestParams params) {
+        client = new AsyncHttpClient();
+        Log.i("Params", params.toString());
+        Log.i("URL", urlLogin);
+        Log.i("Weiterleitung", String.valueOf(loginErfolgreich));
+        client.post(LoginActivity.this, urlLogin, params, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                try {
-                    String response = responseBody.toString();
-                    JSONObject login = new JSONObject(response);
-                    String userVorhanden = login.getString("Erfolgreich");
-                    if (user.equals("0")) {
-                        Intent nutzerDatenAnzeigen = new Intent(LoginActivity.this, NutzerDatenActivity.class);
-                        startActivity(nutzerDatenAnzeigen);
-                    }
-                    else if (user.equals("-1")) {
-                        Toast.makeText(LoginActivity.this, getString(R.string.status_code_1), Toast.LENGTH_SHORT).show();
-                    }
-                    else if (user.equals("-2")) {
-                        Toast.makeText(LoginActivity.this, getString(R.string.status_code_2), Toast.LENGTH_SHORT).show();
-                    }
-                } catch (JSONException e) {
-                    Toast.makeText(LoginActivity.this, getString(R.string.catch_block), Toast.LENGTH_SHORT).show();
-                    e.printStackTrace();
-                }
+                String responseStr = new String(responseBody);
+                gson = new Gson();
+                responseLoginObject = gson.fromJson(responseStr, ResponseLogin.class);
+                loginErfolgreich = true;
             }
 
             @Override
             public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                 if (statusCode == 404) {
                     Toast.makeText(LoginActivity.this, getString(R.string.status_code_404), Toast.LENGTH_SHORT).show();
-                }
-                else if (statusCode == 500) {
+                } else if (statusCode == 500) {
                     Toast.makeText(LoginActivity.this, getString(R.string.status_code_500), Toast.LENGTH_SHORT).show();
                 } else {
                     Log.i("Test", String.valueOf(statusCode));
@@ -127,5 +135,8 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        return loginErfolgreich;
     }
+
 }

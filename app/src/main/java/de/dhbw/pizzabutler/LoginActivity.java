@@ -3,14 +3,12 @@ package de.dhbw.pizzabutler;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.TextHttpResponseHandler;
 
@@ -25,16 +23,13 @@ import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.protocol.HTTP;
 
 public class LoginActivity extends AppCompatActivity {
-    //Variablen für das Auslesen der Usereingaben
-    private String user = "test";
-    private String password = "test";
-    private EditText eingabeUser;
-    private EditText eingabePasswort;
-
     //Variablen für die Backend-Anbindung
     private static AsyncHttpClient client;
     private String urlLogin = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login";
     private boolean loginErfolgreich = false; //Steuert die Weiterleitung an die nächste Activity
+    //Variablen für das Auslesen der Usereingaben
+    private EditText eingabeUser;
+    private EditText eingabePasswort;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param v Standard View
      */
     public void logIn(View v) {
-        if (user.equals(eingabeUser.getText().toString()) && password.equals(eingabePasswort.getText().toString())) {
+        if (eingabeUser.getText().toString().contains("@") && eingabeUser.getText().toString().contains(".") && !eingabePasswort.getText().toString().isEmpty()) {
             Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
             //Erzeugen des JSON-Objektes welches übertragen wird ans Backend
             JSONObject jsonParams = new JSONObject();
@@ -104,21 +99,22 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(nutzerDatenAnzeigen);
             }
         } else {
-            Toast failure = Toast.makeText(this, "Email oder Passwort falsch", Toast.LENGTH_SHORT);
+            Toast failure = Toast.makeText(this, getString(R.string.rückgabewert_minus1), Toast.LENGTH_SHORT);
             failure.show();
         }
     }
 
     /**
      * Herstellen einer Verbindung an das Backend - Reaktion auf den HTTP Status Code und den Rückgabestring des Backend
+     *
      * @param entity - JSONObject das in einem String gespeichert wurde, enthält die Nutzereingaben in folgenden Key-Value-Paaren:
      *               email:benutzereingabe und passwort:benutzereingabe
      * @return Rückgabewert nur true wenn zum Backend connected + der Aufruf erfolgreich anhand der Rückgabe
-     *          Mögliche Rückgaben + Bedeutung:
-     *          0 --> Aufruf erfolgreich | -1 --> email oder passwort ist ungültig | -2 es gibt den User offenbar nicht
-     *
-     *  In onSucces wird auf den StatusCode 200 reagiert und dann auf die Response des Backend eingegangen
-     *  In onFailure werden Fehlerhafte StatusCodes abgefangen und teilweise speziell behandelt
+     * Mögliche Rückgaben + Bedeutung:
+     * 0 --> Aufruf erfolgreich | -1 --> email oder passwort ist ungültig | -2 es gibt den User offenbar nicht
+     * <p/>
+     * In onSucces wird auf den StatusCode 200 reagiert und dann auf die Response des Backend eingegangen
+     * In onFailure werden Fehlerhafte StatusCodes abgefangen und teilweise speziell behandelt
      */
     public boolean backendConnection(StringEntity entity) {
         entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));

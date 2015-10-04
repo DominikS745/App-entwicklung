@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -138,10 +140,17 @@ public class LoginActivity extends AppCompatActivity {
         client.post(LoginActivity.this, urlLogin, entity, "application/json", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
- //               String responseStr = new String(responseBody);
- //               gson = new Gson();
-  //              responseLoginObject = gson.fromJson(responseStr, ResponseLogin.class);
-                loginErfolgreich = true;
+                String test = Base64.encodeToString(responseBody, 2);
+                if (test.equals("0")) {
+                    loginErfolgreich = true;
+                } else if (test.equals("-1")) {
+                    Log.i("Return -1", "Reading succes");
+                } else if (test.equals("-2")) {
+                    Log.i("Return -2", "Reading succes");
+                }
+                //               String responseStr = new String(responseBody);
+                //               gson = new Gson();
+                //              responseLoginObject = gson.fromJson(responseStr, ResponseLogin.class);
             }
 
             @Override

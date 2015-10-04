@@ -1,10 +1,8 @@
 package de.dhbw.pizzabutler;
 
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,37 +11,17 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonParser;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
+import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.HttpResponse;
-import cz.msebera.android.httpclient.NameValuePair;
-import cz.msebera.android.httpclient.client.ClientProtocolException;
-import cz.msebera.android.httpclient.client.HttpClient;
-import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
-import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.entity.StringEntity;
-import cz.msebera.android.httpclient.impl.DefaultBHttpClientConnection;
-import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
-import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
-import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
 import cz.msebera.android.httpclient.message.BasicHeader;
-import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.protocol.HTTP;
 
 public class LoginActivity extends AppCompatActivity {
@@ -137,24 +115,20 @@ public class LoginActivity extends AppCompatActivity {
         Log.i("Params", entity.toString());
         Log.i("URL", urlLogin);
         Log.i("Weiterleitung", String.valueOf(loginErfolgreich));
-        client.post(LoginActivity.this, urlLogin, entity, "application/json", new AsyncHttpResponseHandler() {
+        client.post(LoginActivity.this, urlLogin, entity, "application/json", new TextHttpResponseHandler() {
             @Override
-            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String test = Base64.encodeToString(responseBody, 2);
-                if (test.equals("0")) {
+            public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                if (responseString.equals("0")) {
                     loginErfolgreich = true;
-                } else if (test.equals("-1")) {
+                } else if (responseString.equals("-1")) {
                     Log.i("Return -1", "Reading succes");
-                } else if (test.equals("-2")) {
+                } else if (responseString.equals("-2")) {
                     Log.i("Return -2", "Reading succes");
                 }
-                //               String responseStr = new String(responseBody);
-                //               gson = new Gson();
-                //              responseLoginObject = gson.fromJson(responseStr, ResponseLogin.class);
             }
 
             @Override
-            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable error) {
                 if (statusCode == 404) {
                     Toast.makeText(LoginActivity.this, getString(R.string.status_code_404), Toast.LENGTH_SHORT).show();
                 } else if (statusCode == 500) {

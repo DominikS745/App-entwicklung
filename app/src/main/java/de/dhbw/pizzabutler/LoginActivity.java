@@ -25,23 +25,23 @@ import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.protocol.HTTP;
 
 public class LoginActivity extends AppCompatActivity {
-
-    //Variablen für die Backend-Anbindung
-    Gson gson;
-    ResponseLogin responseLoginObject;
-    private static AsyncHttpClient client;
+    //Variablen für das Auslesen der Usereingaben
     private String user = "test";
     private String password = "test";
     private EditText eingabeUser;
     private EditText eingabePasswort;
+
+    //Variablen für die Backend-Anbindung
+    private static AsyncHttpClient client;
     private String urlLogin = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login";
-    private boolean loginErfolgreich = false;
+    private boolean loginErfolgreich = false; //Steuert die Weiterleitung an die nächste Activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        //Übergabe der Eingabefelder in Variablen
         eingabeUser = (EditText) findViewById(R.id.benutzername);
         eingabePasswort = (EditText) findViewById(R.id.passwort_login);
     }
@@ -87,6 +87,7 @@ public class LoginActivity extends AppCompatActivity {
     public void logIn(View v) {
         if (user.equals(eingabeUser.getText().toString()) && password.equals(eingabePasswort.getText().toString())) {
             Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
+            //Erzeugen des JSON-Objektes welches übertragen wird ans Backend
             JSONObject jsonParams = new JSONObject();
             StringEntity entity = null;
             try {
@@ -98,32 +99,39 @@ public class LoginActivity extends AppCompatActivity {
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             }
-
+            //Aufruf der Anbindung an das Backend, Übergabe des JSONObjektes als String
             if (backendConnection(entity)) {
                 startActivity(nutzerDatenAnzeigen);
             }
-            ;
         } else {
             Toast failure = Toast.makeText(this, "Email oder Passwort falsch", Toast.LENGTH_SHORT);
             failure.show();
         }
     }
 
+    /**
+     * Herstellen einer Verbindung an das Backend - Reaktion auf den HTTP Status Code und den Rückgabestring des Backend
+     * @param entity - JSONObject das in einem String gespeichert wurde, enthält die Nutzereingaben in folgenden Key-Value-Paaren:
+     *               email:benutzereingabe und passwort:benutzereingabe
+     * @return Rückgabewert nur true wenn zum Backend connected + der Aufruf erfolgreich anhand der Rückgabe
+     *          Mögliche Rückgaben + Bedeutung:
+     *          0 --> Aufruf erfolgreich | -1 --> email oder passwort ist ungültig | -2 es gibt den User offenbar nicht
+     *
+     *  In onSucces wird auf den StatusCode 200 reagiert und dann auf die Response des Backend eingegangen
+     *  In onFailure werden Fehlerhafte StatusCodes abgefangen und teilweise speziell behandelt
+     */
     public boolean backendConnection(StringEntity entity) {
         entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
         client = new AsyncHttpClient();
-        Log.i("Params", entity.toString());
-        Log.i("URL", urlLogin);
-        Log.i("Weiterleitung", String.valueOf(loginErfolgreich));
         client.post(LoginActivity.this, urlLogin, entity, "application/json", new TextHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 if (responseString.equals("0")) {
                     loginErfolgreich = true;
                 } else if (responseString.equals("-1")) {
-                    Log.i("Return -1", "Reading succes");
+                    Toast.makeText(LoginActivity.this, getString(R.string.rückgabewert_minus1), Toast.LENGTH_SHORT).show();
                 } else if (responseString.equals("-2")) {
-                    Log.i("Return -2", "Reading succes");
+                    Toast.makeText(LoginActivity.this, getString(R.string.rückgabewert_minus2), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -134,7 +142,6 @@ public class LoginActivity extends AppCompatActivity {
                 } else if (statusCode == 500) {
                     Toast.makeText(LoginActivity.this, getString(R.string.status_code_500), Toast.LENGTH_SHORT).show();
                 } else {
-                    Log.i("Test", String.valueOf(statusCode));
                     Toast.makeText(LoginActivity.this, getString(R.string.status_code_else), Toast.LENGTH_SHORT).show();
                 }
             }

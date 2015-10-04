@@ -46,4 +46,8 @@
     <string name="status_code_500">Ups, unsere Server werden gerade gewartet</string>
     <string name="status_code_else">Etwas ist schrecklich schief gelaufen, bitte versuchen Sie es später noch einmal</string>
     <string name="catch_block">Ein unerwarteter Fehler ist aufgetreten, bitte versuchen Sie es erneut</string>
+
+    <!-- Rückmeldung Server an User -->
+    <string name="rückgabewert_minus1">E-Mail oder Passwort ungültig</string>
+    <string name="rückgabewert_minus2">Sie müssen sich erst registrieren</string>
 </resources>

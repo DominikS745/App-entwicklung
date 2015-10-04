@@ -35,18 +35,21 @@ import cz.msebera.android.httpclient.client.ClientProtocolException;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.impl.DefaultBHttpClientConnection;
 import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.impl.client.HttpClientBuilder;
+import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.message.BasicNameValuePair;
+import cz.msebera.android.httpclient.protocol.HTTP;
 
 public class LoginActivity extends AppCompatActivity {
 
     //Variablen für die Backend-Anbindung
     Gson gson;
     ResponseLogin responseLoginObject;
-    AsyncHttpClient client;
+    private static AsyncHttpClient client;
     private String user = "test";
     private String password = "test";
     private EditText eingabeUser;
@@ -104,9 +107,19 @@ public class LoginActivity extends AppCompatActivity {
     public void logIn(View v) {
         if (user.equals(eingabeUser.getText().toString()) && password.equals(eingabePasswort.getText().toString())) {
             Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
-            RequestParams params = new RequestParams("?email", eingabeUser.getText().toString());
-            params.put("passwort", eingabePasswort.getText().toString());
-            if (backendConnection(params)) {
+            JSONObject jsonParams = new JSONObject();
+            StringEntity entity = null;
+            try {
+                jsonParams.put("email", eingabeUser.getText().toString());
+                jsonParams.put("passwort", eingabePasswort.getText().toString());
+                entity = new StringEntity(jsonParams.toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            }
+
+            if (backendConnection(entity)) {
                 startActivity(nutzerDatenAnzeigen);
             }
             ;
@@ -116,37 +129,18 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    public boolean backendConnection(RequestParams params) {
-
-        DefaultHttpClient httpClient = new DefaultHttpClient();
-        HttpPost httpPost = new HttpPost("http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login");
-
-        try {
-            List<NameValuePair> parameters = new ArrayList<NameValuePair>(); 
-            parameters.add(new BasicNameValuePair("email", eingabeUser.getText().toString())); 
-            parameters.add(new BasicNameValuePair("passwort", eingabePasswort.getText().toString()));
-            httpPost.setEntity(new UrlEncodedFormEntity(parameters));
-
-            HttpResponse response = httpClient.execute(httpPost);
-
-            loginErfolgreich = true;
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        /*
+    public boolean backendConnection(StringEntity entity) {
+        entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
         client = new AsyncHttpClient();
-        Log.i("Params", params.toString());
+        Log.i("Params", entity.toString());
         Log.i("URL", urlLogin);
         Log.i("Weiterleitung", String.valueOf(loginErfolgreich));
-        client.post(LoginActivity.this, urlLogin, params, new AsyncHttpResponseHandler() {
+        client.post(LoginActivity.this, urlLogin, entity, "application/json", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                String responseStr = new String(responseBody);
-                gson = new Gson();
-                responseLoginObject = gson.fromJson(responseStr, ResponseLogin.class);
+ //               String responseStr = new String(responseBody);
+ //               gson = new Gson();
+  //              responseLoginObject = gson.fromJson(responseStr, ResponseLogin.class);
                 loginErfolgreich = true;
             }
 
@@ -161,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(LoginActivity.this, getString(R.string.status_code_else), Toast.LENGTH_SHORT).show();
                 }
             }
-        }); */
+        });
 
         return loginErfolgreich;
     }

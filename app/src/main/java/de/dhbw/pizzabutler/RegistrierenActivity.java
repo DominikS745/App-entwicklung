@@ -1,7 +1,9 @@
 package de.dhbw.pizzabutler;
 
-import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
@@ -13,9 +15,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.regex.Pattern;
+
+import de.dhbw.pizzabutler_api.EditTextExtended;
 
 public class RegistrierenActivity extends AppCompatActivity {
 
@@ -44,23 +47,27 @@ public class RegistrierenActivity extends AppCompatActivity {
     private boolean iHilf = false;
     private boolean jHilf = false;
 
+    //Error Icon Object
+    Drawable errorIcon;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrieren);
 
         anredeSp = (Spinner) findViewById(R.id.spinner_anrede);
-        vornameET = (EditText) findViewById(R.id.vorname);
-        nachnameET = (EditText) findViewById(R.id.nachname);
-        strasseET = (EditText) findViewById(R.id.strasse);
-        hausnummerET = (EditText) findViewById(R.id.hausnummer);
-        plzET = (EditText) findViewById(R.id.plz);
-        ortET = (EditText) findViewById(R.id.ort);
-        emailET = (EditText) findViewById(R.id.email);
+        vornameET = (EditTextExtended) findViewById(R.id.vorname);
+        nachnameET = (EditTextExtended) findViewById(R.id.nachname);
+        strasseET = (EditTextExtended) findViewById(R.id.strasse);
+        hausnummerET = (EditTextExtended) findViewById(R.id.hausnummer);
+        plzET = (EditTextExtended) findViewById(R.id.plz);
+        ortET = (EditTextExtended) findViewById(R.id.ort);
+        emailET = (EditTextExtended) findViewById(R.id.email);
         passwortET = (EditText) findViewById(R.id.passwort_register);
         passwortCheckET = (EditText) findViewById(R.id.passwort_match);
         agb_check_CB = (CheckBox) findViewById(R.id.agb_check);
         accept_button = (Button) findViewById(R.id.weiter_button);
+
 
         /**
          * Validierung der Eingabedaten;
@@ -75,24 +82,34 @@ public class RegistrierenActivity extends AppCompatActivity {
         final String regexPlz = "^[0-9]{5}$";
         final String regexHnr = "^[0-9]+[a-z]?$";
 
+        /**
+         * Instantiierung des Drawable ErrorIcon
+         * Veralteter Aufruf um dem min. SDK von 16 zu entsprechen
+         */
+
+            //noinspection deprecation
+            errorIcon = getResources().getDrawable(R.drawable.pizzabutler_erroricon_old);
+            errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(), errorIcon.getIntrinsicHeight()));
+
         //Validierung des Feldes Vorname nach erfolgter Eingabe
         vornameET.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            public void onTextChanged(CharSequence s, int st, int b, int c) {
+            }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
+            public void afterTextChanged(Editable s) {
                 String vorname = vornameET.getText().toString();
-                if ((!Pattern.matches(regexName, vorname) && !Pattern.matches(regexDName,vorname)) || vorname.length() < 2) {
-                    vornameET.setError(getString(R.string.vorname_fehler));
+                if ((!Pattern.matches(regexName, vorname) && !Pattern.matches(regexDName, vorname)) || vorname.length() < 2) {
+                    vornameET.setError("", errorIcon);
                     aHilf = false;
-                }
-                else{
+                } else {
+                    vornameET.setError(null);
                     aHilf = true;
                 }
                 changeButton();
@@ -113,10 +130,11 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String nachname = nachnameET.getText().toString();
                 if ((!Pattern.matches(regexName, nachname) && !Pattern.matches(regexDName,nachname)) || nachname.length() < 4) {
-                    nachnameET.setError(getString(R.string.nachname_fehler));
+                    nachnameET.setError("", errorIcon);
                     bHilf = false;
                 }
                 else{
+                    nachnameET.setError(null);
                     bHilf = true;
                 }
                 changeButton();
@@ -131,10 +149,11 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String strasse = strasseET.getText().toString();
                 if (strasse.isEmpty()) {
-                    strasseET.setError(getString(R.string.strasse_fehler));
+                    strasseET.setError("", errorIcon);
                     cHilf = false;
                 }
                 else{
+                    strasseET.setError(null);
                     cHilf = true;
                 }
                 changeButton();
@@ -148,10 +167,11 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String strasse = strasseET.getText().toString();
                 if (strasse.isEmpty()) {
-                    strasseET.setError(getString(R.string.strasse_fehler));
+                    strasseET.setError("", errorIcon);
                     cHilf = false;
                 }
                 else{
+                    strasseET.setError(null);
                     cHilf = true;
                 }
                 changeButton();
@@ -172,10 +192,11 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String hausnummer = hausnummerET.getText().toString();
                 if (!Pattern.matches(regexHnr, hausnummer) || hausnummer.length() > 5) {
-                    hausnummerET.setError(getString(R.string.hnr_fehler));
+                    hausnummerET.setError("", errorIcon);
                     dHilf = false;
                 }
                 else{
+                    hausnummerET.setError(null);
                     dHilf = true;
                 }
                 changeButton();
@@ -196,10 +217,11 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String plz = plzET.getText().toString();
                 if (!Pattern.matches(regexPlz, plz)) {
-                    plzET.setError(getString(R.string.plz_fehler));
+                    plzET.setError("", errorIcon);
                     eHilf = false;
                 }
                 else{
+                    plzET.setError(null);
                     eHilf = true;
                 }
                 changeButton();
@@ -220,10 +242,11 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String ort = ortET.getText().toString();
                 if ((!Pattern.matches(regexName, ort) && !Pattern.matches(regexDName, ort)) || ort.length()< 3 || ort.length() > 32) {
-                    ortET.setError(getString(R.string.ort_fehler));
+                    ortET.setError("", errorIcon);
                     fHilf = false;
                 }
                 else{
+                    ortET.setError(null);
                     fHilf = true;
                 }
                 changeButton();
@@ -244,10 +267,11 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String email = emailET.getText().toString();
                 if (!(email.contains("@") && email.contains("."))) {
-                    emailET.setError(getString(R.string.email_fehler));
+                    emailET.setError("", errorIcon);
                     gHilf = false;
                 }
                 else{
+                    emailET.setError(null);
                     gHilf = true;
                 }
                 changeButton();
@@ -267,12 +291,21 @@ public class RegistrierenActivity extends AppCompatActivity {
             public void afterTextChanged(Editable s)
             {
                 String passwort = passwortET.getText().toString();
+                String passwortCheck = passwortCheckET.getText().toString();
                 if (passwort.length() < 8 || passwort.length() > 12) {
-                    passwortET.setError(getString(R.string.passwort_fehler));
+                    passwortET.setError(getString(R.string.passwort_fehler), errorIcon);
                     hHilf = false;
                 }
                 else{
                     hHilf = true;
+                }
+                if(!passwort.equals(passwortCheck)) {
+                    passwortCheckET.setError(getString(R.string.passwort_check_fehler), errorIcon);
+                    iHilf = false;
+                }
+                else{
+                    iHilf = true;
+                    passwortCheckET.setError(null);
                 }
                 changeButton();
             }
@@ -293,7 +326,7 @@ public class RegistrierenActivity extends AppCompatActivity {
                 String passwort = passwortET.getText().toString();
                 String passwortCheck = passwortCheckET.getText().toString();
                 if(!passwort.equals(passwortCheck)) {
-                    passwortCheckET.setError(getString(R.string.passwort_check_fehler));
+                    passwortCheckET.setError(getString(R.string.passwort_check_fehler), errorIcon);
                     iHilf = false;
                 }
                 else{
@@ -309,11 +342,11 @@ public class RegistrierenActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (!agb_check_CB.isChecked()) {
-                    agb_check_CB.setError(getString(R.string.agb_fehler));
+                    agb_check_CB.setError(getString(R.string.agb_fehler), errorIcon);
                     jHilf = false;
                 }
                 else{
-                    agb_check_CB.setError(null);
+                    agb_check_CB.setError(null); // EditText überschreiben setError(...,null)
                     jHilf = true;
                 }
                 changeButton();

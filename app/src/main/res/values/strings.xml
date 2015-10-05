@@ -18,13 +18,6 @@
     <string name="email_hint">Email</string>
 
     <!-- Fehler Registrierung -->
-    <string name="vorname_fehler"></string>
-    <string name="nachname_fehler"></string>
-    <string name="strasse_fehler"></string>
-    <string name="hnr_fehler"></string>
-    <string name="plz_fehler"></string>
-    <string name="ort_fehler"></string>
-    <string name="email_fehler"></string>
     <string name="passwort_fehler">Das Passwort muss zwischen 8 und 12 Zeichen beinhalten</string>
     <string name="passwort_check_fehler">Bitte Passwort erneut eingeben</string>
     <string name="agb_fehler">Bitte akzeptieren Sie die AGBs</string>

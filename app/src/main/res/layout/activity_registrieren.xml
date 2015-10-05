@@ -20,49 +20,49 @@
             android:layout_height="wrap_content"
             android:entries="@array/anrede"></Spinner>
 
-        <EditText
+        <de.dhbw.pizzabutler_api.EditTextExtended
             android:id="@+id/vorname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/vorname_hint"
             android:inputType="textCapWords" />
 
-        <EditText
+        <de.dhbw.pizzabutler_api.EditTextExtended
             android:id="@+id/nachname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nachname_hint"
             android:inputType="textCapWords" />
 
-        <EditText
+        <de.dhbw.pizzabutler_api.EditTextExtended
             android:id="@+id/strasse"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/strasse_hint"
             android:inputType="textCapWords" />
 
-        <EditText
+        <de.dhbw.pizzabutler_api.EditTextExtended
             android:id="@+id/hausnummer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nummer_hint"
             android:inputType="text" />
 
-        <EditText
+        <de.dhbw.pizzabutler_api.EditTextExtended
             android:id="@+id/plz"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/plz_hint"
             android:inputType="number" />
 
-        <EditText
+        <de.dhbw.pizzabutler_api.EditTextExtended
             android:id="@+id/ort"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/ort_hint"
             android:inputType="textCapWords" />
 
-        <EditText
+        <de.dhbw.pizzabutler_api.EditTextExtended
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

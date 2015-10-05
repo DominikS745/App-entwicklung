@@ -298,6 +298,7 @@ public class RegistrierenActivity extends AppCompatActivity {
                 }
                 else{
                     hHilf = true;
+                    passwortET.setError(null);
                 }
                 if(!passwort.equals(passwortCheck)) {
                     passwortCheckET.setError(getString(R.string.passwort_check_fehler), errorIcon);

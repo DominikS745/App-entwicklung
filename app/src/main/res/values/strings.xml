@@ -8,6 +8,7 @@
     <!-- Hints -->
     <string name="benutzername_hint">Email</string>
     <string name="passwort_hint">Passwort</string>
+    <string name="passwort_match">Passwort erneut eingeben</string>
     <string name="vorname_hint">Vorname</string>
     <string name="nachname_hint">Nachname</string>
     <string name="strasse_hint">Straße</string>
@@ -15,6 +16,18 @@
     <string name="plz_hint">Postleitzahl</string>
     <string name="ort_hint">Ort</string>
     <string name="email_hint">Email</string>
+
+    <!-- Fehler Registrierung -->
+    <string name="vorname_fehler">Ungültiger Vorname</string>
+    <string name="nachname_fehler">Ungültiger Nachname</string>
+    <string name="strasse_fehler">Ungültige Straße</string>
+    <string name="hnr_fehler">Ungültige Hausnummer</string>
+    <string name="plz_fehler">Ungültige PLZ</string>
+    <string name="ort_fehler">Ungültiger Ort</string>
+    <string name="email_fehler">Ungültige Email</string>
+    <string name="passwort_fehler">Das Passwort muss zwischen 8 und 12 Zeichen beinhalten</string>
+    <string name="passwort_check_fehler">Bitte Passwort erneut eingeben</string>
+    <string name="agb_fehler"></string>
 
     <!-- Texte für die Nutzerdaten -->
     <string name="name">Ihr Name: </string>

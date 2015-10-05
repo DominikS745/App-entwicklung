@@ -76,6 +76,13 @@
             android:hint="@string/passwort_hint"
             android:inputType="textPassword" />
 
+        <EditText
+            android:id="@+id/passwort_match"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/passwort_hint"
+            android:inputType="textPassword" />
+
         <CheckBox
             android:id="@+id/agb_check"
             android:layout_width="wrap_content"

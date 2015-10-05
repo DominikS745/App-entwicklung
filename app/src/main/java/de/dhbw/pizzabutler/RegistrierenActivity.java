@@ -1,8 +1,11 @@
 package de.dhbw.pizzabutler;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,10 +18,240 @@ import java.util.regex.Pattern;
 
 public class RegistrierenActivity extends AppCompatActivity {
 
+    private Spinner anredeSp;
+    private EditText vornameET;
+    private EditText nachnameET;
+    private EditText strasseET;
+    private EditText hausnummerET;
+    private EditText plzET;
+    private EditText ortET;
+    private EditText emailET;
+    private EditText passwortET;
+    private EditText passwortCheckET;
+    private CheckBox agb_check_CB;
+    private String fehler = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registrieren);
+
+        anredeSp = (Spinner) findViewById(R.id.spinner_anrede);
+        vornameET = (EditText) findViewById(R.id.vorname);
+        nachnameET = (EditText) findViewById(R.id.nachname);
+        strasseET = (EditText) findViewById(R.id.strasse);
+        hausnummerET = (EditText) findViewById(R.id.hausnummer);
+        plzET = (EditText) findViewById(R.id.plz);
+        ortET = (EditText) findViewById(R.id.ort);
+        emailET = (EditText) findViewById(R.id.email);
+        passwortET = (EditText) findViewById(R.id.passwort_register);
+        passwortCheckET = (EditText) findViewById(R.id.passwort_match);
+        agb_check_CB = (CheckBox) findViewById(R.id.agb_check);
+
+
+        /**
+         * Validierung der Eingabedaten;
+         * überprüft die verschiedenen Eingabefelder nach erfolgter Eingabe mit Ausnahme der Straße und Checkbox
+         * Straße wird vor erfolgter Eingabe überprüft, da sie nicht leer sein darf
+         * Checkbox wird x überprüft
+         *
+         */
+
+        final String regexName = "^[A-ZÖÜÄ]{1}[a-züäöß]+$";
+        final String regexDName = "^[A-ZÖÜÄ]{1}[a-züäöß]+[\\s-]{1}[A-ZÖÜÄ]{1}[a-züäoß]+$";
+        final String regexPlz = "^[0-9]{5}$";
+        final String regexHnr = "^[0-9]+[a-z]?$";
+
+        //Validierung des Feldes Vorname nach erfolgter Eingabe
+        vornameET.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                String vorname = vornameET.getText().toString();
+                if ((!Pattern.matches(regexName, vorname) && !Pattern.matches(regexDName,vorname)) || vorname.length() < 2) {
+                    fehler += "Bitte geben Sie einen gültigen Vornamen ein.";
+                    vornameET.setError(getString(R.string.vorname_fehler));
+                }
+            }
+        });
+
+        //Validierung des Feldes Nachname nach erfolgter Eingabe
+        nachnameET.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                String nachname = nachnameET.getText().toString();
+                if ((!Pattern.matches(regexName, nachname) && !Pattern.matches(regexDName,nachname)) || nachname.length() < 4) {
+                    fehler += "Bitte geben Sie einen gültigen Nachnamen ein.";
+                    nachnameET.setError(getString(R.string.nachname_fehler));
+                }
+            }
+        });
+
+        //Validierung des Feldes Straße nach erfolgter Eingabe
+        strasseET.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int st, int c, int a)
+            {
+                String strasse = strasseET.getText().toString();
+                if (strasse.isEmpty()) {
+                    fehler += "Bitte geben Sie eine Straße ein.";
+                    strasseET.setError(getString(R.string.strasse_fehler));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        //Validierung des Feldes Hausnummer nach erfolgter Eingabe
+        hausnummerET.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                String hausnummer = hausnummerET.getText().toString();
+                if (!Pattern.matches(regexHnr, hausnummer) || hausnummer.length() > 5) {
+                    fehler += "Bitte geben Sie eine gültige Hausnummer ein.";
+                    hausnummerET.setError(getString(R.string.hnr_fehler));
+                }
+            }
+        });
+
+        //Validierung des Feldes PLZ nach erfolgter Eingabe
+        plzET.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                String plz = plzET.getText().toString();
+                if (!Pattern.matches(regexPlz, plz)) {
+                    fehler += "Bitte geben Sie eine gültige PLZ ein.";
+                    plzET.setError(getString(R.string.plz_fehler));
+                }
+            }
+        });
+
+        //Validierung des Feldes Ort nach erfolgter Eingabe
+        ortET.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                String ort = ortET.getText().toString();
+                if ((!Pattern.matches(regexName, ort) && !Pattern.matches(regexDName, ort)) || ort.length()< 3 || ort.length() > 32) {
+                    fehler += "Bitte geben Sie einen gültigen Wohnort ein.";
+                    ortET.setError(getString(R.string.ort_fehler));
+                }
+
+            }
+        });
+
+        //Validierung des Feldes Email nach erfolgter Eingabe
+        emailET.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                String email = emailET.getText().toString();
+                if (!(email.contains("@") && email.contains("."))) {
+                    fehler += "Bitte geben Sie eine gültige Email-Adresse ein.";
+                    emailET.setError(getString(R.string.email_fehler));
+                }
+
+            }
+        });
+
+        //Validierung des Feldes Passwort nach erfolgter Eingabe
+        passwortET.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                String passwort = passwortET.getText().toString();
+                if (passwort.length() < 8 || passwort.length() > 12) {
+                    fehler += "Bitte geben Sie ein Passwort ein.";
+                    passwortET.setError(getString(R.string.passwort_fehler));
+                }
+
+            }
+        });
+
+        //Validierung des Feldes PasswortCheck nach erfolgter Eingabe
+        passwortCheckET.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+
+            @Override
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                String passwort = passwortET.getText().toString();
+                String passwortCheck = passwortCheckET.getText().toString();
+                if(!passwort.equals(passwortCheck)) {
+                    fehler += "Bitte geben sie Ihr Passwort erneut ein.";
+                    passwortCheckET.setError(getString(R.string.passwort_check_fehler));
+                }
+
+            }
+        });
+
+
+        if (!agb_check_CB.isChecked()) {
+            fehler += "Bitte akzeptieren Sie die AGB's und Datenschutzrichtlinien.";
+            agb_check_CB.setError(getString(R.string.agb_fehler));
+        }
     }
 
     @Override
@@ -49,18 +282,6 @@ public class RegistrierenActivity extends AppCompatActivity {
      * @param v Standard View
      */
     public void registrierungAbschliessen(View v) {
-        //Benutzereingaben abgreifen
-        Spinner anredeSp = (Spinner) findViewById(R.id.spinner_anrede);
-        EditText vornameET = (EditText) findViewById(R.id.vorname);
-        EditText nachnameET = (EditText) findViewById(R.id.nachname);
-        EditText strasseET = (EditText) findViewById(R.id.strasse);
-        EditText hausnummerET = (EditText) findViewById(R.id.hausnummer);
-        EditText plzET = (EditText) findViewById(R.id.plz);
-        EditText ortET = (EditText) findViewById(R.id.ort);
-        EditText emailET = (EditText) findViewById(R.id.email);
-        EditText passwortET = (EditText) findViewById(R.id.passwort_register);
-        CheckBox agb_check_CB = (CheckBox) findViewById(R.id.agb_check);
-
         //Uebergabe der Daten in die NutzerDaten Aktivitaet
         Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
         nutzerDatenAnzeigen.putExtra("anrede", anredeSp.getSelectedItem().toString());
@@ -74,60 +295,12 @@ public class RegistrierenActivity extends AppCompatActivity {
         nutzerDatenAnzeigen.putExtra("passwort", passwortET.getText().toString());
         nutzerDatenAnzeigen.putExtra("agb_check", agb_check_CB.isChecked());
 
-        //Validierung der Eingabedaten
-        String meldung = registrierungValidieren(vornameET.getText().toString(), nachnameET.getText().toString(), strasseET.getText().toString(), hausnummerET.getText().toString(), plzET.getText().toString(), ortET.getText().toString(), emailET.getText().toString(), passwortET.getText().toString(), agb_check_CB.isChecked());
 
-        if (!meldung.isEmpty()) {
-            Toast failure = Toast.makeText(this, meldung, Toast.LENGTH_SHORT);
+        if (!fehler.isEmpty()) {
+            Toast failure = Toast.makeText(this, fehler, Toast.LENGTH_SHORT);
             failure.show();
         } else {
             startActivity(nutzerDatenAnzeigen);
         }
-    }
-
-    //Validierung der Eingabedaten
-    public String registrierungValidieren(String vorname, String nachname, String strasse, String hausnummer, String plz, String ort, String email, String passwort, boolean agb_check) {
-        String regexName = "^[A-ZÖÜÄ]{1}[a-züäöß]+$";
-        String regexPlz = "^[0-9]+$";
-        String regexHnr = "^[0-9]+[a-z]?$";
-        String fehler = "";
-
-        if (!Pattern.matches(regexName, vorname)) {
-            fehler += "Bitte geben Sie einen gültigen Vornamen ein.";
-        }
-
-        if (!Pattern.matches(regexName, nachname)) {
-            fehler += "Bitte geben Sie einen gültigen Nachnamen ein.";
-        }
-
-        if (strasse.isEmpty()) {
-            fehler += "Bitte geben Sie eine Straße ein.";
-        }
-
-        if (!Pattern.matches(regexHnr, hausnummer) || hausnummer.length() > 5) {
-            fehler += "Bitte geben Sie eine gültige Hausnummer ein.";
-        }
-
-        if (!Pattern.matches(regexPlz, plz) || plz.length() != 5) {
-            fehler += "Bitte geben Sie eine gültige PLZ ein.";
-        }
-
-        if (!Pattern.matches(regexName, ort)) {
-            fehler += "Bitte geben Sie einen gültigen Wohnort ein.";
-        }
-
-        if (!(email.contains("@") && email.contains("."))) {
-            fehler += "Bitte geben Sie eine gültige Email-Adresse ein.";
-        }
-
-        if (passwort.isEmpty()) {
-            fehler += "Bitte geben Sie ein Passwort ein.";
-        }
-
-        if (agb_check == false) {
-            fehler += "Bitte akzeptieren Sie die AGB's und Datenschutzrichtlinien.";
-        }
-
-        return fehler;
     }
 }

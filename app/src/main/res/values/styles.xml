@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--App Theme -->
-    <style name="PizzaButlerTheme" parent="@style/Theme.AppCompat.Light" >
+    <style name="PizzaButlerTheme" parent="@style/Theme.AppCompat.Light.NoActionBar" >
         <item name="colorPrimary">@color/background</item>
         <item name="colorPrimaryDark">@color/background_dark</item>
         <item name="colorAccent">@color/button</item>
@@ -19,10 +19,17 @@
 
     <!-- Button Style für Start Screen -->
     <style name="WelcomeButon">
-        <item name="android:background">@color/lachs</item>
+        <item name="android:background">@drawable/button_shape</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
+        <item name="android:radius">8dp</item>
+    </style>
+
+    <!-- Cutom Style für Toolbar (Widget) -->
+    <style name="StartToolbarStyle">
+        <item name="android:background">@color/lachs</item>
+        <item name="android:windowActionBarOverlay">true</item>
     </style>
 
 </resources>

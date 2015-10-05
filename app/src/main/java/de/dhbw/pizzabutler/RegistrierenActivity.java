@@ -9,6 +9,7 @@ import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -29,7 +30,19 @@ public class RegistrierenActivity extends AppCompatActivity {
     private EditText passwortET;
     private EditText passwortCheckET;
     private CheckBox agb_check_CB;
-    private String fehler = "";
+    private Button accept_button;
+
+    //Hilfsvariabeln zur Buttonaktivierung / -deaktivierung
+    private boolean aHilf = false;
+    private boolean bHilf = false;
+    private boolean cHilf = false;
+    private boolean dHilf = false;
+    private boolean eHilf = false;
+    private boolean fHilf = false;
+    private boolean gHilf = false;
+    private boolean hHilf = false;
+    private boolean iHilf = false;
+    private boolean jHilf = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +60,7 @@ public class RegistrierenActivity extends AppCompatActivity {
         passwortET = (EditText) findViewById(R.id.passwort_register);
         passwortCheckET = (EditText) findViewById(R.id.passwort_match);
         agb_check_CB = (CheckBox) findViewById(R.id.agb_check);
-
+        accept_button = (Button) findViewById(R.id.weiter_button);
 
         /**
          * Validierung der Eingabedaten;
@@ -76,9 +89,13 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String vorname = vornameET.getText().toString();
                 if ((!Pattern.matches(regexName, vorname) && !Pattern.matches(regexDName,vorname)) || vorname.length() < 2) {
-                    fehler += "Bitte geben Sie einen gültigen Vornamen ein.";
                     vornameET.setError(getString(R.string.vorname_fehler));
+                    aHilf = false;
                 }
+                else{
+                    aHilf = true;
+                }
+                changeButton();
             }
         });
 
@@ -96,9 +113,13 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String nachname = nachnameET.getText().toString();
                 if ((!Pattern.matches(regexName, nachname) && !Pattern.matches(regexDName,nachname)) || nachname.length() < 4) {
-                    fehler += "Bitte geben Sie einen gültigen Nachnamen ein.";
                     nachnameET.setError(getString(R.string.nachname_fehler));
+                    bHilf = false;
                 }
+                else{
+                    bHilf = true;
+                }
+                changeButton();
             }
         });
 
@@ -106,20 +127,35 @@ public class RegistrierenActivity extends AppCompatActivity {
         strasseET.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void onTextChanged(CharSequence s, int st, int b, int c) {}
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int st, int c, int a)
+            public void onTextChanged(CharSequence s, int st, int b, int c)
             {
                 String strasse = strasseET.getText().toString();
                 if (strasse.isEmpty()) {
-                    fehler += "Bitte geben Sie eine Straße ein.";
                     strasseET.setError(getString(R.string.strasse_fehler));
+                    cHilf = false;
                 }
+                else{
+                    cHilf = true;
+                }
+                changeButton();
             }
 
             @Override
-            public void afterTextChanged(Editable s) {}
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+
+            @Override
+            public void afterTextChanged(Editable s)
+            {
+                String strasse = strasseET.getText().toString();
+                if (strasse.isEmpty()) {
+                    strasseET.setError(getString(R.string.strasse_fehler));
+                    cHilf = false;
+                }
+                else{
+                    cHilf = true;
+                }
+                changeButton();
+            }
         });
 
         //Validierung des Feldes Hausnummer nach erfolgter Eingabe
@@ -136,9 +172,13 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String hausnummer = hausnummerET.getText().toString();
                 if (!Pattern.matches(regexHnr, hausnummer) || hausnummer.length() > 5) {
-                    fehler += "Bitte geben Sie eine gültige Hausnummer ein.";
                     hausnummerET.setError(getString(R.string.hnr_fehler));
+                    dHilf = false;
                 }
+                else{
+                    dHilf = true;
+                }
+                changeButton();
             }
         });
 
@@ -156,9 +196,13 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String plz = plzET.getText().toString();
                 if (!Pattern.matches(regexPlz, plz)) {
-                    fehler += "Bitte geben Sie eine gültige PLZ ein.";
                     plzET.setError(getString(R.string.plz_fehler));
+                    eHilf = false;
                 }
+                else{
+                    eHilf = true;
+                }
+                changeButton();
             }
         });
 
@@ -176,10 +220,13 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String ort = ortET.getText().toString();
                 if ((!Pattern.matches(regexName, ort) && !Pattern.matches(regexDName, ort)) || ort.length()< 3 || ort.length() > 32) {
-                    fehler += "Bitte geben Sie einen gültigen Wohnort ein.";
                     ortET.setError(getString(R.string.ort_fehler));
+                    fHilf = false;
                 }
-
+                else{
+                    fHilf = true;
+                }
+                changeButton();
             }
         });
 
@@ -197,10 +244,13 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String email = emailET.getText().toString();
                 if (!(email.contains("@") && email.contains("."))) {
-                    fehler += "Bitte geben Sie eine gültige Email-Adresse ein.";
                     emailET.setError(getString(R.string.email_fehler));
+                    gHilf = false;
                 }
-
+                else{
+                    gHilf = true;
+                }
+                changeButton();
             }
         });
 
@@ -218,10 +268,13 @@ public class RegistrierenActivity extends AppCompatActivity {
             {
                 String passwort = passwortET.getText().toString();
                 if (passwort.length() < 8 || passwort.length() > 12) {
-                    fehler += "Bitte geben Sie ein Passwort ein.";
                     passwortET.setError(getString(R.string.passwort_fehler));
+                    hHilf = false;
                 }
-
+                else{
+                    hHilf = true;
+                }
+                changeButton();
             }
         });
 
@@ -240,18 +293,32 @@ public class RegistrierenActivity extends AppCompatActivity {
                 String passwort = passwortET.getText().toString();
                 String passwortCheck = passwortCheckET.getText().toString();
                 if(!passwort.equals(passwortCheck)) {
-                    fehler += "Bitte geben sie Ihr Passwort erneut ein.";
                     passwortCheckET.setError(getString(R.string.passwort_check_fehler));
+                    iHilf = false;
                 }
-
+                else{
+                    iHilf = true;
+                }
+                changeButton();
             }
         });
 
+        //Überprüfung der Checkbox (clicked or not clicked)
+        agb_check_CB.setOnClickListener(new View.OnClickListener() {
 
-        if (!agb_check_CB.isChecked()) {
-            fehler += "Bitte akzeptieren Sie die AGB's und Datenschutzrichtlinien.";
-            agb_check_CB.setError(getString(R.string.agb_fehler));
-        }
+            @Override
+            public void onClick(View v) {
+                if (!agb_check_CB.isChecked()) {
+                    agb_check_CB.setError(getString(R.string.agb_fehler));
+                    jHilf = false;
+                }
+                else{
+                    agb_check_CB.setError(null);
+                    jHilf = true;
+                }
+                changeButton();
+            }
+        });
     }
 
     @Override
@@ -295,12 +362,20 @@ public class RegistrierenActivity extends AppCompatActivity {
         nutzerDatenAnzeigen.putExtra("passwort", passwortET.getText().toString());
         nutzerDatenAnzeigen.putExtra("agb_check", agb_check_CB.isChecked());
 
+        startActivity(nutzerDatenAnzeigen);
+    }
 
-        if (!fehler.isEmpty()) {
-            Toast failure = Toast.makeText(this, fehler, Toast.LENGTH_SHORT);
-            failure.show();
-        } else {
-            startActivity(nutzerDatenAnzeigen);
+    //enable or disable button
+    private void changeButton() {
+
+        //Wenn keine Fehler vorhanden sind, aktiviere den Button
+        if (aHilf && bHilf && cHilf && dHilf && eHilf && fHilf && gHilf && hHilf && iHilf && jHilf){
+            accept_button.setEnabled(true);
+        }
+
+        //Wenn Fehler vorhanden sind, deaktiviere den Button
+        else{
+            accept_button.setEnabled(false);
         }
     }
 }

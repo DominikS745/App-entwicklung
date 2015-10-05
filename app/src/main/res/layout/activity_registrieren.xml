@@ -90,10 +90,12 @@
             android:text="@string/agb" />
 
         <Button
+            android:id="@+id/weiter_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:onClick="registrierungAbschliessen"
-            android:text="@string/weiter" />
+            android:text="@string/weiter"
+            android:enabled="false"/>
 
     </LinearLayout>
 </ScrollView>

@@ -45,4 +45,13 @@ public class StartActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Onclick Methoden für Twitter und Facebook:
+    public void onClickFacebook(View v){
+        Toast.makeText(this, "Facebook", Toast.LENGTH_SHORT).show();
+    }
+
+    public void onClickTwitter(View v){
+        Toast.makeText(this, "Twitter", Toast.LENGTH_SHORT).show();
+    }
+
 }

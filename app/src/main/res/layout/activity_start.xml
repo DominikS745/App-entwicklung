@@ -25,7 +25,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="16dp"
                 android:src="@drawable/facebook_logo"
-                android:onClick=""/>
+                android:onClick="onClickFacebook"/>
 
             <ImageView
                 android:layout_width="48dp"
@@ -33,9 +33,11 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginRight="16dp"
                 android:src="@drawable/twitter_logo"
-                android:onClick=""/>
+                android:onClick="onClickTwitter"/>
         </LinearLayout>
     </android.widget.Toolbar>
+
+
 
     <ImageView
         android:layout_width="248dp"

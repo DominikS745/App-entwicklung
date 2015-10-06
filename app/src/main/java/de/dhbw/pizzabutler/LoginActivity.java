@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity {
      * @param v Standard View
      */
     public void logIn(View v) {
-        if (eingabeUser.getText().toString().contains("@") && eingabeUser.getText().toString().contains(".") && !eingabePasswort.getText().toString().isEmpty()) {
+        if (eingabeUser.getText().toString().contains("@") && eingabeUser.getText().toString().contains(".") && eingabePasswort.getText().toString().length() < 13 && eingabePasswort.getText().toString().length() > 7) {
             Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
             //Erzeugen des JSON-Objektes welches übertragen wird ans Backend
             JSONObject jsonParams = new JSONObject();

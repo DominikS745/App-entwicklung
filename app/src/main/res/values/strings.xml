@@ -42,9 +42,6 @@
     <!-- Text für Checkbox -->
     <string name="agb">Ich akzeptiere die AGB und Datenschutz-Richtlinien</string>
 
-    <!-- Aus Datei generiert -->
-    <string name="action_settings">Einstellungen</string>
-
     <!-- Fehlermeldungen REST Service -->
     <string name="status_code_404">Bitte überprüfen Sie Ihre Internet-Verbindung</string>
     <string name="status_code_500">Ups, unsere Server werden gerade gewartet</string>
@@ -53,4 +50,15 @@
     <!-- Rückmeldung Server an User -->
     <string name="rückgabewert_minus1">E-Mail oder Passwort ungültig</string>
     <string name="rückgabewert_minus2">Sie müssen sich erst registrieren</string>
+
+    <!--Texte für Start Page -->
+    <string name="button_start">WO WOHNST DU?</string>
+    <string name="text_start">...stets zu Ihren &#xA; &#009; &#009; &#009; &#009; &#009; Diensten</string>
+
+
+
+
+
+    <!-- Aus Datei generiert -->
+    <string name="action_settings">Einstellungen</string>
 </resources>

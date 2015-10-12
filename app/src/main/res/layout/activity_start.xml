@@ -54,7 +54,7 @@
         android:layout_height="32dp"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:onClick=""
+        android:onClick="onClickLocation"
         android:text="@string/button_start" />
 
     <TextView

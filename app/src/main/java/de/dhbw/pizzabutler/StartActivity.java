@@ -45,6 +45,12 @@ public class StartActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    //Aufruf der Location-Abfrage (-Activity)
+    public void onClickLocation(View v) {
+        Intent findLocation = new Intent(this, LocationActivity.class);
+        startActivity(findLocation);
+    }
+
     //Onclick Methoden für Twitter und Facebook:
     public void onClickFacebook(View v){
         Toast.makeText(this, "Facebook", Toast.LENGTH_SHORT).show();

@@ -2,7 +2,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.dhbw.pizzabutler">
 
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -28,6 +31,10 @@
         <activity
             android:name=".NutzerDatenActivity"
             android:label="@string/nutzerDaten">
+
+        </activity>
+
+        <activity android:name=".LocationActivity">
 
         </activity>
 

@@ -36,6 +36,7 @@
 
     <!--Strings für Buttons -->
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="registrieren">Registrieren</string>
     <string name="weiter">Weiter</string>
 

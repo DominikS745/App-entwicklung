@@ -146,4 +146,11 @@ public class LoginActivity extends AppCompatActivity {
         return loginErfolgreich;
     }
 
+    //Anbindung an das Backend muss noch erfolgen
+    public void onClickPasswortVergessen(View v) {
+        /*
+        Intent passwortVergessen = new Intent(this, LocationActivity.class);
+        startActivity(passwortVergessen); */
+    }
+
 }

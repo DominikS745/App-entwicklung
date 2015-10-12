@@ -39,6 +39,7 @@
     <string name="logout">Logout</string>
     <string name="registrieren">Registrieren</string>
     <string name="weiter">Weiter</string>
+    <string name="passwort_vergessen">Passwort vergessen?</string>
 
     <!-- Text für Checkbox -->
     <string name="agb">Ich akzeptiere die AGB und Datenschutz-Richtlinien</string>

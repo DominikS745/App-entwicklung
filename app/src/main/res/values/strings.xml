@@ -36,8 +36,10 @@
 
     <!--Strings für Buttons -->
     <string name="login">Login</string>
+    <string name="logout">Logout</string>
     <string name="registrieren">Registrieren</string>
     <string name="weiter">Weiter</string>
+    <string name="passwort_vergessen">Passwort vergessen?</string>
 
     <!-- Text für Checkbox -->
     <string name="agb">Ich akzeptiere die AGB und Datenschutz-Richtlinien</string>
@@ -54,6 +56,7 @@
     <!--Texte für Start Page -->
     <string name="button_start">WO WOHNST DU?</string>
     <string name="text_start">...stets zu Ihren &#xA; &#009; &#009; &#009; &#009; &#009; Diensten</string>
+    <string name="twitter_post">Pizza Butler sets zu meinen Diensten und immer mit der besten Pizza #PizzaButler #DHBW #WWI13AMB</string>
 
 
 

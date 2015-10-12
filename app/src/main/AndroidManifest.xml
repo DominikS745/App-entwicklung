@@ -31,7 +31,6 @@
         <activity
             android:name=".NutzerDatenActivity"
             android:label="@string/nutzerDaten">
-
         </activity>
 
         <activity android:name=".LocationActivity">

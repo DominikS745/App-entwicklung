@@ -1,19 +1,13 @@
 package de.dhbw.pizzabutler;
 
 import android.content.Intent;
-import android.content.pm.ResolveInfo;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.Toast;
 import android.widget.Toolbar;
-
-import java.util.List;
 
 public class StartActivity extends AppCompatActivity {
 
@@ -61,43 +55,13 @@ public class StartActivity extends AppCompatActivity {
         Intent intent = new Intent(Intent.ACTION_SEND);
         intent.setType("text/plain");
         intent.putExtra(Intent.EXTRA_TEXT, urlToShare);
-        boolean facebookAppFound = false;
-
-        // Überprüfung ob die Facebook app installiert ist
-        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
-        for (ResolveInfo info : matches) {
-            if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook.katana")) {
-                intent.setPackage(info.activityInfo.packageName);
-                facebookAppFound = true;
-                break;
-            }
-        }
-
-        //Fallback falls die Facebook app nicht installiert ist
-        if (!facebookAppFound) {
-            String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + urlToShare;
-            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
-        }
-
-        startActivity(intent);
+        startActivity(Intent.createChooser(intent, "Share with"));
     }
 
     public void onClickTwitter(View v) {
-        try {
-            // Überprüfung ob die Twitter app installiert ist
-            getPackageManager().getPackageInfo("com.twitter.android", 0);
-            Intent postToTwitter = new Intent(Intent.ACTION_SEND);
-            postToTwitter.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
-            postToTwitter.setType("text/plain");
-            postToTwitter.putExtra(Intent.EXTRA_TEXT, getString(R.string.twitter_post));
-            startActivity(postToTwitter);
-        } catch (Exception e) {
-            //Fallback falls die Twitter app nicht installiert ist
-            String url = "http://www.twitter.com/intent/tweet?text=" + getString(R.string.twitter_post);
-            Intent i = new Intent(Intent.ACTION_VIEW);
-            i.setData(Uri.parse(url));
-            startActivity(i);
-        }
+        Intent postToTwitter = new Intent(Intent.ACTION_SEND);
+        postToTwitter.setType("text/plain");
+        postToTwitter.putExtra(Intent.EXTRA_TEXT, getString(R.string.twitter_post));
+        startActivity(Intent.createChooser(postToTwitter, "Share with"));
     }
-
 }

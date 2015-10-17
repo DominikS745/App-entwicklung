@@ -57,6 +57,26 @@
 
 
 
+    <!-- Für Navigation Drawer -->
+    <string-array name="nav_drawer_items">
+        <item>Login</item>
+        <item>Not Assigned</item>
+        <item>Not Assigned</item>
+        <item>Not Assigned</item>
+        <item>Not Assigned</item>
+        <item>Not Assigned</item>
+    </string-array>
+    <array name="nav_drawer_icons">
+        <item>@drawable/twitter_logo</item>
+        <item>@drawable/twitter_logo</item>
+        <item>@drawable/twitter_logo</item>
+        <item>@drawable/twitter_logo</item>
+        <item>@drawable/twitter_logo</item>
+        <item>@drawable/twitter_logo</item>
+    </array>
+
+
+
 
 
     <!-- Aus Datei generiert -->

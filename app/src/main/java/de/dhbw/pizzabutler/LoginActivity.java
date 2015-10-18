@@ -2,7 +2,6 @@ package de.dhbw.pizzabutler;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -39,7 +38,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.navdrawer_login);
 
         //Icons und Text für NavDrawer initalisieren
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml

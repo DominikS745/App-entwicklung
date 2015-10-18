@@ -2,7 +2,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!--App Theme -->
-    <style name="PizzaButlerTheme" parent="@style/Theme.AppCompat.Light.NoActionBar" >
+    <style name="PizzaButlerTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar" >
         <item name="colorPrimary">@color/background</item>
         <item name="colorPrimaryDark">@color/background_dark</item>
         <item name="colorAccent">@color/button</item>

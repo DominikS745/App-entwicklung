@@ -1,7 +1,7 @@
 package de.dhbw.pizzabutler;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +22,7 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.protocol.HTTP;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     //Variablen für die Backend-Anbindung
     private static AsyncHttpClient client;
     private String urlLogin = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login";
@@ -31,10 +31,20 @@ public class LoginActivity extends AppCompatActivity {
     private EditText eingabeUser;
     private EditText eingabePasswort;
 
+    //Variablen für NavDrawer
+    private String[] navMenuTitles;
+    private TypedArray navMenuIcons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.navdrawer_login);
+
+        //Icons und Text für NavDrawer initalisieren
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
+        navMenuIcons = getResources()
+                .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
+        set(navMenuTitles, navMenuIcons);
 
         //Übergabe der Eingabefelder in Variablen
         eingabeUser = (EditText) findViewById(R.id.benutzername);

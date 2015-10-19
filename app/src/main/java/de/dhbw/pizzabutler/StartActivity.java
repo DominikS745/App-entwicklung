@@ -1,23 +1,36 @@
 package de.dhbw.pizzabutler;
 
 import android.content.Intent;
+import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 import android.widget.Toolbar;
+import android.widget.Toast;
 
-public class StartActivity extends AppCompatActivity {
+public class StartActivity extends BaseActivity {
+
+    //Diese beiden Variablen für NavDrawer
+    private String[] navMenuTitles;
+    private TypedArray navMenuIcons;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_start);
+        setContentView(R.layout.navdrawer_start);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.start_toolbar);
+
+        //Icons und Text für NavDrawer initalisieren
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
+        navMenuIcons = getResources()
+                .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
+        set(navMenuTitles, navMenuIcons);
+
     }
 
     @Override

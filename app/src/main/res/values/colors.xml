@@ -12,7 +12,7 @@
     <!-- Farben aus Styleguide -->
     <color name="background">#ce3d11</color>
     <color name="background_dark">#9e2c0a</color>
-    <color name="gelbe_leiste">#fecc3f</color>
+    <color name="gelb">#fecc3f</color>
     <color name="button">#842002</color>
     <color name="text_grey">#191919</color>
     <color name="text_red">#842002</color>

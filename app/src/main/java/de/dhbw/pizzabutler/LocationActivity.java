@@ -60,20 +60,15 @@ public class LocationActivity extends AppCompatActivity  {
 
     //fragt die aktuelle Location ab (ueber GPS- bzw. Netzwerkabfrage)
     private void checkLocation() {
-        System.out.println(locationManager.isProviderEnabled(locationManager.GPS_PROVIDER));
-        System.out.println(locationManager.isProviderEnabled(locationManager.NETWORK_PROVIDER));
-
         try {
             //fragt Locations ab, ohne dass diese sich aendern muss
             locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, listener);
             Location location = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
-            System.out.println("GPS: " + location);
 
             //Falls location nicht ueber GPS moeglich, dann wird der Netzwerkprovider genutzt
             if (null == location) {
                 locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, 0, 0, listener);
                 location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
-                System.out.println("network: " + location);
             }
 
             /**
@@ -132,9 +127,6 @@ public class LocationActivity extends AppCompatActivity  {
             //Ausgabe des Ergebnis
             String ort = parts[0];
             String plz = parts[1];
-
-            System.out.println(ort);
-            System.out.println(plz);
 
             b.setText("Sie befinden sich momentan in " + ort + ".");
             l.setText("Dieser Ort hat die PLZ: " + plz);

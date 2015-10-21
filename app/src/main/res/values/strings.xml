@@ -44,6 +44,10 @@
     <!-- Text für Checkbox -->
     <string name="agb">Ich akzeptiere die AGB und Datenschutz-Richtlinien</string>
 
+    <!-- Text für Dialogfeld -->
+    <string name="dialog">"Zur Zeit kann nicht auf ihren Standort zugegriffen werden. \nBitte aktivieren Sie den Standortzugriff."</string>
+
+
     <!-- Fehlermeldungen REST Service -->
     <string name="status_code_404">Bitte überprüfen Sie Ihre Internet-Verbindung</string>
     <string name="status_code_500">Ups, unsere Server werden gerade gewartet</string>
@@ -56,7 +60,7 @@
     <!--Texte für Start Page -->
     <string name="button_start">WO WOHNST DU?</string>
     <string name="text_start">...stets zu Ihren &#xA; &#009; &#009; &#009; &#009; &#009; Diensten</string>
-    <string name="twitter_post">Pizza Butler sets zu meinen Diensten und immer mit der besten Pizza #PizzaButler #DHBW #WWI13AMB</string>
+    <string name="twitter_post">Pizza Butler stets zu meinen Diensten und immer mit der besten Pizza #PizzaButler #DHBW #WWI13AMB</string>
 
 
     <!-- Für Navigation Drawer -->

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="primary">#f44336</color>
+    <!--<color name="primary">#f44336</color>
     <color name="primary_dark">#d32f2f</color>
     <color name="primary_light">#FFCDD2</color>
     <color name="accent">#ffeb3b</color>
     <color name="primary_text">#212121</color>
     <color name="secondary_text">#727272</color>
     <color name="icons">#FFFFFF</color>
-    <color name="divider">#B6B6B6</color>
+    <color name="divider">#B6B6B6</color> -->
 
     <!-- Farben aus Styleguide -->
     <color name="background">#ce3d11</color>
@@ -17,6 +17,11 @@
     <color name="text_grey">#191919</color>
     <color name="text_red">#842002</color>
     <color name="lachs">#e59a83</color>
+
+    <!-- Neue Farben -->
+    <color name="obere_leiste">#842002</color>
+    <color name="main_background">#ce3d11</color>
+    <color name="mittlere_leiste">#d71f2a</color>
 
 
 

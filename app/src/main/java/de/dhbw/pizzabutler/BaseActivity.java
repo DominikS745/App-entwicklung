@@ -152,6 +152,21 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(intent);
                 //finish();
                 break;
+            case 1:
+                Intent intent1 = new Intent(this, ImpressumActivity.class);
+                startActivity(intent1);
+                //finish();
+                break;
+            case 2:
+                Intent intent2 = new Intent(this, AgbActivity.class);
+                startActivity(intent2);
+                //finish();
+                break;
+            case 3:
+                Intent intent3 = new Intent(this, DatenschutzActivity.class);
+                startActivity(intent3);
+                //finish();
+                break;
             default:
                 break;
         }

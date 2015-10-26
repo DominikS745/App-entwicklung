@@ -66,9 +66,9 @@
     <!-- Für Navigation Drawer -->
     <string-array name="nav_drawer_items">
         <item>Login</item>
-        <item>Not Assigned</item>
-        <item>Not Assigned</item>
-        <item>Not Assigned</item>
+        <item>Impressum</item>
+        <item>Datenschutz</item>
+        <item>AGB</item>
         <item>Not Assigned</item>
         <item>Not Assigned</item>
     </string-array>

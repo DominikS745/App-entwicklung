@@ -3,24 +3,32 @@
 
     <!--App Theme -->
     <style name="PizzaButlerTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar" >
-        <item name="colorPrimary">@color/background</item>
-        <item name="colorPrimaryDark">@color/background_dark</item>
-        <item name="colorAccent">@color/button</item>
+        <!-- Colors -->
+        <item name="colorPrimary">@android:color/transparent</item>
+        <item name="colorPrimaryDark">@color/obere_leiste</item>
+        <item name="colorAccent">@color/gelb</item>
         <item name="android:textColorPrimary">@color/text_grey</item>
         <item name="android:textColorSecondary">@color/text_red</item>
+        <!-- Background -->
         <item name="android:windowBackground">@color/background</item>
-        <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <!-- Font -->
         <item name="android:fontFamily">sans-serif-light</item>
+        <!--Refering other Styles (complex) -->
+        <item name="android:buttonStyle">@style/ButtonStyle</item>
     </style>
 
     <!-- Button Style -->
     <style name="ButtonStyle">
-        <item name="android:background">@color/button</item>
+        <item name="android:background">@drawable/button_shape</item>
+        <item name="android:textColor">@android:color/white</item>
+        <!--<item name="android:textSize">24sp</item> -->
+        <!--<item name="android:textStyle">bold</item> -->
+        <item name="android:radius">8dp</item>
     </style>
 
     <!-- Button Style für Start Screen -->
     <style name="WelcomeButon">
-        <item name="android:background">@drawable/button_shape</item>
+        <item name="android:background">@drawable/button_shape_start</item>
         <item name="android:textColor">@android:color/white</item>
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>

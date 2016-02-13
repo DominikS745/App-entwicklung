@@ -33,7 +33,7 @@ public class StartActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        getMenuInflater().inflate(R.menu.menu_start, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -45,8 +45,12 @@ public class StartActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.action_share) {
+            //Share Method
+            Intent postToTwitter = new Intent(Intent.ACTION_SEND);
+            postToTwitter.setType("text/plain");
+            postToTwitter.putExtra(Intent.EXTRA_TEXT, getString(R.string.twitter_post));
+            startActivity(Intent.createChooser(postToTwitter, "Share with"));
         }
 
         return super.onOptionsItemSelected(item);
@@ -57,6 +61,11 @@ public class StartActivity extends BaseActivity {
         Intent findLocation = new Intent(this, LocationActivity.class);
         startActivity(findLocation);
     }
+
+
+
+
+
 
     //Onclick Methoden für Twitter und Facebook:
     public void onClickFacebook(View v) {

@@ -66,9 +66,9 @@
     <!-- Für Navigation Drawer -->
     <string-array name="nav_drawer_items">
         <item>Login</item>
-        <item>Not Assigned</item>
-        <item>Not Assigned</item>
-        <item>Not Assigned</item>
+        <item>Impressum</item>
+        <item>Datenschutz</item>
+        <item>AGB</item>
         <item>Not Assigned</item>
         <item>Not Assigned</item>
     </string-array>
@@ -562,6 +562,7 @@
 
     <!-- Aus Datei generiert -->
     <string name="action_settings">Einstellungen</string>
+    <string name="action_share">Teilen</string>
     <string name="title_activity_drawer">DrawerActivity</string>
 
     <string name="title_section1">Section 1</string>

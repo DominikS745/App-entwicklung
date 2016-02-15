@@ -1,7 +1,7 @@
 package de.dhbw.pizzabutler;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,7 +22,7 @@ import cz.msebera.android.httpclient.entity.StringEntity;
 import cz.msebera.android.httpclient.message.BasicHeader;
 import cz.msebera.android.httpclient.protocol.HTTP;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
     //Variablen für die Backend-Anbindung
     private static AsyncHttpClient client;
     private String urlLogin = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login";
@@ -31,22 +31,26 @@ public class LoginActivity extends AppCompatActivity {
     private EditText eingabeUser;
     private EditText eingabePasswort;
 
+    //Variablen für NavDrawer
+    private String[] navMenuTitles;
+    private TypedArray navMenuIcons;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.navdrawer_login);
+
+        //Icons und Text für NavDrawer initalisieren
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
+        navMenuIcons = getResources()
+                .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
+        set(navMenuTitles, navMenuIcons);
 
         //Übergabe der Eingabefelder in Variablen
         eingabeUser = (EditText) findViewById(R.id.benutzername);
         eingabePasswort = (EditText) findViewById(R.id.passwort_login);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
-        return true;
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -56,9 +60,9 @@ public class LoginActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+        //if (id == R.id.action_settings) {
+            //return true;
+        //}
 
         return super.onOptionsItemSelected(item);
     }
@@ -144,6 +148,13 @@ public class LoginActivity extends AppCompatActivity {
         });
 
         return loginErfolgreich;
+    }
+
+    //Anbindung an das Backend muss noch erfolgen
+    public void onClickPasswortVergessen(View v) {
+        /*
+        Intent passwortVergessen = new Intent(this, LocationActivity.class);
+        startActivity(passwortVergessen); */
     }
 
 }

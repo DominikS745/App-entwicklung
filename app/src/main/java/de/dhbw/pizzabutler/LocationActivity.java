@@ -1,89 +1,139 @@
 package de.dhbw.pizzabutler;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.location.LocationServices;
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
-public class LocationActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks,
-        GoogleApiClient.OnConnectionFailedListener {
-
-    GoogleApiClient mGoogleApiClient;
-    Location lastLocation;
+public class LocationActivity extends AppCompatActivity  {
 
     //Variablen, zur Anzeige der Daten (nicht unbedingt relevant)
     TextView l;
     TextView b;
 
+    LocationManager locationManager;
+    LocationListener listener;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-        buildGoogleApiClient();
 
         //Definition der Textausgabefelder
         l = (TextView) findViewById(R.id.textLaengenGrad);
         b = (TextView) findViewById(R.id.textBreitenGrad);
 
-        //Connect with Google-API
-        mGoogleApiClient.connect();
-    }
-    //instantiiert einen Google-API-Client mit der Location-API
-    protected synchronized void buildGoogleApiClient()
-    {
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
-                .addApi(LocationServices.API)
-                .build();
+        //Instantiierung LocationManager + Listener mit vorgefertigten Funktionen
+        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        listener = new LocationListener() {
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+            public void onProviderEnabled(String provider){}
+
+            //is ALWAYS called when Provider is not available
+            public void onProviderDisabled(String provider) {}
+
+            public void onLocationChanged(Location location) {}
+        };
+
+        checkLocation();
     }
 
-    //Verbindung ausstehend
+    //Aufruf nach Rückkehr von Einstellungen
     @Override
-    public void onConnectionSuspended(int i) {}
-
-    //Verbindung fehlgeschlagen
-    @Override
-    public void onConnectionFailed(ConnectionResult connectionResult)
-    {
-        l.setText("Laengengrad: Da ist ein Fehler aufgetreten.");
-        b.setText("Breitengrad: Da ist ein Fehler aufgetreten.");
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        checkLocation();
     }
 
-    //Verbindung erfolgreich
-    @Override
-    public void onConnected(Bundle connectionHint)
-    {
-        //Letzte Location abfragen
-        lastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+    //fragt die aktuelle Location ab (ueber GPS- bzw. Netzwerkabfrage)
+    private void checkLocation() {
+        try {
+            //fragt Locations ab, ohne dass diese sich aendern muss
+            locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, listener);
+            Location location = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
 
-        //Umwandlung des Laengen- + Breitengrades in PLZ
-        String location = getLocation(lastLocation.getLatitude(), lastLocation.getLongitude());
+            //Falls location nicht ueber GPS moeglich, dann wird der Netzwerkprovider genutzt
+            if (null == location) {
+                locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, 0, 0, listener);
+                location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
+            }
 
-        //Split des Ergebnis-String
-        String[] parts = location.split("-");
+            /**
+             * Wenn beide Provider keine Location zurueckgeben, wird ein Dialog aufgerufen, der zur Aktivierung
+             * der Standortdienste auffordert
+             */
+            if(null == location) {
+                callDialog();
+            }
 
-        //Ausgabe des Ergebnis
-        String ort = parts[0];
-        String plz = parts[1];
+            else{
+                //unregister Listener + anschließender Ausgabe der Location
+                locationManager.removeUpdates(listener);
+                getLocation(location);
+            }
 
-        b.setText("Sie befinden sich momentan in motherfucking " + ort + ".");
-        l.setText("Dieser Ort hat die PLZ: " + plz);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    //Umwandlung des Laengen- + Breitengrades in PLZ
-    private String getLocation(double latitude, double longitude){
+    //Aufruf des Dialogs
+    private void callDialog() {
+
+        final AlertDialog.Builder builder =
+                new AlertDialog.Builder(this);
+        builder.setMessage(R.string.dialog)
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int id) {
+                                //Aufruf der Einstellungen
+                                Intent intent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                                startActivityForResult(intent, 1);
+                                d.dismiss();
+                            }
+                        })
+                .setNegativeButton("Cancel",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int id) {
+                                d.cancel();
+                                //Neuueberpruefung der Location
+                                checkLocation();
+                            }
+                        });
+        //Anzeigen des Dialogfeldes
+        builder.create().show();
+    }
+
+    //Ausgabe der Location
+    private void getLocation(Location location) {
+            String locationString = convertLocation(location.getLatitude(), location.getLongitude());
+
+            //Split des Ergebnis-String
+            String[] parts = locationString.split("-");
+
+            //Ausgabe des Ergebnis
+            String ort = parts[0];
+            String plz = parts[1];
+
+            b.setText("Sie befinden sich momentan in " + ort + ".");
+            l.setText("Dieser Ort hat die PLZ: " + plz);
+        }
+
+    //Umwandlung des Laengen- + Breitengrades in PLZ und Ort
+    private String convertLocation(double latitude, double longitude){
         Geocoder geocoder = new Geocoder(this, Locale.GERMAN);
         try {
 

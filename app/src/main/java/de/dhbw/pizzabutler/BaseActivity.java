@@ -158,6 +158,9 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(intent);
                 //finish();
                 break;
+            case 1:
+                Intent intent1 = new Intent (this, ListPizzariaActivity.class);
+                startActivity(intent1);
             default:
                 break;
         }

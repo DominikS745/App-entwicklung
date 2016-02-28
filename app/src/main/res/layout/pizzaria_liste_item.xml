@@ -1,68 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/pizzaria_liste_item"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-    android:id="@+id/pizzaria_liste_item"
-    android:background="@android:color/white">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BILD \nEINFÜGEN!"
-        android:textSize="12pt"
-        android:textStyle="bold" />
+    android:background="@android:color/white"
+    android:orientation="vertical">
+    <android.widget.Space
+        android:layout_width="match_parent"
+        android:layout_height="8pt" />
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16pt"
-        android:orientation="vertical">
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pizzaria Name"
-            android:textSize="10pt"
+            android:text="BILD \nEINFÜGEN!"
+            android:textSize="12pt"
             android:textStyle="bold" />
 
-        <TextView
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Adresse"
-            android:textSize="10pt" />
+            android:layout_marginLeft="16pt"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="PLZ und Stadt"
-            android:textSize="10pt" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Pizzaria Name"
+                android:textSize="10pt"
+                android:textStyle="bold" />
 
-        <android.widget.Space
-            android:layout_width="match_parent"
-            android:layout_height="8pt" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Adresse"
+                android:textSize="10pt" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lieferkosten: Betrag"
-            android:textSize="8pt" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="PLZ und Stadt"
+                android:textSize="10pt" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Mindestbestelltwert: Betrag"
-            android:textSize="8pt" />
+            <android.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="8pt" />
 
-        <android.widget.Space
-            android:layout_width="match_parent"
-            android:layout_height="8pt" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lieferkosten: Betrag"
+                android:textSize="8pt" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="geschlossen / offen"
-            android:textSize="8pt"
-            android:textStyle="bold" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mindestbestelltwert: Betrag"
+                android:textSize="8pt" />
+
+            <android.widget.Space
+                android:layout_width="match_parent"
+                android:layout_height="8pt" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="geschlossen / offen"
+                android:textSize="8pt"
+                android:textStyle="bold" />
+
+        </LinearLayout>
     </LinearLayout>
+    <View
+        android:layout_width="fill_parent"
+        android:layout_height="2dp"
+        android:background="@android:color/black"
+        android:layout_marginTop="8pt"
+        android:layout_marginBottom="8pt"/>
 </LinearLayout>

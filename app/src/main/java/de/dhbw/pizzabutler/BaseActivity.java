@@ -146,6 +146,10 @@ public class BaseActivity extends AppCompatActivity {
     /**
      * Diplaying fragment view for selected nav drawer list item
      * */
+
+    /**
+     * Hier die Aufrufe, von den Elementen in dem NavDrawer, mit Intents
+     */
     private void displayView(int position) {
         // update the main content by replacing fragments
         switch (position) {

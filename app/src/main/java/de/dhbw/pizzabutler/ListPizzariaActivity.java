@@ -42,6 +42,7 @@ public class ListPizzariaActivity extends BaseActivity {
         // Assign adapter to ListView
         listView.setAdapter(adapter);
 
+
         //ItemClickListener folgt noch
 
 

@@ -1,6 +1,5 @@
 package de.dhbw.pizzabutler;
 
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.Menu;
@@ -111,7 +110,7 @@ public class ListPizzariaActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.string.action_settings) {
             return true;
         }
 

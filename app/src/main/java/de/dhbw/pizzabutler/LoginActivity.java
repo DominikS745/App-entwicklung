@@ -113,7 +113,7 @@ public class LoginActivity extends BaseActivity {
                 obj.put("email", email);
                 obj.put("passwort", passwort);
 
-                URL url = new URL("http://pizzabutlerentwbak.krihi.com/entwicklung/rest/login");
+                URL url = new URL("http://pizzabutlerbackend.krihi.com/user/login");
                 HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
 
                 Log.d("doInBackground(Req)", obj.toString());

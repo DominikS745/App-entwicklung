@@ -2,31 +2,27 @@ package de.dhbw.pizzabutler;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.TextHttpResponseHandler;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.UnsupportedEncodingException;
-
-import cz.msebera.android.httpclient.Header;
-import cz.msebera.android.httpclient.entity.StringEntity;
-import cz.msebera.android.httpclient.message.BasicHeader;
-import cz.msebera.android.httpclient.protocol.HTTP;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 public class LoginActivity extends BaseActivity {
-    //Variablen für die Backend-Anbindung
-    private static AsyncHttpClient client;
-    private String urlLogin = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login";
-    private boolean loginErfolgreich = false; //Steuert die Weiterleitung an die nächste Activity
     //Variablen für das Auslesen der Usereingaben
     private EditText eingabeUser;
     private EditText eingabePasswort;
@@ -85,69 +81,81 @@ public class LoginActivity extends BaseActivity {
      */
     public void logIn(View v) {
         if (eingabeUser.getText().toString().contains("@") && eingabeUser.getText().toString().contains(".") && eingabePasswort.getText().toString().length() < 13 && eingabePasswort.getText().toString().length() > 7) {
+            String passwort = eingabePasswort.getText().toString();
+            String email = eingabeUser.getText().toString();
+            Toast.makeText(this, "Login wird durchgeführt", Toast.LENGTH_LONG).show();
+            new LoginThroughBackend(passwort, email).execute();
+
             Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
-            //Erzeugen des JSON-Objektes welches übertragen wird ans Backend
-            JSONObject jsonParams = new JSONObject();
-            StringEntity entity = null;
-            try {
-                jsonParams.put("email", eingabeUser.getText().toString());
-                jsonParams.put("passwort", eingabePasswort.getText().toString());
-                entity = new StringEntity(jsonParams.toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            } catch (UnsupportedEncodingException e) {
-                e.printStackTrace();
-            }
-            //Aufruf der Anbindung an das Backend, Übergabe des JSONObjektes als String
-            if (backendConnection(entity)) {
-                startActivity(nutzerDatenAnzeigen);
-            }
         } else {
             Toast failure = Toast.makeText(this, getString(R.string.rückgabewert_minus1), Toast.LENGTH_SHORT);
             failure.show();
         }
     }
 
-    /**
-     * Herstellen einer Verbindung an das Backend - Reaktion auf den HTTP Status Code und den Rückgabestring des Backend
-     *
-     * @param entity - JSONObject das in einem String gespeichert wurde, enthält die Nutzereingaben in folgenden Key-Value-Paaren:
-     *               email:benutzereingabe und passwort:benutzereingabe
-     * @return Rückgabewert nur true wenn zum Backend connected + der Aufruf erfolgreich anhand der Rückgabe
-     * Mögliche Rückgaben + Bedeutung:
-     * 0 --> Aufruf erfolgreich | -1 --> email oder passwort ist ungültig | -2 es gibt den User offenbar nicht
-     * <p/>
-     * In onSucces wird auf den StatusCode 200 reagiert und dann auf die Response des Backend eingegangen
-     * In onFailure werden Fehlerhafte StatusCodes abgefangen und teilweise speziell behandelt
-     */
-    public boolean backendConnection(StringEntity entity) {
-        entity.setContentType(new BasicHeader(HTTP.CONTENT_TYPE, "application/json"));
-        client = new AsyncHttpClient();
-        client.post(LoginActivity.this, urlLogin, entity, "application/json", new TextHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, String responseString) {
-                if (responseString.equals("0")) {
-                    loginErfolgreich = true;
-                } else if (responseString.equals("-1")) {
-                    Toast.makeText(LoginActivity.this, getString(R.string.rückgabewert_minus1), Toast.LENGTH_SHORT).show();
-                } else if (responseString.equals("-2")) {
-                    Toast.makeText(LoginActivity.this, getString(R.string.rückgabewert_minus2), Toast.LENGTH_SHORT).show();
+    class LoginThroughBackend extends AsyncTask<Void, Void, Void> {
+
+        String passwort;
+        String email;
+
+        public LoginThroughBackend(String p, String e) {
+            passwort = p;
+            email = e;
+        }
+
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+                //Das zu versendende JSONObjekt
+                JSONObject obj = new JSONObject();
+                obj.put("email", email);
+                obj.put("passwort", passwort);
+
+                URL url = new URL("http://pizzabutlerentwbak.krihi.com/entwicklung/rest/login");
+                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+
+                Log.d("doInBackground(Req)", obj.toString());
+
+                //Parameter der Verbindung werden gesetzt
+                urlConnection.setDoOutput(true);
+                urlConnection.setDoInput(true);
+                urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
+                urlConnection.setRequestMethod("POST");
+                urlConnection.connect();
+
+                //Output an das Backend
+                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
+                String output = obj.toString();
+                out.write(output);
+                out.flush();
+                out.close();
+
+                //Verarbeitung der Backend-Antwort
+                InputStream input = urlConnection.getInputStream();
+                BufferedReader reader = new BufferedReader(new InputStreamReader(input , "UTF-8"));
+                StringBuilder result = new StringBuilder();
+                String line;
+
+                while((line = reader.readLine()) != null) {
+                    result.append(line);
                 }
+                Log.d("doInBackground(Resp)", result.toString());
+                String response = result.toString();
+                JSONObject jResultObject = new JSONObject((response));
+                JSONObject jFinalResult = jResultObject.getJSONObject("erfolgreich");
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
 
-            @Override
-            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable error) {
-                if (statusCode == 404) {
-                    Toast.makeText(LoginActivity.this, getString(R.string.status_code_404), Toast.LENGTH_SHORT).show();
-                } else if (statusCode == 500) {
-                    Toast.makeText(LoginActivity.this, getString(R.string.status_code_500), Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(LoginActivity.this, getString(R.string.status_code_else), Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        return loginErfolgreich;
+            return null;
+        }
     }
 
     //Anbindung an das Backend muss noch erfolgen

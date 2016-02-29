@@ -7,8 +7,10 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 /**
  * Created by Marvin on 28.02.16.
@@ -30,6 +32,11 @@ public class ListPizzariaActivity extends BaseActivity {
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.listview_pizzaria);
 
+        // Defined Array values to show in ListView
+        String[] values = new String[]{"Pizzaria 1", "Pizzaria 2", "Pizzaria 3", "Pizzaria 4", "Pizzaria 5",
+                "Pizzaria 6", "Pizzaria 7", "Pizzaria 8", "Pizzaria 9", "Pizzaria 10", "Pizzaria 11"
+        };
+
         // Define a new Adapter
         // First parameter - Context
         // Second parameter - Layout for the row
@@ -37,13 +44,33 @@ public class ListPizzariaActivity extends BaseActivity {
         // Forth - the Array of data
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                R.layout.pizzaria_liste_item);
+                android.R.layout.simple_list_item_1, android.R.id.text1, values);
 
         // Assign adapter to ListView
         listView.setAdapter(adapter);
 
 
-        //ItemClickListener folgt noch
+        // ListView Item Click Listener
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+
+                // ListView Clicked item index
+                int itemPosition = position;
+
+                // ListView Clicked item value
+                String itemValue = (String) listView.getItemAtPosition(position);
+
+                // Show Alert
+                Toast.makeText(getApplicationContext(),
+                        "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
+                        .show();
+
+            }
+
+        });
 
 
         //Icons und Text für NavDrawer initalisieren

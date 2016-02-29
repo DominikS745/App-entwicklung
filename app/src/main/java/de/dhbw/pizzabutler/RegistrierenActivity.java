@@ -3,10 +3,12 @@ package de.dhbw.pizzabutler;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,7 +16,24 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.regex.Pattern;
 
 import de.dhbw.pizzabutler_api.EditTextExtended;
@@ -86,9 +105,9 @@ public class RegistrierenActivity extends AppCompatActivity {
          * Veralteter Aufruf um dem min. SDK von 16 zu entsprechen
          */
 
-            //noinspection deprecation
-            errorIcon = getResources().getDrawable(R.drawable.pizzabutler_erroricon_old);
-            errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(), errorIcon.getIntrinsicHeight()));
+        //noinspection deprecation
+        errorIcon = getResources().getDrawable(R.drawable.pizzabutler_erroricon_old);
+        errorIcon.setBounds(new Rect(0, 0, errorIcon.getIntrinsicWidth(), errorIcon.getIntrinsicHeight()));
 
         //Validierung des Feldes Vorname nach erfolgter Eingabe
         vornameET.addTextChangedListener(new TextWatcher() {
@@ -119,20 +138,20 @@ public class RegistrierenActivity extends AppCompatActivity {
         nachnameET.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            public void onTextChanged(CharSequence s, int st, int b, int c) {
+            }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
+            public void afterTextChanged(Editable s) {
                 String nachname = nachnameET.getText().toString();
-                if ((!Pattern.matches(regexName, nachname) && !Pattern.matches(regexDName,nachname)) || nachname.length() < 4) {
+                if ((!Pattern.matches(regexName, nachname) && !Pattern.matches(regexDName, nachname)) || nachname.length() < 4) {
                     nachnameET.setError("", errorIcon);
                     bHilf = false;
-                }
-                else{
+                } else {
                     nachnameET.setError(null);
                     bHilf = true;
                 }
@@ -144,14 +163,12 @@ public class RegistrierenActivity extends AppCompatActivity {
         strasseET.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void onTextChanged(CharSequence s, int st, int b, int c)
-            {
+            public void onTextChanged(CharSequence s, int st, int b, int c) {
                 String strasse = strasseET.getText().toString();
                 if (strasse.isEmpty()) {
                     strasseET.setError("", errorIcon);
                     cHilf = false;
-                }
-                else{
+                } else {
                     strasseET.setError(null);
                     cHilf = true;
                 }
@@ -159,17 +176,16 @@ public class RegistrierenActivity extends AppCompatActivity {
             }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
+            public void afterTextChanged(Editable s) {
                 String strasse = strasseET.getText().toString();
                 if (strasse.isEmpty()) {
                     strasseET.setError("", errorIcon);
                     cHilf = false;
-                }
-                else{
+                } else {
                     strasseET.setError(null);
                     cHilf = true;
                 }
@@ -181,20 +197,20 @@ public class RegistrierenActivity extends AppCompatActivity {
         hausnummerET.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            public void onTextChanged(CharSequence s, int st, int b, int c) {
+            }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
+            public void afterTextChanged(Editable s) {
                 String hausnummer = hausnummerET.getText().toString();
                 if (!Pattern.matches(regexHnr, hausnummer) || hausnummer.length() > 5) {
                     hausnummerET.setError("", errorIcon);
                     dHilf = false;
-                }
-                else{
+                } else {
                     hausnummerET.setError(null);
                     dHilf = true;
                 }
@@ -206,20 +222,20 @@ public class RegistrierenActivity extends AppCompatActivity {
         plzET.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            public void onTextChanged(CharSequence s, int st, int b, int c) {
+            }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
+            public void afterTextChanged(Editable s) {
                 String plz = plzET.getText().toString();
                 if (!Pattern.matches(regexPlz, plz)) {
                     plzET.setError("", errorIcon);
                     eHilf = false;
-                }
-                else{
+                } else {
                     plzET.setError(null);
                     eHilf = true;
                 }
@@ -231,20 +247,20 @@ public class RegistrierenActivity extends AppCompatActivity {
         ortET.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            public void onTextChanged(CharSequence s, int st, int b, int c) {
+            }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
+            public void afterTextChanged(Editable s) {
                 String ort = ortET.getText().toString();
-                if ((!Pattern.matches(regexName, ort) && !Pattern.matches(regexDName, ort)) || ort.length()< 3 || ort.length() > 32) {
+                if ((!Pattern.matches(regexName, ort) && !Pattern.matches(regexDName, ort)) || ort.length() < 3 || ort.length() > 32) {
                     ortET.setError("", errorIcon);
                     fHilf = false;
-                }
-                else{
+                } else {
                     ortET.setError(null);
                     fHilf = true;
                 }
@@ -256,20 +272,20 @@ public class RegistrierenActivity extends AppCompatActivity {
         emailET.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            public void onTextChanged(CharSequence s, int st, int b, int c) {
+            }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
+            public void afterTextChanged(Editable s) {
                 String email = emailET.getText().toString();
                 if (!(email.contains("@") && email.contains("."))) {
                     emailET.setError("", errorIcon);
                     gHilf = false;
-                }
-                else{
+                } else {
                     emailET.setError(null);
                     gHilf = true;
                 }
@@ -281,29 +297,28 @@ public class RegistrierenActivity extends AppCompatActivity {
         passwortET.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            public void onTextChanged(CharSequence s, int st, int b, int c) {
+            }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
+            public void afterTextChanged(Editable s) {
                 String passwort = passwortET.getText().toString();
                 String passwortCheck = passwortCheckET.getText().toString();
                 if (passwort.length() < 8 || passwort.length() > 12) {
                     passwortET.setError(getString(R.string.passwort_fehler), errorIcon);
                     hHilf = false;
-                }
-                else{
+                } else {
                     hHilf = true;
                     passwortET.setError(null);
                 }
-                if(!passwort.equals(passwortCheck)) {
+                if (!passwort.equals(passwortCheck)) {
                     passwortCheckET.setError(getString(R.string.passwort_check_fehler), errorIcon);
                     iHilf = false;
-                }
-                else{
+                } else {
                     iHilf = true;
                     passwortCheckET.setError(null);
                 }
@@ -315,21 +330,21 @@ public class RegistrierenActivity extends AppCompatActivity {
         passwortCheckET.addTextChangedListener(new TextWatcher() {
 
             @Override
-            public void onTextChanged(CharSequence s, int st, int b, int c) {}
+            public void onTextChanged(CharSequence s, int st, int b, int c) {
+            }
 
             @Override
-            public void beforeTextChanged(CharSequence s, int st, int c, int a) {}
+            public void beforeTextChanged(CharSequence s, int st, int c, int a) {
+            }
 
             @Override
-            public void afterTextChanged(Editable s)
-            {
+            public void afterTextChanged(Editable s) {
                 String passwort = passwortET.getText().toString();
                 String passwortCheck = passwortCheckET.getText().toString();
-                if(!passwort.equals(passwortCheck)) {
+                if (!passwort.equals(passwortCheck)) {
                     passwortCheckET.setError(getString(R.string.passwort_check_fehler), errorIcon);
                     iHilf = false;
-                }
-                else{
+                } else {
                     iHilf = true;
                 }
                 changeButton();
@@ -344,8 +359,7 @@ public class RegistrierenActivity extends AppCompatActivity {
                 if (!agb_check_CB.isChecked()) {
                     agb_check_CB.setError(getString(R.string.agb_fehler), errorIcon);
                     jHilf = false;
-                }
-                else{
+                } else {
                     agb_check_CB.setError(null); // EditText überschreiben setError(...,null)
                     jHilf = true;
                 }
@@ -370,7 +384,7 @@ public class RegistrierenActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         //if (id == R.id.action_settings) {
-           // return true;
+        // return true;
         //}
 
         return super.onOptionsItemSelected(item);
@@ -382,18 +396,24 @@ public class RegistrierenActivity extends AppCompatActivity {
      * @param v Standard View
      */
     public void registrierungAbschliessen(View v) {
-        //Uebergabe der Daten in die NutzerDaten Aktivitaet
+        //Uebergabe der Daten in die innere Klasse RegisterThroughBackend
+
+        new RegisterThroughBackend(anredeSp.getSelectedItem().toString(),vornameET.getText().toString(),
+                nachnameET.getText().toString(), strasseET.getText().toString(),
+                hausnummerET.getText().toString(), plzET.getText().toString(), ortET.getText().toString(),
+                passwortET.getText().toString(), emailET.getText().toString()).execute();
+
         Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
-        nutzerDatenAnzeigen.putExtra("anrede", anredeSp.getSelectedItem().toString());
+
         nutzerDatenAnzeigen.putExtra("vorname", vornameET.getText().toString());
         nutzerDatenAnzeigen.putExtra("nachname", nachnameET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("anrede", anredeSp.getSelectedItem().toString());
+        nutzerDatenAnzeigen.putExtra("email", emailET.getText().toString());
+        nutzerDatenAnzeigen.putExtra("passwort", passwortET.getText().toString());
         nutzerDatenAnzeigen.putExtra("strasse", strasseET.getText().toString());
         nutzerDatenAnzeigen.putExtra("hausnummer", hausnummerET.getText().toString());
         nutzerDatenAnzeigen.putExtra("plz", plzET.getText().toString());
         nutzerDatenAnzeigen.putExtra("ort", ortET.getText().toString());
-        nutzerDatenAnzeigen.putExtra("email", emailET.getText().toString());
-        nutzerDatenAnzeigen.putExtra("passwort", passwortET.getText().toString());
-        nutzerDatenAnzeigen.putExtra("agb_check", agb_check_CB.isChecked());
 
         startActivity(nutzerDatenAnzeigen);
     }
@@ -402,13 +422,72 @@ public class RegistrierenActivity extends AppCompatActivity {
     private void changeButton() {
 
         //Wenn keine Fehler vorhanden sind, aktiviere den Button
-        if (aHilf && bHilf && cHilf && dHilf && eHilf && fHilf && gHilf && hHilf && iHilf && jHilf){
+        if (aHilf && bHilf && cHilf && dHilf && eHilf && fHilf && gHilf && hHilf && iHilf && jHilf) {
             accept_button.setEnabled(true);
         }
 
         //Wenn Fehler vorhanden sind, deaktiviere den Button
-        else{
+        else {
             accept_button.setEnabled(false);
+        }
+    }
+
+    private class RegisterThroughBackend extends AsyncTask<Void, Void, Void> {
+
+        String anrede;
+        String vorname;
+        String nachname;
+        String strasse;
+        String hausnummer;
+        String plz;
+        String ort;
+        String passwort;
+        String email;
+
+        public RegisterThroughBackend(String mAnrede, String mVorname, String mNachname, String mStrasse, String mHausnummer,
+                                      String mOrt, String mPlz, String mPasswort, String mEmail) {
+            anrede = mAnrede;
+            vorname = mVorname;
+            nachname = mNachname;
+            strasse = mStrasse;
+            hausnummer = mHausnummer;
+            ort = mOrt;
+            plz = mPlz;
+            email = mEmail;
+            passwort = mPasswort;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                //Das zu versendende JSONObjekt
+                JSONObject obj = new JSONObject();
+                obj.put("anrede", anrede);
+                obj.put("vorname", vorname);
+                obj.put("nachname", nachname);
+                obj.put("strasse", strasse);
+                obj.put("hausnr", hausnummer);
+                obj.put("plz", plz);
+                obj.put("ort", ort);
+                obj.put("passwort", passwort);
+                obj.put("email", email);
+
+                //Definition einer URL
+                final String url = "http://pizzaButlerBackend.krihi.com/user";
+
+                //Kommunikation mit Backend über ein REST-Template
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
+                String response = restTemplate.postForObject(url, obj, String.class);
+
+                //Ausgabe des Mock-Wertes
+                System.out.println(response);
+
+            } catch (Exception e) {
+                Log.e("RegistrierenActivity", e.getMessage(), e);
+            }
+
+            return null;
         }
     }
 }

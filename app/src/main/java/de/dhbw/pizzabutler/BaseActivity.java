@@ -20,10 +20,10 @@ import java.util.ArrayList;
  * Created by Marvin on 17.10.15.
  */
 public class BaseActivity extends AppCompatActivity {
+    protected RelativeLayout _completeLayout, _activityLayout;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-    protected RelativeLayout _completeLayout, _activityLayout;
     // nav drawer title
     private CharSequence mDrawerTitle;
 
@@ -47,7 +47,7 @@ public class BaseActivity extends AppCompatActivity {
         // }
     }
 
-    public void set(String[] navMenuTitles,TypedArray navMenuIcons) {
+    public void set(String[] navMenuTitles, TypedArray navMenuIcons) {
         mTitle = mDrawerTitle = getTitle();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -56,12 +56,13 @@ public class BaseActivity extends AppCompatActivity {
         navDrawerItems = new ArrayList<NavDrawerItem>();
 
         // adding nav drawer items
-        if(navMenuIcons==null){
-            for(int i=0;i<navMenuTitles.length;i++){
+        if (navMenuIcons == null) {
+            for (int i = 0; i < navMenuTitles.length; i++) {
                 navDrawerItems.add(new NavDrawerItem(navMenuTitles[i]));
-            }}else{
-            for(int i=0;i<navMenuTitles.length;i++){
-                navDrawerItems.add(new NavDrawerItem(navMenuTitles[i],navMenuIcons.getResourceId(i, -1)));
+            }
+        } else {
+            for (int i = 0; i < navMenuTitles.length; i++) {
+                navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navMenuIcons.getResourceId(i, -1)));
             }
         }
 
@@ -99,17 +100,6 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-
-    private class SlideMenuClickListener implements
-            ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            // display view for selected nav drawer item
-            displayView(position);
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // getSupportMenuInflater().inflate(R.menu.main, menu);
@@ -142,8 +132,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Diplaying fragment view for selected nav drawer list item
-     * */
+     * Hier die Aufrufe, von den Elementen in dem NavDrawer, mit Intents
+     */
     private void displayView(int position) {
         // update the main content by replacing fragments
         switch (position) {
@@ -153,20 +143,8 @@ public class BaseActivity extends AppCompatActivity {
                 //finish();
                 break;
             case 1:
-                Intent intent1 = new Intent(this, ImpressumActivity.class);
+                Intent intent1 = new Intent(this, ListPizzariaActivity.class);
                 startActivity(intent1);
-                //finish();
-                break;
-            case 2:
-                Intent intent2 = new Intent(this, AgbActivity.class);
-                startActivity(intent2);
-                //finish();
-                break;
-            case 3:
-                Intent intent3 = new Intent(this, DatenschutzActivity.class);
-                startActivity(intent3);
-                //finish();
-                break;
             default:
                 break;
         }
@@ -176,6 +154,10 @@ public class BaseActivity extends AppCompatActivity {
         mDrawerList.setSelection(position);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
+
+    /**
+     * Diplaying fragment view for selected nav drawer list item
+     * */
 
     @Override
     public void setTitle(CharSequence title) {
@@ -199,7 +181,17 @@ public class BaseActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
-       mDrawerToggle.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    private class SlideMenuClickListener implements
+            ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            // display view for selected nav drawer item
+            displayView(position);
+        }
     }
 }
 

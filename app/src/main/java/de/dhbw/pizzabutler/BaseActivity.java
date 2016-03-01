@@ -145,6 +145,11 @@ public class BaseActivity extends AppCompatActivity {
             case 1:
                 Intent intent1 = new Intent(this, ListPizzariaActivity.class);
                 startActivity(intent1);
+            case 5:
+                Intent postToTwitter = new Intent(Intent.ACTION_SEND);
+                postToTwitter.setType("text/plain");
+                postToTwitter.putExtra(Intent.EXTRA_TEXT, getString(R.string.twitter_post));
+                startActivity(Intent.createChooser(postToTwitter, "Share with"));
             default:
                 break;
         }

@@ -70,7 +70,7 @@
         <item>Not Assigned</item>
         <item>Not Assigned</item>
         <item>Not Assigned</item>
-        <item>Not Assigned</item>
+        <item>Teilen</item>
     </string-array>
     <array name="nav_drawer_icons">
         <item>@drawable/twitter_logo</item>
@@ -78,7 +78,7 @@
         <item>@drawable/twitter_logo</item>
         <item>@drawable/twitter_logo</item>
         <item>@drawable/twitter_logo</item>
-        <item>@drawable/twitter_logo</item>
+        <item>@drawable/ic_action_share</item>
     </array>
 
 

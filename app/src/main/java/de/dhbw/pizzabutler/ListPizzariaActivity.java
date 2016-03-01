@@ -82,18 +82,6 @@ public class ListPizzariaActivity extends BaseActivity {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
     //Standard Code
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -111,7 +99,7 @@ public class ListPizzariaActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.string.action_settings) {
             return true;
         }
 

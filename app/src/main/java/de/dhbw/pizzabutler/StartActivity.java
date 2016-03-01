@@ -45,13 +45,15 @@ public class StartActivity extends BaseActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_share) {
+        /*
+            if (id == R.id.action_share) {
             //Share Method
             Intent postToTwitter = new Intent(Intent.ACTION_SEND);
             postToTwitter.setType("text/plain");
             postToTwitter.putExtra(Intent.EXTRA_TEXT, getString(R.string.twitter_post));
             startActivity(Intent.createChooser(postToTwitter, "Share with"));
         }
+        */
 
         return super.onOptionsItemSelected(item);
     }

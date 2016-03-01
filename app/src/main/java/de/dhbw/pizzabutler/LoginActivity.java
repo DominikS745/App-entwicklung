@@ -12,6 +12,9 @@ import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,6 +24,8 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import de.dhbw.pizzabutler_entities.User;
 
 public class LoginActivity extends BaseActivity {
     //Variablen für das Auslesen der Usereingaben
@@ -113,44 +118,19 @@ public class LoginActivity extends BaseActivity {
                 obj.put("email", email);
                 obj.put("passwort", passwort);
 
-                URL url = new URL("http://pizzabutlerbackend.krihi.com/user/login");
-                HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+                //Definition einer URL
+                final String url = "http://pizzabutlerbackend.krihi.com/user/login/";
 
-                Log.d("doInBackground(Req)", obj.toString());
+                //Kommunikation mit Backend über ein REST-Template
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
+                ResponseEntity<User> response = restTemplate.getForEntity(url, User.class, email, passwort );
 
-                //Parameter der Verbindung werden gesetzt
-                urlConnection.setDoOutput(true);
-                urlConnection.setDoInput(true);
-                urlConnection.setRequestProperty("Content-Type", "application/json;charset=UTF-8");
-                urlConnection.setRequestMethod("POST");
-                urlConnection.connect();
+                //Ausgabe des Mock-Wertes
+                System.out.println(response.getStatusCode());
+                System.out.println(response.getBody());
 
-                //Output an das Backend
-                OutputStreamWriter out = new OutputStreamWriter(urlConnection.getOutputStream());
-                String output = obj.toString();
-                out.write(output);
-                out.flush();
-                out.close();
-
-                //Verarbeitung der Backend-Antwort
-                InputStream input = urlConnection.getInputStream();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(input , "UTF-8"));
-                StringBuilder result = new StringBuilder();
-                String line;
-
-                while((line = reader.readLine()) != null) {
-                    result.append(line);
-                }
-                Log.d("doInBackground(Resp)", result.toString());
-                String response = result.toString();
-                JSONObject jResultObject = new JSONObject((response));
-                JSONObject jFinalResult = jResultObject.getJSONObject("erfolgreich");
-
-            } catch (MalformedURLException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

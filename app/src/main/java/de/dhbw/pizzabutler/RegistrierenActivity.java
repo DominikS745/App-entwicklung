@@ -15,28 +15,19 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.Spinner;;
+import com.google.gson.Gson;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJacksonHttpMessageConverter;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+
 import java.util.regex.Pattern;
 
 import de.dhbw.pizzabutler_api.EditTextExtended;
+import de.dhbw.pizzabutler_entities.User;
 
 public class RegistrierenActivity extends AppCompatActivity {
 
@@ -396,14 +387,14 @@ public class RegistrierenActivity extends AppCompatActivity {
      * @param v Standard View
      */
     public void registrierungAbschliessen(View v) {
-        //Uebergabe der Daten in die innere Klasse RegisterThroughBackend
 
+        Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
+
+        //Uebergabe der Daten in die innere Klasse RegisterThroughBackend
         new RegisterThroughBackend(anredeSp.getSelectedItem().toString(),vornameET.getText().toString(),
                 nachnameET.getText().toString(), strasseET.getText().toString(),
                 hausnummerET.getText().toString(), plzET.getText().toString(), ortET.getText().toString(),
                 passwortET.getText().toString(), emailET.getText().toString()).execute();
-
-        Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
 
         nutzerDatenAnzeigen.putExtra("vorname", vornameET.getText().toString());
         nutzerDatenAnzeigen.putExtra("nachname", nachnameET.getText().toString());
@@ -473,15 +464,16 @@ public class RegistrierenActivity extends AppCompatActivity {
                 obj.put("email", email);
 
                 //Definition einer URL
-                final String url = "http://pizzaButlerBackend.krihi.com/user";
+                final String url = "http://pizzaButlerBackend.krihi.com/user/";
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new MappingJacksonHttpMessageConverter());
-                String response = restTemplate.postForObject(url, obj, String.class);
+                restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
+                ResponseEntity<User> response = restTemplate.postForEntity(url, obj, User.class);
 
                 //Ausgabe des Mock-Wertes
-                System.out.println(response);
+                System.out.println(response.getStatusCode());
+                System.out.println(response.getBody().getVorname());
 
             } catch (Exception e) {
                 Log.e("RegistrierenActivity", e.getMessage(), e);

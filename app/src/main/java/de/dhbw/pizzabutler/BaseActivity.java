@@ -1,13 +1,16 @@
 package de.dhbw.pizzabutler;
 
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,6 +18,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Marvin on 17.10.15.
@@ -103,7 +107,11 @@ public class BaseActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // getSupportMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        //return true;
+        MenuInflater inflater = getMenuInflater();
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
@@ -145,6 +153,7 @@ public class BaseActivity extends AppCompatActivity {
             case 1:
                 Intent intent1 = new Intent(this, ListPizzariaActivity.class);
                 startActivity(intent1);
+                break;
             case 5:
                 Intent postToTwitter = new Intent(Intent.ACTION_SEND);
                 postToTwitter.setType("text/plain");
@@ -162,7 +171,7 @@ public class BaseActivity extends AppCompatActivity {
 
     /**
      * Diplaying fragment view for selected nav drawer list item
-     * */
+     */
 
     @Override
     public void setTitle(CharSequence title) {
@@ -189,6 +198,50 @@ public class BaseActivity extends AppCompatActivity {
         mDrawerToggle.onConfigurationChanged(newConfig);
     }
 
+    //Onclick Methoden für Twitter und Facebook:
+    public void onClickFacebook(MenuItem mi) {
+        String urlToShare = "http://wwww.facebook.com"; //Muss noch auf die URL von PizzaButler geändert werden
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, urlToShare);
+        boolean facebookAppFound = false;
+
+        // Überprüfung ob die Facebook app installiert ist
+        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo info : matches) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook.katana")) {
+                intent.setPackage(info.activityInfo.packageName);
+                facebookAppFound = true;
+                break;
+            }
+        }
+        //Fallback falls die Facebook app nicht installiert ist
+        if (!facebookAppFound) {
+            String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + urlToShare;
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
+        }
+
+        startActivity(intent);
+    }
+
+    public void onClickTwitter(MenuItem mi) {
+        try {
+            // Überprüfung ob die Twitter app installiert ist
+            getPackageManager().getPackageInfo("com.twitter.android", 0);
+            Intent postToTwitter = new Intent(Intent.ACTION_SEND);
+            postToTwitter.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
+            postToTwitter.setType("text/plain");
+            postToTwitter.putExtra(Intent.EXTRA_TEXT, getString(R.string.twitter_post));
+            startActivity(postToTwitter);
+        } catch (Exception e) {
+            //Fallback falls die Twitter app nicht installiert ist
+            String url = "http://www.twitter.com/intent/tweet?text=" + getString(R.string.twitter_post);
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        }
+    }
+
     private class SlideMenuClickListener implements
             ListView.OnItemClickListener {
         @Override
@@ -199,6 +252,7 @@ public class BaseActivity extends AppCompatActivity {
         }
     }
 }
+
 
 
 

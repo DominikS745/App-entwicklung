@@ -388,25 +388,11 @@ public class RegistrierenActivity extends AppCompatActivity {
      */
     public void registrierungAbschliessen(View v) {
 
-        Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
-
         //Uebergabe der Daten in die innere Klasse RegisterThroughBackend
         new RegisterThroughBackend(anredeSp.getSelectedItem().toString(),vornameET.getText().toString(),
                 nachnameET.getText().toString(), strasseET.getText().toString(),
                 hausnummerET.getText().toString(), plzET.getText().toString(), ortET.getText().toString(),
                 passwortET.getText().toString(), emailET.getText().toString()).execute();
-
-        nutzerDatenAnzeigen.putExtra("vorname", vornameET.getText().toString());
-        nutzerDatenAnzeigen.putExtra("nachname", nachnameET.getText().toString());
-        nutzerDatenAnzeigen.putExtra("anrede", anredeSp.getSelectedItem().toString());
-        nutzerDatenAnzeigen.putExtra("email", emailET.getText().toString());
-        nutzerDatenAnzeigen.putExtra("passwort", passwortET.getText().toString());
-        nutzerDatenAnzeigen.putExtra("strasse", strasseET.getText().toString());
-        nutzerDatenAnzeigen.putExtra("hausnummer", hausnummerET.getText().toString());
-        nutzerDatenAnzeigen.putExtra("plz", plzET.getText().toString());
-        nutzerDatenAnzeigen.putExtra("ort", ortET.getText().toString());
-
-        startActivity(nutzerDatenAnzeigen);
     }
 
     //enable or disable button
@@ -425,6 +411,7 @@ public class RegistrierenActivity extends AppCompatActivity {
 
     private class RegisterThroughBackend extends AsyncTask<Void, Void, Void> {
 
+        ResponseEntity<User> response;
         String anrede;
         String vorname;
         String nachname;
@@ -469,17 +456,34 @@ public class RegistrierenActivity extends AppCompatActivity {
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                ResponseEntity<User> response = restTemplate.postForEntity(url, obj, User.class);
+                response = restTemplate.postForEntity(url, obj, User.class);
 
-                //Ausgabe des Mock-Wertes
+                //Ausgabe des Statuscodes
                 System.out.println(response.getStatusCode());
-                System.out.println(response.getBody().getVorname());
 
             } catch (Exception e) {
                 Log.e("RegistrierenActivity", e.getMessage(), e);
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Intent nutzerDatenAnzeigen = new Intent(RegistrierenActivity.this, NutzerDatenActivity.class);
+
+            nutzerDatenAnzeigen.putExtra("id", response.getBody().getId());
+            nutzerDatenAnzeigen.putExtra("anrede", response.getBody().getAnrede());
+            nutzerDatenAnzeigen.putExtra("vorname", response.getBody().getVorname());
+            nutzerDatenAnzeigen.putExtra("nachname", response.getBody().getNachname());
+            nutzerDatenAnzeigen.putExtra("strasse", response.getBody().getStrasse());
+            nutzerDatenAnzeigen.putExtra("hausnummer", response.getBody().getHausnr());
+            nutzerDatenAnzeigen.putExtra("plz", response.getBody().getPlz());
+            nutzerDatenAnzeigen.putExtra("ort", response.getBody().getOrt());
+            nutzerDatenAnzeigen.putExtra("passwort", response.getBody().getPasswort());
+            nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
+
+            startActivity(nutzerDatenAnzeigen);
         }
     }
 }

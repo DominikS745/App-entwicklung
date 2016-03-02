@@ -15,6 +15,7 @@ public class NutzerDatenActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nutzerdaten);
 
+        String id = getIntent().getStringExtra("id");
         String anrede = getIntent().getStringExtra("anrede");
         String vorname = getIntent().getStringExtra("vorname");
         String nachname = getIntent().getStringExtra("nachname");
@@ -32,7 +33,9 @@ public class NutzerDatenActivity extends AppCompatActivity {
         String agbCheckDisplayText = getString(R.string.zustimmungAGB);
 
         TextView nutzerDaten = (TextView) findViewById(R.id.nutzerdaten);
-        nutzerDaten.setText(nameDisplayText + anrede + " " + vorname + " " + nachname + "\n" + adresseDisplayText + strasse + " " + hausnummer + " " + plz + " " + ort + "\n" + emailDisplayText + email + "\n" + agbCheckDisplayText);
+        nutzerDaten.setText("ID: " + id + " " + nameDisplayText + anrede + " " + vorname + " " + nachname + "\n"
+                + adresseDisplayText + strasse + " " + hausnummer + " " + plz + " " + ort + "\n" + emailDisplayText + email
+                + "\n" + agbCheckDisplayText);
 
     }
 

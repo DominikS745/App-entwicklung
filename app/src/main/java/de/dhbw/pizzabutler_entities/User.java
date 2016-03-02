@@ -10,7 +10,7 @@ public class User {
     private String vorname;
     private String nachname;
     private String strasse;
-    private String hnr;
+    private String hausnr;
     private String ort;
     private String plz;
     private String passwort;
@@ -56,12 +56,12 @@ public class User {
         this.strasse = strasse;
     }
 
-    public String getHnr() {
-        return hnr;
+    public String getHausnr() {
+        return hausnr;
     }
 
-    public void setHnr(String hnr) {
-        this.hnr = hnr;
+    public void setHausnr(String hnr) {
+        this.hausnr = hausnr;
     }
 
     public String getOrt() {

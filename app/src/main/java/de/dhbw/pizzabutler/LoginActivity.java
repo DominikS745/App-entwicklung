@@ -91,7 +91,6 @@ public class LoginActivity extends BaseActivity {
             Toast.makeText(this, "Login wird durchgeführt", Toast.LENGTH_LONG).show();
             new LoginThroughBackend(passwort, email).execute();
 
-            Intent nutzerDatenAnzeigen = new Intent(this, NutzerDatenActivity.class);
         } else {
             Toast failure = Toast.makeText(this, getString(R.string.rückgabewert_minus1), Toast.LENGTH_SHORT);
             failure.show();
@@ -100,6 +99,7 @@ public class LoginActivity extends BaseActivity {
 
     class LoginThroughBackend extends AsyncTask<Void, Void, Void> {
 
+        ResponseEntity<User> response;
         String passwort;
         String email;
 
@@ -124,17 +124,34 @@ public class LoginActivity extends BaseActivity {
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                ResponseEntity<User> response = restTemplate.getForEntity(url, User.class, email, passwort );
+                response = restTemplate.getForEntity(url, User.class, email, passwort );
 
                 //Ausgabe des Mock-Wertes
                 System.out.println(response.getStatusCode());
-                System.out.println(response.getBody());
 
             } catch (Exception e) {
                 e.printStackTrace();
             }
 
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            Intent nutzerDatenAnzeigen = new Intent(LoginActivity.this, NutzerDatenActivity.class);
+
+            nutzerDatenAnzeigen.putExtra("id", response.getBody().getId());
+            nutzerDatenAnzeigen.putExtra("anrede", response.getBody().getAnrede());
+            nutzerDatenAnzeigen.putExtra("vorname", response.getBody().getVorname());
+            nutzerDatenAnzeigen.putExtra("nachname", response.getBody().getNachname());
+            nutzerDatenAnzeigen.putExtra("strasse", response.getBody().getStrasse());
+            nutzerDatenAnzeigen.putExtra("hausnummer", response.getBody().getHausnr());
+            nutzerDatenAnzeigen.putExtra("plz", response.getBody().getPlz());
+            nutzerDatenAnzeigen.putExtra("ort", response.getBody().getOrt());
+            nutzerDatenAnzeigen.putExtra("passwort", response.getBody().getPasswort());
+            nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
+
+            startActivity(nutzerDatenAnzeigen);
         }
     }
 

@@ -16,6 +16,7 @@
         <item name="android:fontFamily">sans-serif-light</item>
         <!--Refering other Styles (complex) -->
         <item name="android:buttonStyle">@style/ButtonStyle</item>
+        <item name="android:actionBarStyle">@style/CustomActionBar</item>
     </style>
 
     <!-- Button Style -->
@@ -34,6 +35,11 @@
         <item name="android:textSize">24sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:radius">8dp</item>
+    </style>
+
+    <!-- Action Bar Style -->
+    <style name="CustomActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:logo">@drawable/pizzabutler_logo_schriftzug_white</item>
     </style>
 
 </resources>

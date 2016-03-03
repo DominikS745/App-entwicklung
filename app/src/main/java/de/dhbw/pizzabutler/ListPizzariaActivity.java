@@ -1,15 +1,29 @@
 package de.dhbw.pizzabutler;
 
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.json.GsonHttpMessageConverter;
+import org.springframework.util.support.Base64;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
+
+import de.dhbw.pizzabutler_entities.Pizzeria;
 
 /**
  * Created by Marvin on 28.02.16.
@@ -30,6 +44,8 @@ public class ListPizzariaActivity extends BaseActivity {
 
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.listview_pizzaria);
+
+        new ListThroughBackend().execute();
 
         // Defined Array values to show in ListView
         String[] values = new String[]{"Pizzaria 1", "Pizzaria 2", "Pizzaria 3", "Pizzaria 4", "Pizzaria 5",
@@ -85,13 +101,22 @@ public class ListPizzariaActivity extends BaseActivity {
 
 
 
+    //Verarbeitung des Bilds
+    public Bitmap processPicture(String base64) {
+        try {
+            byte[] byteArray = Base64.decode(base64);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            //Provisorische Anzeige (die vermutlich das Layout etwas zerlegt. Später löschen!
+            ImageView image = (ImageView) findViewById(R.id.imageView1);
+            image.setImageBitmap(bitmap);
 
-
-
-
-
-
-
+            return bitmap;
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     //Standard Code
     @Override
@@ -115,6 +140,59 @@ public class ListPizzariaActivity extends BaseActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    private class ListThroughBackend extends AsyncTask<Void, Void, Void> {
+
+        ResponseEntity<Pizzeria[]> response;
+
+        public ListThroughBackend(){
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                //Definition einer URL
+                final String url = "http://pizzaButlerBackend.krihi.com/pizzeria";
+
+                //Kommunikation mit Backend über ein REST-Template
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
+                response = restTemplate.getForEntity(url, Pizzeria[].class);
+
+                //Ausgabe des Statuscodes
+                System.out.println(response.getStatusCode());
+
+                Pizzeria[] pizzerien = response.getBody();
+
+                //Hier sollte die Listenuebersicht der Pizzerien befuellt werden
+                for(int i=0; i<pizzerien.length; i++){
+                    System.out.println("Name: " + pizzerien[i].getName());
+                    System.out.println("Hausnummer: " + pizzerien[i].getHausnummer());
+                    System.out.println("Lieferkosten: " + pizzerien[i].getLieferkosten());
+                    System.out.println("PLZ: " + pizzerien[i].getPlz());
+                    System.out.println("Ort: " + pizzerien[i].getOrt());
+                    System.out.println("Straße: " + pizzerien[i].getStrasse());
+                    System.out.println("Öffnungszeiten: " + pizzerien[i].getOeffnungszeiten().length);
+                    System.out.println("Von :" + pizzerien[i].getOeffnungszeiten()[i].getVon());
+                    System.out.println("Bis :" + pizzerien[i].getOeffnungszeiten()[i].getBis());
+                    System.out.println("Tag :" + pizzerien[i].getOeffnungszeiten()[i].getTag());
+                    //Verarbeitung des Bilds
+                    processPicture(pizzerien[i].getBild());
+                }
+
+            } catch (Exception e) {
+                Log.e("RegistrierenActivity", e.getMessage(), e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+
+        }
     }
 
 

@@ -1,6 +1,8 @@
 package de.dhbw.pizzabutler;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -138,6 +140,14 @@ public class LoginActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(Void result) {
+
+            //Setzen der User-ID (verhält sich ähnlich einer Session)
+            SharedPreferences session = getSharedPreferences("id", Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = session.edit();
+            editor.putString("id", response.getBody().getId());
+            editor.commit();
+
+            //Starten einer neuen Activity: NutzerDatenAnzeigen
             Intent nutzerDatenAnzeigen = new Intent(LoginActivity.this, NutzerDatenActivity.class);
 
             nutzerDatenAnzeigen.putExtra("id", response.getBody().getId());

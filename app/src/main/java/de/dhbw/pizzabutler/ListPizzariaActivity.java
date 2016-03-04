@@ -1,5 +1,6 @@
 package de.dhbw.pizzabutler;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -23,6 +24,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 
+import de.dhbw.pizzabutler_entities.Oeffnungszeiten;
 import de.dhbw.pizzabutler_entities.Pizzeria;
 
 /**
@@ -77,6 +79,9 @@ public class ListPizzariaActivity extends BaseActivity {
 
                 // ListView Clicked item value
                 String itemValue = (String) listView.getItemAtPosition(position);
+
+                //provisorische ID; die echte ID muss über das Pizzeria-Objekt aufgerufen werden
+                new DetailThroughBackend(itemValue).execute();
 
                 // Show Alert
                 Toast.makeText(getApplicationContext(),
@@ -195,5 +200,57 @@ public class ListPizzariaActivity extends BaseActivity {
         }
     }
 
+    private class DetailThroughBackend extends AsyncTask<Void, Void, Void> {
 
+        ResponseEntity<Pizzeria> response;
+        String id;
+
+        public DetailThroughBackend(String pId){
+            id = pId;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            try {
+                //Definition einer URL
+                final String url = "http://pizzaButlerBackend.krihi.com/pizzeria";
+
+                //Kommunikation mit Backend über ein REST-Template
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
+                response = restTemplate.getForEntity(url, Pizzeria.class, id);
+
+                //Ausgabe des Statuscodes
+                System.out.println(response.getStatusCode());
+
+            } catch (Exception e) {
+                Log.e("RegistrierenActivity", e.getMessage(), e);
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            //Starten der Detailansicht einer Pizzeria
+            // - Kommentierung entfernen und Activity-Bezeichnung anpassen,sobald implementiert
+            /*Intent detailansicht = new Intent(ListPizzariaActivity.this, DetailPizzariaActivity.class);
+
+            Bitmap bitmap = processPicture(response.getBody().getBild());
+
+            detailansicht.putExtra("name", response.getBody().getName());
+            detailansicht.putExtra("anrede", response.getBody().getBeschreibung());
+            detailansicht.putExtra("vorname", response.getBody().getMindestbestellwert());
+            detailansicht.putExtra("nachname", response.getBody().getOeffnungszeiten());
+            detailansicht.putExtra("strasse", response.getBody().getStrasse());
+            detailansicht.putExtra("hausnummer", response.getBody().getHausnummer());
+            detailansicht.putExtra("plz", response.getBody().getPlz());
+            detailansicht.putExtra("ort", response.getBody().getOrt());
+            detailansicht.putExtra("passwort", response.getBody().getLieferkosten());
+            detailansicht.putExtra("email", response.getBody().getEmail());
+            detailansicht.putExtra("bild", bitmap);
+
+            startActivity(detailansicht);*/
+        }
+    }
 }

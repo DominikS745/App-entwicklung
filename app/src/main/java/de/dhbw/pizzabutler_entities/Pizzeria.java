@@ -5,6 +5,7 @@ package de.dhbw.pizzabutler_entities;
  */
 public class Pizzeria {
 
+    String id;
     String name;
     String beschreibung;
     Oeffnungszeiten[] oeffnungszeiten;
@@ -16,6 +17,14 @@ public class Pizzeria {
     String ort;
     String email;
     String bild;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

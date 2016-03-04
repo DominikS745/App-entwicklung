@@ -105,7 +105,6 @@ public class ListPizzariaActivity extends BaseActivity {
 
 
 
-
     //Verarbeitung des Bilds
     public Bitmap processPicture(String base64) {
         try {
@@ -123,12 +122,23 @@ public class ListPizzariaActivity extends BaseActivity {
         return null;
     }
 
+
+
+
+
+
+
+
+
+
+
+
     //Standard Code
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         MenuInflater inflater = getMenuInflater();
-        getMenuInflater().inflate(R.menu.menu_start, menu);
+        getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 

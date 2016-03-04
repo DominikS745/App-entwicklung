@@ -67,7 +67,7 @@
     <string-array name="nav_drawer_items">
         <item>Login</item>
         <item>Pizzaria Übersicht</item>
-        <item>Not Assigned</item>
+        <item>Pizzaria Profil (TEST)</item>
         <item>Not Assigned</item>
         <item>Not Assigned</item>
         <item>Teilen</item>

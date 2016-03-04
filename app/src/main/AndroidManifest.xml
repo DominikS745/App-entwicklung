@@ -30,6 +30,7 @@
         <activity android:name=".AgbActivity" />
         <activity android:name=".DatenschutzActivity" />
         <activity android:name=".ListPizzariaActivity" />
+        <activity android:name=".PizzariaProfilActivity" />
     </application>
 
 </manifest>

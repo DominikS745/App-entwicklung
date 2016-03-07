@@ -62,14 +62,8 @@ public class LocationActivity extends AppCompatActivity  {
     private void checkLocation() {
         try {
             //fragt Locations ab, ohne dass diese sich aendern muss
-            locationManager.requestLocationUpdates(locationManager.GPS_PROVIDER, 0, 0, listener);
-            Location location = locationManager.getLastKnownLocation(locationManager.GPS_PROVIDER);
-
-            //Falls location nicht ueber GPS moeglich, dann wird der Netzwerkprovider genutzt
-            if (null == location) {
-                locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, 0, 0, listener);
-                location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
-            }
+            locationManager.requestLocationUpdates(locationManager.NETWORK_PROVIDER, 0, 0, listener);
+            Location location = locationManager.getLastKnownLocation(locationManager.NETWORK_PROVIDER);
 
             /**
              * Wenn beide Provider keine Location zurueckgeben, wird ein Dialog aufgerufen, der zur Aktivierung

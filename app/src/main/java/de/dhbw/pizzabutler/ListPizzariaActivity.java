@@ -1,5 +1,6 @@
 package de.dhbw.pizzabutler;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -75,12 +76,15 @@ public class ListPizzariaActivity extends BaseActivity {
 
                 //provisorische ID; die echte ID muss über das Pizzeria-Objekt aufgerufen werden
                 new DetailThroughBackend(itemValue).execute();
-
+/*
                 // Show Alert
                 Toast.makeText(getApplicationContext(),
                         "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
                         .show();
-
+*/
+                //Aufruf des Pizzaria Profils
+                Intent intent = new Intent(ListPizzariaActivity.this, PizzariaProfilActivity.class);
+                startActivity(intent);
             }
 
         });

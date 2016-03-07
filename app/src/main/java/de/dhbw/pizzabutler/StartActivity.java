@@ -55,6 +55,13 @@ public class StartActivity extends BaseActivity {
         Intent findLocation = new Intent(this, LocationActivity.class);
         startActivity(findLocation);
     }
+
+    //Aufruf der Pizzaria Liste
+    public void onClickButton(View v) {
+        Intent intent = new Intent(this, ListPizzariaActivity.class);
+        startActivity(intent);
+    }
+
     //Onclick Methoden für Twitter und Facebook:
     public void onClickTwitter(View v) {
         Intent postToTwitter = new Intent(Intent.ACTION_SEND);

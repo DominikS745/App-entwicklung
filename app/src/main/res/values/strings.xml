@@ -68,16 +68,12 @@
         <item>Login</item>
         <item>Pizzaria Übersicht</item>
         <item>Pizzaria Profil (TEST)</item>
-        <item>Not Assigned</item>
-        <item>Not Assigned</item>
         <item>Teilen</item>
     </string-array>
     <array name="nav_drawer_icons">
-        <item>@drawable/twitter_logo</item>
-        <item>@drawable/twitter_logo</item>
-        <item>@drawable/twitter_logo</item>
-        <item>@drawable/twitter_logo</item>
-        <item>@drawable/twitter_logo</item>
+        <item>@drawable/ic_account_circle_white</item>
+        <item>@drawable/ic_local_grocery_store_white</item>
+        <item>@drawable/ic_local_grocery_store_white</item>
         <item>@drawable/ic_action_share</item>
     </array>
 

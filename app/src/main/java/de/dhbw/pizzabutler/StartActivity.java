@@ -29,26 +29,6 @@ public class StartActivity extends BaseActivity {
 
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        /*
-            if (id == R.id.action_share) {
-            //Share Method
-            Intent postToTwitter = new Intent(Intent.ACTION_SEND);
-            postToTwitter.setType("text/plain");
-            postToTwitter.putExtra(Intent.EXTRA_TEXT, getString(R.string.twitter_post));
-            startActivity(Intent.createChooser(postToTwitter, "Share with"));
-        }
-        */
-
-        return super.onOptionsItemSelected(item);
-    }
 
     //Aufruf der Location-Abfrage (-Activity)
     public void onClickLocation(View v) {
@@ -60,13 +40,5 @@ public class StartActivity extends BaseActivity {
     public void onClickButton(View v) {
         Intent intent = new Intent(this, ListPizzariaActivity.class);
         startActivity(intent);
-    }
-
-    //Onclick Methoden für Twitter und Facebook:
-    public void onClickTwitter(View v) {
-        Intent postToTwitter = new Intent(Intent.ACTION_SEND);
-        postToTwitter.setType("text/plain");
-        postToTwitter.putExtra(Intent.EXTRA_TEXT, getString(R.string.twitter_post));
-        startActivity(Intent.createChooser(postToTwitter, "Share with"));
     }
 }

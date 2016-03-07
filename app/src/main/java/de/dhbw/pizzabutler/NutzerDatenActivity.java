@@ -1,20 +1,30 @@
 package de.dhbw.pizzabutler;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.TypedArray;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-public class NutzerDatenActivity extends AppCompatActivity {
+public class NutzerDatenActivity extends BaseActivity {
+    //Diese beiden Variablen für NavDrawer
+    private String[] navMenuTitles;
+    private TypedArray navMenuIcons;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_nutzerdaten);
+        setContentView(R.layout.navdrawer_nutzerdaten);
 
+        //Icons und Text für NavDrawer initalisieren
+        navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
+        navMenuIcons = getResources()
+                .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
+        set(navMenuTitles, navMenuIcons);
+
+        String id = getIntent().getStringExtra("id");
         String anrede = getIntent().getStringExtra("anrede");
         String vorname = getIntent().getStringExtra("vorname");
         String nachname = getIntent().getStringExtra("nachname");
@@ -32,34 +42,21 @@ public class NutzerDatenActivity extends AppCompatActivity {
         String agbCheckDisplayText = getString(R.string.zustimmungAGB);
 
         TextView nutzerDaten = (TextView) findViewById(R.id.nutzerdaten);
-        nutzerDaten.setText(nameDisplayText + anrede + " " + vorname + " " + nachname + "\n" + adresseDisplayText + strasse + " " + hausnummer + " " + plz + " " + ort + "\n" + emailDisplayText + email + "\n" + agbCheckDisplayText);
+        nutzerDaten.setText("ID: " + id + " " + nameDisplayText + anrede + " " + vorname + " " + nachname + "\n"
+                + adresseDisplayText + strasse + " " + hausnummer + " " + plz + " " + ort + "\n" + emailDisplayText + email
+                + "\n" + agbCheckDisplayText);
 
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        //if (id == R.id.action_settings) {
-          //  return true;
-        //}
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void onClickLogout(View v) {
         Intent logout = new Intent(this, StartActivity.class);
+
+        //Löschen der User-ID (verhält sich ähnlich einer Session)
+        SharedPreferences session = getSharedPreferences("id", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = session.edit();
+        editor.clear();
+        editor.commit();
+
         startActivity(logout);
     }
 

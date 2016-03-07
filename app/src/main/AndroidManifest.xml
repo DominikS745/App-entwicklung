@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.dhbw.pizzabutler" >
+    package="de.dhbw.pizzabutler">
 
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -9,34 +10,27 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_pizzabuttler_launcher"
         android:label="@string/app_name"
-        android:theme="@style/PizzaButlerTheme" >
-        <activity android:name=".StartActivity" >
+        android:theme="@style/PizzaButlerTheme">
+        <activity android:name=".StartActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity
             android:name=".LoginActivity"
-            android:label="@string/app_name" >
-        </activity>
-        <activity android:name=".RegistrierenActivity" >
-        </activity>
+            android:label="@string/app_name" />
+        <activity android:name=".RegistrierenActivity" />
         <activity
             android:name=".NutzerDatenActivity"
-            android:label="@string/nutzerDaten" >
-        </activity>
-        <activity android:name=".LocationActivity" >
-        </activity>
-        <activity android:name=".BaseActivity" >
-        </activity>
-        <activity android:name=".ImpressumActivity" >
-        </activity>
-        <activity android:name=".AgbActivity" >
-        </activity>
-        <activity android:name=".DatenschutzActivity" >
-        </activity>
+            android:label="@string/nutzerDaten" />
+        <activity android:name=".LocationActivity" />
+        <activity android:name=".BaseActivity" />
+        <activity android:name=".ImpressumActivity" />
+        <activity android:name=".AgbActivity" />
+        <activity android:name=".DatenschutzActivity" />
+        <activity android:name=".ListPizzariaActivity" />
+        <activity android:name=".PizzariaProfilActivity" />
     </application>
 
 </manifest>

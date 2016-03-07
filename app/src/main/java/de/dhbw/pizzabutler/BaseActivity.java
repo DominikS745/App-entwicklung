@@ -1,13 +1,16 @@
 package de.dhbw.pizzabutler;
 
 import android.content.Intent;
+import android.content.pm.ResolveInfo;
 import android.content.res.Configuration;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -15,15 +18,16 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Marvin on 17.10.15.
  */
 public class BaseActivity extends AppCompatActivity {
+    protected RelativeLayout _completeLayout, _activityLayout;
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-    protected RelativeLayout _completeLayout, _activityLayout;
     // nav drawer title
     private CharSequence mDrawerTitle;
 
@@ -47,7 +51,7 @@ public class BaseActivity extends AppCompatActivity {
         // }
     }
 
-    public void set(String[] navMenuTitles,TypedArray navMenuIcons) {
+    public void set(String[] navMenuTitles, TypedArray navMenuIcons) {
         mTitle = mDrawerTitle = getTitle();
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -56,12 +60,13 @@ public class BaseActivity extends AppCompatActivity {
         navDrawerItems = new ArrayList<NavDrawerItem>();
 
         // adding nav drawer items
-        if(navMenuIcons==null){
-            for(int i=0;i<navMenuTitles.length;i++){
+        if (navMenuIcons == null) {
+            for (int i = 0; i < navMenuTitles.length; i++) {
                 navDrawerItems.add(new NavDrawerItem(navMenuTitles[i]));
-            }}else{
-            for(int i=0;i<navMenuTitles.length;i++){
-                navDrawerItems.add(new NavDrawerItem(navMenuTitles[i],navMenuIcons.getResourceId(i, -1)));
+            }
+        } else {
+            for (int i = 0; i < navMenuTitles.length; i++) {
+                navDrawerItems.add(new NavDrawerItem(navMenuTitles[i], navMenuIcons.getResourceId(i, -1)));
             }
         }
 
@@ -99,21 +104,14 @@ public class BaseActivity extends AppCompatActivity {
 
     }
 
-
-    private class SlideMenuClickListener implements
-            ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
-            // display view for selected nav drawer item
-            displayView(position);
-        }
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // getSupportMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        //return true;
+        MenuInflater inflater = getMenuInflater();
+        getMenuInflater().inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+
     }
 
     @Override
@@ -142,8 +140,8 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     /**
-     * Diplaying fragment view for selected nav drawer list item
-     * */
+     * Hier die Aufrufe, von den Elementen in dem NavDrawer, mit Intents
+     */
     private void displayView(int position) {
         // update the main content by replacing fragments
         switch (position) {
@@ -153,20 +151,18 @@ public class BaseActivity extends AppCompatActivity {
                 //finish();
                 break;
             case 1:
-                Intent intent1 = new Intent(this, ImpressumActivity.class);
+                Intent intent1 = new Intent(this, ListPizzariaActivity.class);
                 startActivity(intent1);
-                //finish();
                 break;
             case 2:
-                Intent intent2 = new Intent(this, AgbActivity.class);
+                Intent intent2 = new Intent(this, PizzariaProfilActivity.class);
                 startActivity(intent2);
-                //finish();
                 break;
             case 3:
-                Intent intent3 = new Intent(this, DatenschutzActivity.class);
-                startActivity(intent3);
-                //finish();
-                break;
+                Intent share = new Intent(Intent.ACTION_SEND);
+                share.setType("text/plain");
+                share.putExtra(Intent.EXTRA_TEXT, getString(R.string.twitter_post));
+                startActivity(Intent.createChooser(share, "Share with"));
             default:
                 break;
         }
@@ -176,6 +172,10 @@ public class BaseActivity extends AppCompatActivity {
         mDrawerList.setSelection(position);
         mDrawerLayout.closeDrawer(mDrawerList);
     }
+
+    /**
+     * Diplaying fragment view for selected nav drawer list item
+     */
 
     @Override
     public void setTitle(CharSequence title) {
@@ -199,9 +199,64 @@ public class BaseActivity extends AppCompatActivity {
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
         // Pass any configuration change to the drawer toggls
-       mDrawerToggle.onConfigurationChanged(newConfig);
+        mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    //Onclick Methoden für Twitter und Facebook:
+    public void onClickFacebook(MenuItem mi) {
+        String urlToShare = "http://wwww.facebook.com"; //Muss noch auf die URL von PizzaButler geändert werden
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("text/plain");
+        intent.putExtra(Intent.EXTRA_TEXT, urlToShare);
+        boolean facebookAppFound = false;
+
+        // Überprüfung ob die Facebook app installiert ist
+        List<ResolveInfo> matches = getPackageManager().queryIntentActivities(intent, 0);
+        for (ResolveInfo info : matches) {
+            if (info.activityInfo.packageName.toLowerCase().startsWith("com.facebook.katana")) {
+                intent.setPackage(info.activityInfo.packageName);
+                facebookAppFound = true;
+                break;
+            }
+        }
+        //Fallback falls die Facebook app nicht installiert ist
+        if (!facebookAppFound) {
+            String sharerUrl = "https://www.facebook.com/sharer/sharer.php?u=" + urlToShare;
+            intent = new Intent(Intent.ACTION_VIEW, Uri.parse(sharerUrl));
+        }
+
+        startActivity(intent);
+    }
+
+    public void onClickTwitter(MenuItem mi) {
+        try {
+            // Überprüfung ob die Twitter app installiert ist
+            getPackageManager().getPackageInfo("com.twitter.android", 0);
+            Intent postToTwitter = new Intent(Intent.ACTION_SEND);
+            postToTwitter.setClassName("com.twitter.android", "com.twitter.android.composer.ComposerActivity");
+            postToTwitter.setType("text/plain");
+            postToTwitter.putExtra(Intent.EXTRA_TEXT, getString(R.string.twitter_post));
+            startActivity(postToTwitter);
+        } catch (Exception e) {
+            //Fallback falls die Twitter app nicht installiert ist
+            String url = "http://www.twitter.com/intent/tweet?text=" + getString(R.string.twitter_post);
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
+        }
+    }
+
+    private class SlideMenuClickListener implements
+            ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                                long id) {
+            // display view for selected nav drawer item
+            displayView(position);
+        }
     }
 }
+
 
 
 

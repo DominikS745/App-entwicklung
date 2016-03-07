@@ -1,15 +1,11 @@
 package de.dhbw.pizzabutler;
 
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,9 +18,6 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.util.support.Base64;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-
-import de.dhbw.pizzabutler_entities.Oeffnungszeiten;
 import de.dhbw.pizzabutler_entities.Pizzeria;
 
 /**
@@ -120,41 +113,6 @@ public class ListPizzariaActivity extends BaseActivity {
             e.printStackTrace();
         }
         return null;
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-    //Standard Code
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getMenuInflater();
-        getMenuInflater().inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.string.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
     }
 
     private class ListThroughBackend extends AsyncTask<Void, Void, Void> {

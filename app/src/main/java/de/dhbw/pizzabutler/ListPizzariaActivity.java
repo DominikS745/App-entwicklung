@@ -45,9 +45,12 @@ public class ListPizzariaActivity extends BaseActivity {
 
         //EditText fuer die Eingabe der Postleitzahl
         plzEditText = (EditText) findViewById(R.id.location_text);
-        plzEditText.setText(getIntent().getStringExtra("plz"));
 
-        new ListThroughBackend(plzEditText.getText().toString()).execute();
+        //Null-Ueberpruefung und Setzen der PLZ in EditText
+        if(null != getIntent().getStringExtra("plz")) {
+            plzEditText.setText(getIntent().getStringExtra("plz"));
+            new ListThroughBackend(plzEditText.getText().toString()).execute();
+        }
 
         // Defined Array values to show in ListView
         String[] values = new String[]{"Pizzaria 1", "Pizzaria 2", "Pizzaria 3", "Pizzaria 4", "Pizzaria 5",

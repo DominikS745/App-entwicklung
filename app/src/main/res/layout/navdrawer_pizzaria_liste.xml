@@ -33,6 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8pt"
                     android:inputType="number"
+                    android:maxLength="5"
                     android:text="**POSTLEITZAHL**"
                     android:textColor="@android:color/white"
                     android:textSize="16dp">

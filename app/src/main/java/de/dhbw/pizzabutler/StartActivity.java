@@ -140,7 +140,15 @@ public class StartActivity extends BaseActivity {
         String ort = parts[0];
         String plz = parts[1];
 
-        callPizzaList(plz);
+        System.out.println(plz);
+
+        if(null != plz){
+            callPizzaList(plz);
+        }
+        else{
+            checkLocation();
+        }
+
     }
 
     //Umwandlung des Laengen- + Breitengrades in PLZ und Ort

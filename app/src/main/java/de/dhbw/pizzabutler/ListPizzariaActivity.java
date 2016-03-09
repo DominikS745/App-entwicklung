@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
@@ -109,7 +108,7 @@ public class ListPizzariaActivity extends BaseActivity {
 
 
 
-    public void pizzerienSuchen() {
+    public void pizzerienSuchen(View v) {
         new ListThroughBackend(plzEditText.getText().toString()).execute();
     }
 
@@ -119,8 +118,8 @@ public class ListPizzariaActivity extends BaseActivity {
             byte[] byteArray = Base64.decode(base64);
             Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
             //Provisorische Anzeige (die vermutlich das Layout etwas zerlegt. Später löschen!
-            ImageView image = (ImageView) findViewById(R.id.imageView1);
-            image.setImageBitmap(bitmap);
+            //ImageView image = (ImageView) findViewById(R.id.imageView1);
+            //image.setImageBitmap(bitmap);
 
             return bitmap;
         }
@@ -143,7 +142,7 @@ public class ListPizzariaActivity extends BaseActivity {
         protected Void doInBackground(Void... params) {
             try {
                 //Definition einer URL
-                final String url = "http://pizzaButlerBackend.krihi.com/pizzeria";
+                final String url = "http://pizzaButlerBackend.krihi.com/restaurant";
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
@@ -197,7 +196,7 @@ public class ListPizzariaActivity extends BaseActivity {
         protected Void doInBackground(Void... params) {
             try {
                 //Definition einer URL
-                final String url = "http://pizzaButlerBackend.krihi.com/pizzeria";
+                final String url = "http://pizzaButlerBackend.krihi.com/restaurant/id";
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();

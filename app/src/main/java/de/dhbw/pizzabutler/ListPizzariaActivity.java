@@ -19,7 +19,10 @@ import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.util.support.Base64;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+
 import de.dhbw.pizzabutler_entities.Pizzeria;
+import de.dhbw.pizzabutler_entities.User;
 
 /**
  * Created by Marvin on 28.02.16.
@@ -43,22 +46,25 @@ public class ListPizzariaActivity extends BaseActivity {
 
         new ListThroughBackend().execute();
 
-        // Defined Array values to show in ListView
-        String[] values = new String[]{"Pizzaria 1", "Pizzaria 2", "Pizzaria 3", "Pizzaria 4", "Pizzaria 5",
-                "Pizzaria 6", "Pizzaria 7", "Pizzaria 8", "Pizzaria 9", "Pizzaria 10", "Pizzaria 11"
-        };
+        // Define Dummy Data
+        Pizzeria dummy_pizzeria = new Pizzeria();
+        dummy_pizzeria.setStrasse("Beispielstrasse");
+        dummy_pizzeria.setName("Meine Pizzeriaiaia");
 
-        // Define a new Adapter
-        // First parameter - Context
-        // Second parameter - Layout for the row
-        // Third parameter - ID of the TextView to which the data is written
-        // Forth - the Array of data
+        // Construct the data source --> Must be a ArrayList
+        ArrayList<Pizzeria> arrayOfPizzeria = new ArrayList<Pizzeria>();
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        // Define a new Adapter witch a context and an ArrayList of Pizzeria Objects
+        CustomListAdapter adapter = new CustomListAdapter(this, arrayOfPizzeria);
 
-        // Assign adapter to ListView
+
+        // Attach the adapter to a ListView
+        ListView listView = (ListView) findViewById(R.id.listview_pizzaria);
         listView.setAdapter(adapter);
+
+
+        //Add Data to the Adapter
+        adapter.add(dummy_pizzeria);
 
 
         // ListView Item Click Listener
@@ -67,21 +73,6 @@ public class ListPizzariaActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
-                // ListView Clicked item index
-                int itemPosition = position;
-
-                // ListView Clicked item value
-                String itemValue = (String) listView.getItemAtPosition(position);
-
-                //provisorische ID; die echte ID muss über das Pizzeria-Objekt aufgerufen werden
-                new DetailThroughBackend(itemValue).execute();
-/*
-                // Show Alert
-                Toast.makeText(getApplicationContext(),
-                        "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
-                        .show();
-*/
                 //Aufruf des Pizzaria Profils
                 Intent intent = new Intent(ListPizzariaActivity.this, PizzariaProfilActivity.class);
                 startActivity(intent);
@@ -99,9 +90,6 @@ public class ListPizzariaActivity extends BaseActivity {
     }
 
 
-
-
-
     //Verarbeitung des Bilds
     public Bitmap processPicture(String base64) {
         try {
@@ -112,8 +100,7 @@ public class ListPizzariaActivity extends BaseActivity {
             image.setImageBitmap(bitmap);
 
             return bitmap;
-        }
-        catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -123,7 +110,7 @@ public class ListPizzariaActivity extends BaseActivity {
 
         ResponseEntity<Pizzeria[]> response;
 
-        public ListThroughBackend(){
+        public ListThroughBackend() {
 
         }
 
@@ -144,7 +131,7 @@ public class ListPizzariaActivity extends BaseActivity {
                 Pizzeria[] pizzerien = response.getBody();
 
                 //Hier sollte die Listenuebersicht der Pizzerien befuellt werden
-                for(int i=0; i<pizzerien.length; i++){
+                for (int i = 0; i < pizzerien.length; i++) {
                     System.out.println("Name: " + pizzerien[i].getName());
                     System.out.println("Hausnummer: " + pizzerien[i].getHausnummer());
                     System.out.println("Lieferkosten: " + pizzerien[i].getLieferkosten());
@@ -177,7 +164,7 @@ public class ListPizzariaActivity extends BaseActivity {
         ResponseEntity<Pizzeria> response;
         String id;
 
-        public DetailThroughBackend(String pId){
+        public DetailThroughBackend(String pId) {
             id = pId;
         }
 

@@ -159,9 +159,7 @@ public class LoginActivity extends BaseActivity {
 
     //Anbindung an das Backend muss noch erfolgen
     public void onClickPasswortVergessen(View v) {
-        /*
-        Intent passwortVergessen = new Intent(this, LocationActivity.class);
-        startActivity(passwortVergessen); */
+
     }
 
 }

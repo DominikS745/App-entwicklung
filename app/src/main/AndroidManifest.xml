@@ -25,7 +25,6 @@
         <activity
             android:name=".NutzerDatenActivity"
             android:label="@string/nutzerDaten" />
-        <activity android:name=".LocationActivity" />
         <activity android:name=".BaseActivity" />
         <activity android:name=".ImpressumActivity" />
         <activity android:name=".AgbActivity" />

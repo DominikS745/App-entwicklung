@@ -10,9 +10,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
@@ -24,12 +24,10 @@ import java.util.ArrayList;
 import de.dhbw.pizzabutler_entities.Pizzeria;
 import de.dhbw.pizzabutler_entities.User;
 
-/**
- * Created by Marvin on 28.02.16.
- */
 public class ListPizzariaActivity extends BaseActivity {
 
     ListView listView;
+    EditText plzEditText;
 
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
@@ -44,12 +42,24 @@ public class ListPizzariaActivity extends BaseActivity {
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.listview_pizzaria);
 
-        new ListThroughBackend().execute();
+        //EditText fuer die Eingabe der Postleitzahl
+        plzEditText = (EditText) findViewById(R.id.location_text);
 
-        // Define Dummy Data
-        Pizzeria dummy_pizzeria = new Pizzeria();
-        dummy_pizzeria.setStrasse("Beispielstrasse");
-        dummy_pizzeria.setName("Meine Pizzeriaiaia");
+		// Define Dummy Data
+		Pizzeria dummy_pizzeria = new Pizzeria();
+		dummy_pizzeria.setStrasse("Beispielstrasse");
+		dummy_pizzeria.setName("Meine Pizzeriaiaia");
+
+        //Null-Ueberpruefung und Setzen der PLZ in EditText
+        if(null != getIntent().getStringExtra("plz")) {
+            plzEditText.setText(getIntent().getStringExtra("plz"));
+            new ListThroughBackend(plzEditText.getText().toString()).execute();
+        }
+
+        // Defined Array values to show in ListView
+        String[] values = new String[]{"Pizzaria 1", "Pizzaria 2", "Pizzaria 3", "Pizzaria 4", "Pizzaria 5",
+                "Pizzaria 6", "Pizzaria 7", "Pizzaria 8", "Pizzaria 9", "Pizzaria 10", "Pizzaria 11"
+        };
 
         // Construct the data source --> Must be a ArrayList
         ArrayList<Pizzeria> arrayOfPizzeria = new ArrayList<Pizzeria>();
@@ -62,10 +72,8 @@ public class ListPizzariaActivity extends BaseActivity {
         ListView listView = (ListView) findViewById(R.id.listview_pizzaria);
         listView.setAdapter(adapter);
 
-
         //Add Data to the Adapter
         adapter.add(dummy_pizzeria);
-
 
         // ListView Item Click Listener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -80,7 +88,6 @@ public class ListPizzariaActivity extends BaseActivity {
 
         });
 
-
         //Icons und Text für NavDrawer initalisieren
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
         navMenuIcons = getResources()
@@ -89,6 +96,9 @@ public class ListPizzariaActivity extends BaseActivity {
 
     }
 
+    public void pizzerienSuchen(View v) {
+        new ListThroughBackend(plzEditText.getText().toString()).execute();
+    }
 
     //Verarbeitung des Bilds
     public Bitmap processPicture(String base64) {
@@ -96,8 +106,8 @@ public class ListPizzariaActivity extends BaseActivity {
             byte[] byteArray = Base64.decode(base64);
             Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
             //Provisorische Anzeige (die vermutlich das Layout etwas zerlegt. Später löschen!
-            ImageView image = (ImageView) findViewById(R.id.imageView1);
-            image.setImageBitmap(bitmap);
+            //ImageView image = (ImageView) findViewById(R.id.imageView1);
+            //image.setImageBitmap(bitmap);
 
             return bitmap;
         } catch (Exception e) {
@@ -109,21 +119,22 @@ public class ListPizzariaActivity extends BaseActivity {
     private class ListThroughBackend extends AsyncTask<Void, Void, Void> {
 
         ResponseEntity<Pizzeria[]> response;
+        String plz;
 
-        public ListThroughBackend() {
-
+        public ListThroughBackend(String mPlz){
+            plz = mPlz;
         }
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
                 //Definition einer URL
-                final String url = "http://pizzaButlerBackend.krihi.com/pizzeria";
+                final String url = "http://pizzaButlerBackend.krihi.com/restaurant";
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                response = restTemplate.getForEntity(url, Pizzeria[].class);
+                response = restTemplate.getForEntity(url, Pizzeria[].class, plz);
 
                 //Ausgabe des Statuscodes
                 System.out.println(response.getStatusCode());
@@ -172,7 +183,7 @@ public class ListPizzariaActivity extends BaseActivity {
         protected Void doInBackground(Void... params) {
             try {
                 //Definition einer URL
-                final String url = "http://pizzaButlerBackend.krihi.com/pizzeria";
+                final String url = "http://pizzaButlerBackend.krihi.com/restaurant/id";
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();

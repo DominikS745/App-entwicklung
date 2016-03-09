@@ -11,24 +11,5 @@
     tools:context=".MainActivity"
     >
 
-    <TextView
-        android:id="@+id/textBreitenGrad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Breitengrad: 0.0"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        />
-
-    <TextView
-        android:id="@+id/textLaengenGrad"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Längengrad: 0.0"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        />
 
 </LinearLayout>

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -27,6 +28,7 @@ import de.dhbw.pizzabutler_entities.Pizzeria;
 public class ListPizzariaActivity extends BaseActivity {
 
     ListView listView;
+    EditText plzEditText;
 
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
@@ -41,7 +43,11 @@ public class ListPizzariaActivity extends BaseActivity {
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.listview_pizzaria);
 
-        new ListThroughBackend().execute();
+        //EditText fuer die Eingabe der Postleitzahl
+        plzEditText = (EditText) findViewById(R.id.location_text);
+        plzEditText.setText(getIntent().getStringExtra("plz"));
+
+        new ListThroughBackend(plzEditText.getText().toString()).execute();
 
         // Defined Array values to show in ListView
         String[] values = new String[]{"Pizzaria 1", "Pizzaria 2", "Pizzaria 3", "Pizzaria 4", "Pizzaria 5",
@@ -100,7 +106,9 @@ public class ListPizzariaActivity extends BaseActivity {
 
 
 
-
+    public void pizzerienSuchen() {
+        new ListThroughBackend(plzEditText.getText().toString()).execute();
+    }
 
     //Verarbeitung des Bilds
     public Bitmap processPicture(String base64) {
@@ -122,9 +130,10 @@ public class ListPizzariaActivity extends BaseActivity {
     private class ListThroughBackend extends AsyncTask<Void, Void, Void> {
 
         ResponseEntity<Pizzeria[]> response;
+        String plz;
 
-        public ListThroughBackend(){
-
+        public ListThroughBackend(String mPlz){
+            plz = mPlz;
         }
 
         @Override
@@ -136,7 +145,7 @@ public class ListPizzariaActivity extends BaseActivity {
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                response = restTemplate.getForEntity(url, Pizzeria[].class);
+                response = restTemplate.getForEntity(url, Pizzeria[].class, plz);
 
                 //Ausgabe des Statuscodes
                 System.out.println(response.getStatusCode());

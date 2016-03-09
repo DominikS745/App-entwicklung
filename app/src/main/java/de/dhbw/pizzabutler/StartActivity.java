@@ -29,16 +29,20 @@ public class StartActivity extends BaseActivity {
 
     }
 
-
-    //Aufruf der Location-Abfrage (-Activity)
-    public void onClickLocation(View v) {
+    //Aufruf der Pizzaria Liste mit Location-Abfrage
+    public void onClickButton(View v) {
         Intent findLocation = new Intent(this, LocationActivity.class);
-        startActivity(findLocation);
+        startActivityForResult(findLocation, 400);
+        System.out.println("TEST");
     }
 
-    //Aufruf der Pizzaria Liste
-    public void onClickButton(View v) {
-        Intent intent = new Intent(this, ListPizzariaActivity.class);
-        startActivity(intent);
+    public void onActivityResult(int requestCode, int responseCode, Intent intent) {
+        System.out.println("------------------------------------------");
+        String plz = getIntent().getStringExtra("plz");
+        System.out.println(plz);
+        System.out.println("------------------------------------------");
+        Intent listPizzerien = new Intent(this, ListPizzariaActivity.class);
+        listPizzerien.putExtra("plz", plz);
+        startActivity(listPizzerien);
     }
 }

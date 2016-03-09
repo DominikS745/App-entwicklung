@@ -1,5 +1,6 @@
 package de.dhbw.pizzabutler;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -19,10 +20,6 @@ import java.util.Locale;
 
 public class LocationActivity extends AppCompatActivity  {
 
-    //Variablen, zur Anzeige der Daten (nicht unbedingt relevant)
-    TextView l;
-    TextView b;
-
     LocationManager locationManager;
     LocationListener listener;
 
@@ -30,10 +27,6 @@ public class LocationActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location);
-
-        //Definition der Textausgabefelder
-        l = (TextView) findViewById(R.id.textLaengenGrad);
-        b = (TextView) findViewById(R.id.textBreitenGrad);
 
         //Instantiierung LocationManager + Listener mit vorgefertigten Funktionen
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
@@ -106,7 +99,9 @@ public class LocationActivity extends AppCompatActivity  {
                                 //Neuueberpruefung der Location
                                 checkLocation();
                             }
-                        });
+                        })
+                .setCancelable(false);
+
         //Anzeigen des Dialogfeldes
         builder.create().show();
     }
@@ -122,8 +117,12 @@ public class LocationActivity extends AppCompatActivity  {
             String ort = parts[0];
             String plz = parts[1];
 
-            b.setText("Sie befinden sich momentan in " + ort + ".");
-            l.setText("Dieser Ort hat die PLZ: " + plz);
+            Intent intent = new Intent();
+            intent.putExtra("plz" , plz);
+
+            //Rueckgabe der PLZ der Location
+            setResult(Activity.RESULT_OK, intent);
+            finish();
         }
 
     //Umwandlung des Laengen- + Breitengrades in PLZ und Ort

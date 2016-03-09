@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
@@ -60,14 +62,32 @@ public class LoginActivity extends BaseActivity {
      */
     public void logIn(View v) {
         if (eingabeUser.getText().toString().contains("@") && eingabeUser.getText().toString().contains(".") && eingabePasswort.getText().toString().length() < 13 && eingabePasswort.getText().toString().length() > 7) {
-            String passwort = eingabePasswort.getText().toString();
-            String email = eingabeUser.getText().toString();
-            Toast.makeText(this, "Login wird durchgeführt", Toast.LENGTH_LONG).show();
-            new LoginThroughBackend(passwort, email).execute();
-
+            //Ueberpruefung der Internetverbindung
+            if(!isOnline()){
+                Toast.makeText(this, "Keine Internetverbindung möglich", Toast.LENGTH_SHORT).show();
+            }
+            else{
+                String passwort = eingabePasswort.getText().toString();
+                String email = eingabeUser.getText().toString();
+                Toast.makeText(this, "Login wird durchgeführt", Toast.LENGTH_SHORT).show();
+                new LoginThroughBackend(passwort, email).execute();
+            }
         } else {
             Toast failure = Toast.makeText(this, getString(R.string.rückgabewert_minus1), Toast.LENGTH_SHORT);
             failure.show();
+        }
+    }
+
+    //Funktion zur Ueberpruefung der Internetverbindung
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if(null != netInfo && (netInfo.getState()==NetworkInfo.State.CONNECTED || netInfo.getState()==NetworkInfo.State.CONNECTING)){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 

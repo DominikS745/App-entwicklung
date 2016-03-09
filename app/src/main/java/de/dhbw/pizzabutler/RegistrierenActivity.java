@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +18,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
@@ -364,11 +367,17 @@ public class RegistrierenActivity extends AppCompatActivity {
      */
     public void registrierungAbschliessen(View v) {
 
-        //Uebergabe der Daten in die innere Klasse RegisterThroughBackend
-        new RegisterThroughBackend(anredeSp.getSelectedItem().toString(),vornameET.getText().toString(),
-                nachnameET.getText().toString(), strasseET.getText().toString(),
-                hausnummerET.getText().toString(), plzET.getText().toString(), ortET.getText().toString(),
-                passwortET.getText().toString(), emailET.getText().toString()).execute();
+        //Pruefung der Internetverbindung
+        if(!isOnline()){
+            Toast.makeText(this, "Keine Internetverbindung möglich", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            //Uebergabe der Daten in die innere Klasse RegisterThroughBackend
+            new RegisterThroughBackend(anredeSp.getSelectedItem().toString(), vornameET.getText().toString(),
+                    nachnameET.getText().toString(), strasseET.getText().toString(),
+                    hausnummerET.getText().toString(), plzET.getText().toString(), ortET.getText().toString(),
+                    passwortET.getText().toString(), emailET.getText().toString()).execute();
+        }
     }
 
     //enable or disable button
@@ -382,6 +391,19 @@ public class RegistrierenActivity extends AppCompatActivity {
         //Wenn Fehler vorhanden sind, deaktiviere den Button
         else {
             accept_button.setEnabled(false);
+        }
+    }
+
+    //Funktion zur Ueberpruefung der Internetverbindung
+    public boolean isOnline() {
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if(null != netInfo && (netInfo.getState()==NetworkInfo.State.CONNECTED || netInfo.getState()==NetworkInfo.State.CONNECTING)){
+            return true;
+        }
+        else{
+            return false;
         }
     }
 

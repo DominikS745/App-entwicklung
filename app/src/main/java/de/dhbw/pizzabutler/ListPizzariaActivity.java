@@ -9,9 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import org.springframework.http.ResponseEntity;
@@ -22,16 +20,17 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 
 import de.dhbw.pizzabutler_entities.Pizzeria;
-import de.dhbw.pizzabutler_entities.User;
 
 public class ListPizzariaActivity extends BaseActivity {
 
     ListView listView;
     EditText plzEditText;
+    Pizzeria[] pizzerien;
 
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
+
 
     //Custom Code
     @Override
@@ -45,26 +44,21 @@ public class ListPizzariaActivity extends BaseActivity {
         //EditText fuer die Eingabe der Postleitzahl
         plzEditText = (EditText) findViewById(R.id.location_text);
 
-		// Define Dummy Data
-		Pizzeria dummy_pizzeria = new Pizzeria();
-		dummy_pizzeria.setStrasse("Beispielstrasse");
-		dummy_pizzeria.setName("Meine Pizzeriaiaia");
-
         //Null-Ueberpruefung und Setzen der PLZ in EditText
         if(null != getIntent().getStringExtra("plz")) {
             plzEditText.setText(getIntent().getStringExtra("plz"));
             new ListThroughBackend(plzEditText.getText().toString()).execute();
         }
 
-        // Defined Array values to show in ListView
-        String[] values = new String[]{"Pizzaria 1", "Pizzaria 2", "Pizzaria 3", "Pizzaria 4", "Pizzaria 5",
-                "Pizzaria 6", "Pizzaria 7", "Pizzaria 8", "Pizzaria 9", "Pizzaria 10", "Pizzaria 11"
-        };
+		// Define Dummy Data
+		Pizzeria dummy_pizzeria = new Pizzeria();
+		dummy_pizzeria.setStrasse("Beispielstrasse");
+		dummy_pizzeria.setName("Meine Pizzeriaiaia");
 
-        // Construct the data source --> Must be a ArrayList
+        // Construct the data source --> Must be an ArrayList
         ArrayList<Pizzeria> arrayOfPizzeria = new ArrayList<Pizzeria>();
 
-        // Define a new Adapter witch a context and an ArrayList of Pizzeria Objects
+        // Define a new Adapter with a context and an ArrayList of Pizzeria Objects
         CustomListAdapter adapter = new CustomListAdapter(this, arrayOfPizzeria);
 
 
@@ -74,6 +68,18 @@ public class ListPizzariaActivity extends BaseActivity {
 
         //Add Data to the Adapter
         adapter.add(dummy_pizzeria);
+        pizzerienSuchen(listView);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        //System.out.println("------------------");
+       // System.out.println(pizzerien.length);
+        for (int i = 0; i < pizzerien.length; i++){
+            adapter.add(pizzerien[i]);
+        }
+
 
         // ListView Item Click Listener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -121,9 +127,7 @@ public class ListPizzariaActivity extends BaseActivity {
         ResponseEntity<Pizzeria[]> response;
         String plz;
 
-        public ListThroughBackend(String mPlz){
-            plz = mPlz;
-        }
+        public ListThroughBackend(String mPlz){plz = mPlz;}
 
         @Override
         protected Void doInBackground(Void... params) {
@@ -139,7 +143,7 @@ public class ListPizzariaActivity extends BaseActivity {
                 //Ausgabe des Statuscodes
                 System.out.println(response.getStatusCode());
 
-                Pizzeria[] pizzerien = response.getBody();
+                pizzerien = response.getBody();
 
                 //Hier sollte die Listenuebersicht der Pizzerien befuellt werden
                 for (int i = 0; i < pizzerien.length; i++) {
@@ -156,7 +160,6 @@ public class ListPizzariaActivity extends BaseActivity {
                     //Verarbeitung des Bilds
                     processPicture(pizzerien[i].getBild());
                 }
-
             } catch (Exception e) {
                 Log.e("RegistrierenActivity", e.getMessage(), e);
             }

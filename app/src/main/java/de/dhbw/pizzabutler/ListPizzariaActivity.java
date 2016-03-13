@@ -70,7 +70,7 @@ public class ListPizzariaActivity extends BaseActivity {
         //adapter.add(dummy_pizzeria);
         pizzerienSuchen(listView);
         try {
-            Thread.sleep(1000);
+            Thread.sleep(2000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -106,21 +106,8 @@ public class ListPizzariaActivity extends BaseActivity {
         new ListThroughBackend(plzEditText.getText().toString()).execute();
     }
 
-    //Verarbeitung des Bilds
-    public Bitmap processPicture(String base64) {
-        try {
-            byte[] byteArray = Base64.decode(base64);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-            //Provisorische Anzeige (die vermutlich das Layout etwas zerlegt. Später löschen!
-            //ImageView image = (ImageView) findViewById(R.id.imageView1);
-            //image.setImageBitmap(bitmap);
 
-            return bitmap;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 
     private class ListThroughBackend extends AsyncTask<Void, Void, Void> {
 
@@ -145,21 +132,6 @@ public class ListPizzariaActivity extends BaseActivity {
 
                 pizzerien = response.getBody();
 
-                //Hier sollte die Listenuebersicht der Pizzerien befuellt werden
-                for (int i = 0; i < pizzerien.length; i++) {
-                    System.out.println("Name: " + pizzerien[i].getName());
-                    System.out.println("Hausnummer: " + pizzerien[i].getHausnummer());
-                    System.out.println("Lieferkosten: " + pizzerien[i].getLieferkosten());
-                    System.out.println("PLZ: " + pizzerien[i].getPlz());
-                    System.out.println("Ort: " + pizzerien[i].getOrt());
-                    System.out.println("Straße: " + pizzerien[i].getStrasse());
-                    System.out.println("Öffnungszeiten: " + pizzerien[i].getOeffnungszeiten().length);
-                    System.out.println("Von :" + pizzerien[i].getOeffnungszeiten()[i].getVon());
-                    System.out.println("Bis :" + pizzerien[i].getOeffnungszeiten()[i].getBis());
-                    System.out.println("Tag :" + pizzerien[i].getOeffnungszeiten()[i].getTag());
-                    //Verarbeitung des Bilds
-                    processPicture(pizzerien[i].getBild());
-                }
             } catch (Exception e) {
                 Log.e("RegistrierenActivity", e.getMessage(), e);
             }

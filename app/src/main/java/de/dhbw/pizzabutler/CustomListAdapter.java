@@ -1,6 +1,8 @@
 package de.dhbw.pizzabutler;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,6 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.springframework.util.support.Base64;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
@@ -55,9 +58,29 @@ public class CustomListAdapter extends ArrayAdapter<Pizzeria> {
         PizzariaLieferkosten.setText(data.getLieferkosten().toString());
         PizzariaMindestbestellwert.setText(data.getMindestbestellwert().toString());
 
+        //Aufbereiten des Bilds
+        Bitmap pic = processPicture(data.getBild());
+        PizzariaBild.setImageBitmap(pic);
+
         // Return the completed view to render on screen
         return convertView;
 
+    }
+
+    //Verarbeitung des Bilds
+    public Bitmap processPicture(String base64) {
+        try {
+            byte[] byteArray = Base64.decode(base64);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            //Provisorische Anzeige (die vermutlich das Layout etwas zerlegt. Später löschen!
+            //ImageView image = (ImageView) findViewById(R.id.imageView1);
+            //image.setImageBitmap(bitmap);
+
+            return bitmap;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 

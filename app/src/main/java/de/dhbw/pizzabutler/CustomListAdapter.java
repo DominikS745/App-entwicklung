@@ -35,6 +35,7 @@ public class CustomListAdapter extends ArrayAdapter<Pizzeria> {
         // Lookup view for data population
         TextView PizzariaName = (TextView) convertView.findViewById(R.id.pizzaria_name);
         TextView PizzariaStrasse = (TextView) convertView.findViewById(R.id.pizzaria_adresse);
+
         // Populate the data into the template view using the data object
         PizzariaName.setText(data.getName());
         PizzariaStrasse.setText(data.getStrasse());

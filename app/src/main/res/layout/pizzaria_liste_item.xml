@@ -17,11 +17,11 @@
 
         <ImageView
             android:id="@+id/pizzaria_bild"
-            android:layout_width="64pt"
-            android:layout_height="64pt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="8pt"
             android:scaleType="fitXY"
-            android:src="@drawable/haus_icon" />
+            android:src="@drawable/pizzabutler_erroricon_old" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -46,7 +46,13 @@
                     android:id="@+id/pizzaria_adresse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Adresse "
+                    android:text="Adresse"
+                    android:textSize="10pt" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" "
                     android:textSize="10pt" />
 
                 <TextView
@@ -67,7 +73,13 @@
                     android:id="@+id/pizzaria_plz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="PLZ "
+                    android:text="PLZ"
+                    android:textSize="10pt" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" "
                     android:textSize="10pt" />
 
                 <TextView
@@ -99,7 +111,14 @@
                     android:id="@+id/pizzaria_lieferkosten_betrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="€"
+                    android:text=""
+                    android:textSize="8pt" />
+
+                <TextView
+                    android:id="@+id/static_euro_lieferkosten"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" €"
                     android:textSize="8pt" />
             </LinearLayout>
 
@@ -112,14 +131,21 @@
                     android:id="@+id/pizzaria_minbestellwert_static_string"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Mindestbestelltwert: "
+                    android:text="Minimum: "
                     android:textSize="8pt" />
 
                 <TextView
                     android:id="@+id/pizzaria_minbestellwert_betrag"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="€"
+                    android:text=""
+                    android:textSize="8pt" />
+
+                <TextView
+                    android:id="@+id/static_euro_mindestbestellwert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" €"
                     android:textSize="8pt" />
             </LinearLayout>
 
@@ -133,9 +159,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="geschlossen / offen"
+                android:textColor="@android:color/holo_green_dark"
                 android:textSize="8pt"
-                android:textStyle="bold"
-                android:textColor="@android:color/holo_green_dark"/>
+                android:textStyle="bold" />
 
         </LinearLayout>
     </LinearLayout>

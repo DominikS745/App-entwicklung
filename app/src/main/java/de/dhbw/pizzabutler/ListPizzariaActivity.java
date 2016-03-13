@@ -51,9 +51,9 @@ public class ListPizzariaActivity extends BaseActivity {
         }
 
 		// Define Dummy Data
-		Pizzeria dummy_pizzeria = new Pizzeria();
-		dummy_pizzeria.setStrasse("Beispielstrasse");
-		dummy_pizzeria.setName("Meine Pizzeriaiaia");
+		//Pizzeria dummy_pizzeria = new Pizzeria();
+		//dummy_pizzeria.setStrasse("Beispielstrasse");
+		//dummy_pizzeria.setName("Meine Pizzeriaiaia");
 
         // Construct the data source --> Must be an ArrayList
         ArrayList<Pizzeria> arrayOfPizzeria = new ArrayList<Pizzeria>();
@@ -67,10 +67,10 @@ public class ListPizzariaActivity extends BaseActivity {
         listView.setAdapter(adapter);
 
         //Add Data to the Adapter
-        adapter.add(dummy_pizzeria);
+        //adapter.add(dummy_pizzeria);
         pizzerienSuchen(listView);
         try {
-            Thread.sleep(500);
+            Thread.sleep(1000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

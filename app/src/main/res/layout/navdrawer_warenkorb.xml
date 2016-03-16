@@ -41,13 +41,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"></ListView>
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginRight="8dp"
+            <Button
+                style="@style/WarenkorbButton"
+                android:layout_width="match_parent"
+                android:layout_height="16pt"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/ic_navigate_next_black" />
+                android:gravity="center"
+                android:text="Zur Kasse"
+                android:textSize="10pt"
+                android:textStyle="bold" />
 
         </LinearLayout>
     </FrameLayout>

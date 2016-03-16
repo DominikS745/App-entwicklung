@@ -1,7 +1,9 @@
 package de.dhbw.pizzabutler;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
@@ -48,6 +50,12 @@ public class PizzariaProfilActivity extends BaseActivity {
                 .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
         set(navMenuTitles, navMenuIcons);
 
+    }
+
+    //OnClick Funktion für Aufruf des Warenkorbs
+    public void OnClickWeiter(View v) {
+        Intent intent = new Intent (PizzariaProfilActivity.this, StartActivity.class);
+        startActivity(intent);
     }
 
     /*

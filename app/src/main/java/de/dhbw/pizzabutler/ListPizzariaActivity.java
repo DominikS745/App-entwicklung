@@ -18,11 +18,13 @@ import org.springframework.util.support.Base64;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import de.dhbw.pizzabutler_entities.Pizzeria;
 
 public class ListPizzariaActivity extends BaseActivity {
 
+    CustomListAdapter adapter;
     ListView listView;
     EditText plzEditText;
     Pizzeria[] pizzerien;
@@ -59,27 +61,14 @@ public class ListPizzariaActivity extends BaseActivity {
         ArrayList<Pizzeria> arrayOfPizzeria = new ArrayList<Pizzeria>();
 
         // Define a new Adapter with a context and an ArrayList of Pizzeria Objects
-        CustomListAdapter adapter = new CustomListAdapter(this, arrayOfPizzeria);
+        adapter = new CustomListAdapter(this, arrayOfPizzeria);
 
 
         // Attach the adapter to a ListView
         ListView listView = (ListView) findViewById(R.id.listview_pizzaria);
         listView.setAdapter(adapter);
 
-        //Add Data to the Adapter
-        //adapter.add(dummy_pizzeria);
         pizzerienSuchen(listView);
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //System.out.println("------------------");
-       // System.out.println(pizzerien.length);
-        for (int i = 0; i < pizzerien.length; i++){
-            adapter.add(pizzerien[i]);
-        }
-
 
         // ListView Item Click Listener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -106,7 +95,11 @@ public class ListPizzariaActivity extends BaseActivity {
         new ListThroughBackend(plzEditText.getText().toString()).execute();
     }
 
-
+    public void fillListWithData(Pizzeria[] pizzerien){
+        for (int i = 0; i < pizzerien.length; i++){
+            adapter.add(pizzerien[i]);
+        }
+    }
 
 
     private class ListThroughBackend extends AsyncTask<Void, Void, Void> {
@@ -141,7 +134,7 @@ public class ListPizzariaActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-
+            fillListWithData(pizzerien);
         }
     }
 

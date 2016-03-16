@@ -54,7 +54,7 @@ public class PizzariaProfilActivity extends BaseActivity {
 
     //OnClick Funktion für Aufruf des Warenkorbs
     public void OnClickWeiter(View v) {
-        Intent intent = new Intent (PizzariaProfilActivity.this, StartActivity.class);
+        Intent intent = new Intent (PizzariaProfilActivity.this, WarenkorbActivity.class);
         startActivity(intent);
     }
 

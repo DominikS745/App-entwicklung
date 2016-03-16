@@ -12,11 +12,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 
+import de.dhbw.pizzabutler_entities.Pizzeria;
 import de.dhbw.pizzabutler_entities.User;
 
 public class LoginActivity extends BaseActivity {
@@ -160,6 +163,39 @@ public class LoginActivity extends BaseActivity {
     //Anbindung an das Backend muss noch erfolgen
     public void onClickPasswortVergessen(View v) {
 
+        //Aufruf wird nur ausgefuehrt, wenn das Email-Feld im Login nicht leer ist und den Email-Anforderungen entspricht
+        if (!(eingabeUser.getText().toString().isEmpty()) && eingabeUser.getText().toString().contains("@") && eingabeUser.getText().toString().contains(".")) {
+
+            try {
+                ResponseEntity<?> response;
+
+                String url = "http://pizzaButlerBackend.krihi.com/passwort/reset/";
+
+                //Das zu versendende JSONObject
+                JSONObject obj = new JSONObject();
+                obj.put("email", eingabeUser.getText().toString());
+
+                //Kommunikation mit Backend über ein REST-Template
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
+                response = restTemplate.postForEntity(url, obj, Object.class);
+
+                //Ausgabe des Statuscodes
+                System.out.println(response.getStatusCode());
+
+                if (response.getStatusCode().value() == 200) {
+                    Toast.makeText(this, "Ein neues Passwort wurde an ihre Email versandt.", Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    Toast.makeText(this, "Ein interner Serverfehler ist aufgetreten. Bitte probieren Sie es später erneut.", Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        else{
+            Toast.makeText(this, "Bitte geben Sie eine gültige Email-Adresse ein.", Toast.LENGTH_SHORT).show();
+        }
     }
 
 }

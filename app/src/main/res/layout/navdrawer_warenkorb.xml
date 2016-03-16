@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -16,8 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@android:color/white"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
             android:orientation="vertical">
 
             <LinearLayout
@@ -27,40 +25,33 @@
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/location_text"
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8pt"
-                    android:inputType="number"
-                    android:maxLength="5"
-                    android:hint="**POSTLEITZAHL**"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Warenkorb"
                     android:textColor="@android:color/white"
-                    android:textSize="16dp">
-
-                    <!--<requestFocus /> -->
-                </EditText>
-
-                <ImageView
-                    android:id="@+id/imageView1"
-                    android:layout_width="32dp"
-                    android:layout_height="32dp"
-                    android:layout_marginLeft="54dp"
-                    android:layout_marginTop="8pt"
-                    android:scaleType="fitXY"
-                    android:src="@drawable/ic_search_white"
-                    android:onClick="pizzerienSuchen"/>
+                    android:textSize="12pt"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <ListView
-                android:id="@+id/listview_pizzaria"
+                android:id="@+id/listview_warenkorb"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:entries="@layout/pizzaria_liste_item">
+                android:layout_height="wrap_content"></ListView>
 
-            </ListView>
+            <Button
+                style="@style/WarenkorbButton"
+                android:layout_width="match_parent"
+                android:layout_height="16pt"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Zur Kasse"
+                android:textSize="10pt"
+                android:textStyle="bold" />
+
         </LinearLayout>
-
     </FrameLayout>
 
     <!-- The navigation drawer -->
@@ -74,5 +65,3 @@
         android:divider="@android:color/transparent"
         android:dividerHeight="0dp" />
 </android.support.v4.widget.DrawerLayout>
-
-

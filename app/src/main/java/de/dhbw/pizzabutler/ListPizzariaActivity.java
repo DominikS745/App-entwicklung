@@ -101,7 +101,6 @@ public class ListPizzariaActivity extends BaseActivity {
         }
     }
 
-
     private class ListThroughBackend extends AsyncTask<Void, Void, Void> {
 
         ResponseEntity<Pizzeria[]> response;

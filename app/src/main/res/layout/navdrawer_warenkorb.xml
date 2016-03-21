@@ -36,10 +36,112 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <ListView
+            <ExpandableListView
                 android:id="@+id/listview_warenkorb"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></ListView>
+                android:layout_height="wrap_content"></ExpandableListView>
+
+            <View
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Bestellwert: "
+                    android:textSize="12pt"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+                    <TextView
+                        android:id="@+id/bestellwert"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12pt"
+                        android:textStyle="bold"
+                        android:text="X.X €"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lieferkosten: "
+                    android:textSize="12pt"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+                    <TextView
+                        android:id="@+id/lieferkosten"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="12pt"
+                        android:textStyle="bold"
+                        android:text="X.X €"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Gesamtkosten: "
+                    android:textSize="14pt"
+                    android:textStyle="bold" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="right">
+                    <TextView
+                        android:id="@+id/gesamtkosten"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="14pt"
+                        android:textStyle="bold"
+                        android:text="X.X €"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <View
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black" />
+            <View
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_width="fill_parent"
+                android:layout_height="2dp"
+                android:background="@android:color/black" />
 
             <Button
                 style="@style/WarenkorbButton"
@@ -47,9 +149,10 @@
                 android:layout_height="16pt"
                 android:layout_marginTop="8dp"
                 android:gravity="center"
-                android:text="Zur Kasse"
+                android:text="Weiter"
                 android:textSize="10pt"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="OnClickWeiter"/>
 
         </LinearLayout>
     </FrameLayout>

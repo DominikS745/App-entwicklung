@@ -24,6 +24,7 @@ public class PizzariaProfilActivity extends BaseActivity {
     //Custom Code
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
+
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
@@ -68,7 +69,7 @@ public class PizzariaProfilActivity extends BaseActivity {
         // Adding child data
         listDataHeader.add("Pizza");
         listDataHeader.add("Pasta");
-        listDataHeader.add("Coming Soon..");
+        listDataHeader.add("Salat");
 
         // Adding child data
         List<String> pizza = new ArrayList<String>();

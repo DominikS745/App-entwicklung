@@ -1,7 +1,9 @@
 package de.dhbw.pizzabutler;
 
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ExpandableListView;
 
 import java.util.ArrayList;
@@ -22,6 +24,7 @@ public class PizzariaProfilActivity extends BaseActivity {
     //Custom Code
     List<String> listDataHeader;
     HashMap<String, List<String>> listDataChild;
+
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
@@ -50,6 +53,12 @@ public class PizzariaProfilActivity extends BaseActivity {
 
     }
 
+    //OnClick Funktion für Aufruf des Warenkorbs
+    public void OnClickWeiter(View v) {
+        Intent intent = new Intent (PizzariaProfilActivity.this, WarenkorbActivity.class);
+        startActivity(intent);
+    }
+
     /*
      * Preparing the list data
      */
@@ -60,7 +69,7 @@ public class PizzariaProfilActivity extends BaseActivity {
         // Adding child data
         listDataHeader.add("Pizza");
         listDataHeader.add("Pasta");
-        listDataHeader.add("Coming Soon..");
+        listDataHeader.add("Salat");
 
         // Adding child data
         List<String> pizza = new ArrayList<String>();

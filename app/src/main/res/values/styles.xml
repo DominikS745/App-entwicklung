@@ -37,6 +37,11 @@
         <item name="android:radius">8dp</item>
     </style>
 
+    <!--Button Style für den Warenkorb Button -->
+    <style name="WarenkorbButton">
+        <item name="android:background">@drawable/button_shape_warenkorb</item>
+    </style>
+
     <!-- Action Bar Style -->
     <style name="CustomActionBar" parent="Theme.AppCompat.Light.DarkActionBar">
         <item name="android:logo">@drawable/pizzabutler_logo_schriftzug_white</item>

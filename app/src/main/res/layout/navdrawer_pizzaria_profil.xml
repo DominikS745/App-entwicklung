@@ -13,8 +13,8 @@
         android:layout_height="match_parent">
         <!-- Add content here -->
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:background="@android:color/white"
             android:focusable="true"
             android:focusableInTouchMode="true"
@@ -33,7 +33,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8pt"
                     android:inputType="number"
-                    android:text="**POSTLEITZAHL**"
+                    android:hint="**POSTLEITZAHL**"
                     android:textColor="@android:color/white"
                     android:textSize="16dp">
 
@@ -106,11 +106,23 @@
             <ExpandableListView
                 android:id="@+id/listview_pizzaria_profil"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
             </ExpandableListView>
-        </LinearLayout>
 
+
+            <Button
+                style="@style/WarenkorbButton"
+                android:layout_width="match_parent"
+                android:layout_height="16pt"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:onClick="OnClickWeiter"
+                android:text="Weiter zum Warenkorb"
+                android:textSize="10pt"
+                android:textStyle="bold" />
+
+        </LinearLayout>
     </FrameLayout>
 
     <!-- The navigation drawer -->

@@ -5,7 +5,7 @@ package de.dhbw.pizzabutler_entities;
  */
 public class User {
 
-    private String id;
+    private String userID;
     private String anrede;
     private String vorname;
     private String nachname;
@@ -17,11 +17,11 @@ public class User {
     private String email;
 
     public String getId() {
-        return id;
+        return userID;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setId(String userID) {
+        this.userID = userID;
     }
 
     public String getAnrede() {

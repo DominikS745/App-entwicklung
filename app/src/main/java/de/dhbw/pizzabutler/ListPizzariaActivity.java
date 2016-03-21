@@ -9,28 +9,30 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.util.support.Base64;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import de.dhbw.pizzabutler_entities.Pizzeria;
 
-/**
- * Created by Marvin on 28.02.16.
- */
 public class ListPizzariaActivity extends BaseActivity {
 
+    CustomListAdapter adapter;
     ListView listView;
+    EditText plzEditText;
+    Pizzeria[] pizzerien;
 
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
+
 
     //Custom Code
     @Override
@@ -41,25 +43,32 @@ public class ListPizzariaActivity extends BaseActivity {
         // Get ListView object from xml
         listView = (ListView) findViewById(R.id.listview_pizzaria);
 
-        new ListThroughBackend().execute();
+        //EditText fuer die Eingabe der Postleitzahl
+        plzEditText = (EditText) findViewById(R.id.location_text);
 
-        // Defined Array values to show in ListView
-        String[] values = new String[]{"Pizzaria 1", "Pizzaria 2", "Pizzaria 3", "Pizzaria 4", "Pizzaria 5",
-                "Pizzaria 6", "Pizzaria 7", "Pizzaria 8", "Pizzaria 9", "Pizzaria 10", "Pizzaria 11"
-        };
+        //Null-Ueberpruefung und Setzen der PLZ in EditText
+        if(null != getIntent().getStringExtra("plz")) {
+            plzEditText.setText(getIntent().getStringExtra("plz"));
+            new ListThroughBackend(plzEditText.getText().toString()).execute();
+        }
 
-        // Define a new Adapter
-        // First parameter - Context
-        // Second parameter - Layout for the row
-        // Third parameter - ID of the TextView to which the data is written
-        // Forth - the Array of data
+		// Define Dummy Data
+		//Pizzeria dummy_pizzeria = new Pizzeria();
+		//dummy_pizzeria.setStrasse("Beispielstrasse");
+		//dummy_pizzeria.setName("Meine Pizzeriaiaia");
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_list_item_1, android.R.id.text1, values);
+        // Construct the data source --> Must be an ArrayList
+        ArrayList<Pizzeria> arrayOfPizzeria = new ArrayList<Pizzeria>();
 
-        // Assign adapter to ListView
+        // Define a new Adapter with a context and an ArrayList of Pizzeria Objects
+        adapter = new CustomListAdapter(this, arrayOfPizzeria);
+
+
+        // Attach the adapter to a ListView
+        ListView listView = (ListView) findViewById(R.id.listview_pizzaria);
         listView.setAdapter(adapter);
 
+        pizzerienSuchen(listView);
 
         // ListView Item Click Listener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -67,28 +76,12 @@ public class ListPizzariaActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-
-                // ListView Clicked item index
-                int itemPosition = position;
-
-                // ListView Clicked item value
-                String itemValue = (String) listView.getItemAtPosition(position);
-
-                //provisorische ID; die echte ID muss über das Pizzeria-Objekt aufgerufen werden
-                new DetailThroughBackend(itemValue).execute();
-/*
-                // Show Alert
-                Toast.makeText(getApplicationContext(),
-                        "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
-                        .show();
-*/
                 //Aufruf des Pizzaria Profils
                 Intent intent = new Intent(ListPizzariaActivity.this, PizzariaProfilActivity.class);
                 startActivity(intent);
             }
 
         });
-
 
         //Icons und Text für NavDrawer initalisieren
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
@@ -98,66 +91,38 @@ public class ListPizzariaActivity extends BaseActivity {
 
     }
 
+    public void pizzerienSuchen(View v) {
+        new ListThroughBackend(plzEditText.getText().toString()).execute();
+    }
 
-
-
-
-    //Verarbeitung des Bilds
-    public Bitmap processPicture(String base64) {
-        try {
-            byte[] byteArray = Base64.decode(base64);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-            //Provisorische Anzeige (die vermutlich das Layout etwas zerlegt. Später löschen!
-            ImageView image = (ImageView) findViewById(R.id.imageView1);
-            image.setImageBitmap(bitmap);
-
-            return bitmap;
+    public void fillListWithData(Pizzeria[] pizzerien){
+        for (int i = 0; i < pizzerien.length; i++){
+            adapter.add(pizzerien[i]);
         }
-        catch(Exception e){
-            e.printStackTrace();
-        }
-        return null;
     }
 
     private class ListThroughBackend extends AsyncTask<Void, Void, Void> {
 
         ResponseEntity<Pizzeria[]> response;
+        String plz;
 
-        public ListThroughBackend(){
-
-        }
+        public ListThroughBackend(String mPlz){plz = mPlz;}
 
         @Override
         protected Void doInBackground(Void... params) {
             try {
                 //Definition einer URL
-                final String url = "http://pizzaButlerBackend.krihi.com/pizzeria";
+                final String url = "http://pizzaButlerBackend.krihi.com/restaurant";
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                response = restTemplate.getForEntity(url, Pizzeria[].class);
+                response = restTemplate.getForEntity(url, Pizzeria[].class, plz);
 
                 //Ausgabe des Statuscodes
                 System.out.println(response.getStatusCode());
 
-                Pizzeria[] pizzerien = response.getBody();
-
-                //Hier sollte die Listenuebersicht der Pizzerien befuellt werden
-                for(int i=0; i<pizzerien.length; i++){
-                    System.out.println("Name: " + pizzerien[i].getName());
-                    System.out.println("Hausnummer: " + pizzerien[i].getHausnummer());
-                    System.out.println("Lieferkosten: " + pizzerien[i].getLieferkosten());
-                    System.out.println("PLZ: " + pizzerien[i].getPlz());
-                    System.out.println("Ort: " + pizzerien[i].getOrt());
-                    System.out.println("Straße: " + pizzerien[i].getStrasse());
-                    System.out.println("Öffnungszeiten: " + pizzerien[i].getOeffnungszeiten().length);
-                    System.out.println("Von :" + pizzerien[i].getOeffnungszeiten()[i].getVon());
-                    System.out.println("Bis :" + pizzerien[i].getOeffnungszeiten()[i].getBis());
-                    System.out.println("Tag :" + pizzerien[i].getOeffnungszeiten()[i].getTag());
-                    //Verarbeitung des Bilds
-                    processPicture(pizzerien[i].getBild());
-                }
+                pizzerien = response.getBody();
 
             } catch (Exception e) {
                 Log.e("RegistrierenActivity", e.getMessage(), e);
@@ -168,7 +133,7 @@ public class ListPizzariaActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-
+            fillListWithData(pizzerien);
         }
     }
 
@@ -177,7 +142,7 @@ public class ListPizzariaActivity extends BaseActivity {
         ResponseEntity<Pizzeria> response;
         String id;
 
-        public DetailThroughBackend(String pId){
+        public DetailThroughBackend(String pId) {
             id = pId;
         }
 
@@ -185,7 +150,7 @@ public class ListPizzariaActivity extends BaseActivity {
         protected Void doInBackground(Void... params) {
             try {
                 //Definition einer URL
-                final String url = "http://pizzaButlerBackend.krihi.com/pizzeria";
+                final String url = "http://pizzaButlerBackend.krihi.com/restaurant/id";
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();

@@ -15,14 +15,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
-        <TextView
+        <ImageView
             android:id="@+id/pizzaria_bild"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="8pt"
-            android:text="BILD \nEINFÜGEN!"
-            android:textSize="12pt"
-            android:textStyle="bold" />
+            android:scaleType="fitXY"
+            android:src="@drawable/pizzabutler_erroricon_old" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -38,37 +37,118 @@
                 android:textSize="10pt"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/pizzaria_adresse"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Adresse"
-                android:textSize="10pt" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/pizzaria_plz"
+                <TextView
+                    android:id="@+id/pizzaria_adresse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Adresse"
+                    android:textSize="10pt" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" "
+                    android:textSize="10pt" />
+
+                <TextView
+                    android:id="@+id/pizzaria_hausnummer"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nr"
+                    android:textSize="10pt" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="PLZ und Stadt"
-                android:textSize="10pt" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/pizzaria_plz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PLZ"
+                    android:textSize="10pt" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" "
+                    android:textSize="10pt" />
+
+                <TextView
+                    android:id="@+id/pizzaria_ort"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ort"
+                    android:textSize="10pt" />
+
+            </LinearLayout>
 
             <android.widget.Space
                 android:layout_width="match_parent"
                 android:layout_height="8pt" />
 
-            <TextView
-                android:id="@+id/pizzaria_lieferkosten"
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Lieferkosten: Betrag"
-                android:textSize="8pt" />
+                android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/pizzaria_minbestellwert"
+                <TextView
+                    android:id="@+id/pizzaria_lieferkosten_static_string"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Lieferkosten: "
+                    android:textSize="8pt" />
+
+                <TextView
+                    android:id="@+id/pizzaria_lieferkosten_betrag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="8pt" />
+
+                <TextView
+                    android:id="@+id/static_euro_lieferkosten"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" €"
+                    android:textSize="8pt" />
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Mindestbestelltwert: Betrag"
-                android:textSize="8pt" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/pizzaria_minbestellwert_static_string"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Minimum: "
+                    android:textSize="8pt" />
+
+                <TextView
+                    android:id="@+id/pizzaria_minbestellwert_betrag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="8pt" />
+
+                <TextView
+                    android:id="@+id/static_euro_mindestbestellwert"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" €"
+                    android:textSize="8pt" />
+            </LinearLayout>
+
 
             <android.widget.Space
                 android:layout_width="match_parent"
@@ -79,16 +159,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="geschlossen / offen"
+                android:textColor="@android:color/holo_green_dark"
                 android:textSize="8pt"
                 android:textStyle="bold" />
 
         </LinearLayout>
     </LinearLayout>
-
-    <View
-        android:layout_width="fill_parent"
-        android:layout_height="2dp"
-        android:layout_marginBottom="8pt"
-        android:layout_marginTop="8pt"
-        android:background="@android:color/black" />
 </LinearLayout>

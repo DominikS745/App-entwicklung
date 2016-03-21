@@ -15,6 +15,7 @@
     <string name="nummer_hint">Hausnummer</string>
     <string name="plz_hint">Postleitzahl</string>
     <string name="ort_hint">Ort</string>
+    <string name="telnr_hint">Telefonnummer</string>
     <string name="email_hint">Email</string>
 
     <!-- Fehler Registrierung -->

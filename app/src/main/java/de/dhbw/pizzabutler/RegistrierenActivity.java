@@ -40,6 +40,7 @@ public class RegistrierenActivity extends AppCompatActivity {
     private EditText plzET;
     private EditText ortET;
     private EditText emailET;
+    private EditText telefonnummerET;
     private EditText passwortET;
     private EditText passwortCheckET;
     private CheckBox agb_check_CB;
@@ -72,6 +73,7 @@ public class RegistrierenActivity extends AppCompatActivity {
         hausnummerET = (EditTextExtended) findViewById(R.id.hausnummer);
         plzET = (EditTextExtended) findViewById(R.id.plz);
         ortET = (EditTextExtended) findViewById(R.id.ort);
+        telefonnummerET = (EditTextExtended) findViewById(R.id.telefonnummer);
         emailET = (EditTextExtended) findViewById(R.id.email);
         passwortET = (EditText) findViewById(R.id.passwort_register);
         passwortCheckET = (EditText) findViewById(R.id.passwort_match);
@@ -376,7 +378,7 @@ public class RegistrierenActivity extends AppCompatActivity {
             new RegisterThroughBackend(anredeSp.getSelectedItem().toString(), vornameET.getText().toString(),
                     nachnameET.getText().toString(), strasseET.getText().toString(),
                     hausnummerET.getText().toString(), plzET.getText().toString(), ortET.getText().toString(),
-                    passwortET.getText().toString(), emailET.getText().toString()).execute();
+                    telefonnummerET.getText().toString(), passwortET.getText().toString(), emailET.getText().toString()).execute();
         }
     }
 
@@ -417,11 +419,12 @@ public class RegistrierenActivity extends AppCompatActivity {
         String hausnummer;
         String plz;
         String ort;
+        String telefonnummer;
         String passwort;
         String email;
 
         public RegisterThroughBackend(String mAnrede, String mVorname, String mNachname, String mStrasse, String mHausnummer,
-                                      String mOrt, String mPlz, String mPasswort, String mEmail) {
+                                      String mOrt, String mPlz, String mTelefonnummer, String mPasswort, String mEmail) {
             anrede = mAnrede;
             vorname = mVorname;
             nachname = mNachname;
@@ -429,6 +432,7 @@ public class RegistrierenActivity extends AppCompatActivity {
             hausnummer = mHausnummer;
             ort = mOrt;
             plz = mPlz;
+            telefonnummer = mTelefonnummer;
             email = mEmail;
             passwort = mPasswort;
         }
@@ -445,6 +449,7 @@ public class RegistrierenActivity extends AppCompatActivity {
                 obj.put("hausnr", hausnummer);
                 obj.put("plz", plz);
                 obj.put("ort", ort);
+                obj.put("telefonnummer", telefonnummer);
                 obj.put("passwort", passwort);
                 obj.put("email", email);
 
@@ -486,6 +491,7 @@ public class RegistrierenActivity extends AppCompatActivity {
             nutzerDatenAnzeigen.putExtra("hausnummer", response.getBody().getHausnr());
             nutzerDatenAnzeigen.putExtra("plz", response.getBody().getPlz());
             nutzerDatenAnzeigen.putExtra("ort", response.getBody().getOrt());
+            nutzerDatenAnzeigen.putExtra("telefonnummer", response.getBody().getTelefonnummer());
             nutzerDatenAnzeigen.putExtra("passwort", response.getBody().getPasswort());
             nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
 

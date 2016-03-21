@@ -33,6 +33,12 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences session = getSharedPreferences("id" , MODE_PRIVATE);
+
+        if(!(session.getString("id", "")).equals("")){
+            new UserThroughBackend(session.getString("id", "")).execute();
+        }
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navdrawer_login);
 
@@ -110,11 +116,6 @@ public class LoginActivity extends BaseActivity {
         protected Void doInBackground(Void... params) {
 
             try {
-                //Das zu versendende JSONObjekt
-                JSONObject obj = new JSONObject();
-                obj.put("email", email);
-                obj.put("passwort", passwort);
-
                 //Definition einer URL
                 final String url = "http://pizzabutlerbackend.krihi.com/user/login/";
 
@@ -153,12 +154,68 @@ public class LoginActivity extends BaseActivity {
             nutzerDatenAnzeigen.putExtra("hausnummer", response.getBody().getHausnr());
             nutzerDatenAnzeigen.putExtra("plz", response.getBody().getPlz());
             nutzerDatenAnzeigen.putExtra("ort", response.getBody().getOrt());
+            nutzerDatenAnzeigen.putExtra("telefonnummer", response.getBody().getTelefonnummer());
             nutzerDatenAnzeigen.putExtra("passwort", response.getBody().getPasswort());
             nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
 
             startActivity(nutzerDatenAnzeigen);
         }
     }
+
+    class UserThroughBackend extends AsyncTask<Void, Void, Void> {
+
+        ResponseEntity<User> response;
+        String id;
+
+        public UserThroughBackend(String mId) {
+            id = mId;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+                //Definition einer URL
+                String url = "http://pizzabutlerbackend.krihi.com/user/";
+
+                url += id;
+
+                //Kommunikation mit Backend über ein REST-Template
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
+                response = restTemplate.getForEntity(url, User.class);
+
+                //Ausgabe des Mock-Wertes
+                System.out.println(response.getStatusCode());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            //Starten einer neuen Activity: NutzerDatenAnzeigen
+            Intent nutzerDatenAnzeigen = new Intent(LoginActivity.this, NutzerDatenActivity.class);
+
+            nutzerDatenAnzeigen.putExtra("id", response.getBody().getId());
+            nutzerDatenAnzeigen.putExtra("anrede", response.getBody().getAnrede());
+            nutzerDatenAnzeigen.putExtra("vorname", response.getBody().getVorname());
+            nutzerDatenAnzeigen.putExtra("nachname", response.getBody().getNachname());
+            nutzerDatenAnzeigen.putExtra("strasse", response.getBody().getStrasse());
+            nutzerDatenAnzeigen.putExtra("hausnummer", response.getBody().getHausnr());
+            nutzerDatenAnzeigen.putExtra("plz", response.getBody().getPlz());
+            nutzerDatenAnzeigen.putExtra("ort", response.getBody().getOrt());
+            nutzerDatenAnzeigen.putExtra("telefonnummer", response.getBody().getTelefonnummer());
+            nutzerDatenAnzeigen.putExtra("passwort", response.getBody().getPasswort());
+            nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
+
+            startActivity(nutzerDatenAnzeigen);
+        }
+    }
+
 
     //Anbindung an das Backend muss noch erfolgen
     public void onClickPasswortVergessen(View v) {
@@ -169,7 +226,7 @@ public class LoginActivity extends BaseActivity {
             try {
                 ResponseEntity<?> response;
 
-                String url = "http://pizzaButlerBackend.krihi.com/passwort/reset/";
+                String url = "http://pizzaButlerBackend.krihi.com/user/resetPassword/";
 
                 //Das zu versendende JSONObject
                 JSONObject obj = new JSONObject();

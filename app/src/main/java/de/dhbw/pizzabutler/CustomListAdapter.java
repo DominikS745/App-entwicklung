@@ -72,11 +72,8 @@ public class CustomListAdapter extends ArrayAdapter<Pizzeria> {
         try {
             byte[] byteArray = Base64.decode(base64);
             Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-            //Provisorische Anzeige (die vermutlich das Layout etwas zerlegt. Später löschen!
-            //ImageView image = (ImageView) findViewById(R.id.imageView1);
-            //image.setImageBitmap(bitmap);
-
             return bitmap;
+
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -101,6 +101,19 @@ public class ListPizzariaActivity extends BaseActivity {
         }
     }
 
+    //Verarbeitung des Bilds
+    public Bitmap processPicture(String base64) {
+        try {
+            byte[] byteArray = Base64.decode(base64);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            return bitmap;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     private class ListThroughBackend extends AsyncTask<Void, Void, Void> {
 
         ResponseEntity<Pizzeria[]> response;
@@ -171,7 +184,7 @@ public class ListPizzariaActivity extends BaseActivity {
         protected void onPostExecute(Void result) {
             //Starten der Detailansicht einer Pizzeria
             // - Kommentierung entfernen und Activity-Bezeichnung anpassen,sobald implementiert
-            /*Intent detailansicht = new Intent(ListPizzariaActivity.this, DetailPizzariaActivity.class);
+            Intent detailansicht = new Intent(ListPizzariaActivity.this, PizzariaProfilActivity.class);
 
             Bitmap bitmap = processPicture(response.getBody().getBild());
 
@@ -187,7 +200,7 @@ public class ListPizzariaActivity extends BaseActivity {
             detailansicht.putExtra("email", response.getBody().getEmail());
             detailansicht.putExtra("bild", bitmap);
 
-            startActivity(detailansicht);*/
+            startActivity(detailansicht);
         }
     }
 }

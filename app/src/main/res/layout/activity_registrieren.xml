@@ -65,6 +65,13 @@
             android:inputType="textCapWords" />
 
         <de.dhbw.pizzabutler_api.EditTextExtended
+            android:id="@+id/telefonnummer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/telnr_hint"
+            android:inputType="number" />
+
+        <de.dhbw.pizzabutler_api.EditTextExtended
             android:id="@+id/email"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

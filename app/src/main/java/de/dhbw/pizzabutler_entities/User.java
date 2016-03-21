@@ -10,11 +10,12 @@ public class User {
     private String vorname;
     private String nachname;
     private String strasse;
-    private String hausnr;
+    private String hausnummer;
     private String ort;
     private String plz;
     private String passwort;
     private String email;
+    private String telefonnummer;
 
     public String getId() {
         return userID;
@@ -57,11 +58,11 @@ public class User {
     }
 
     public String getHausnr() {
-        return hausnr;
+        return hausnummer;
     }
 
     public void setHausnr(String hnr) {
-        this.hausnr = hausnr;
+        this.hausnummer = hausnummer;
     }
 
     public String getOrt() {
@@ -94,5 +95,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getTelefonnummer() {
+        return telefonnummer;
+    }
+
+    public void setTelefonnummer(String telefonnummer) {
+        this.telefonnummer = telefonnummer;
     }
 }

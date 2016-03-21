@@ -78,6 +78,8 @@
     </array>
 
 
+    <!--Bestätigungstext -->
+    <string name="bestaetigung">Vielen Dank für Ihre Bestellung. Eine email wurde an die hinterlegte Adresse gesendet.</string>
 
 
 

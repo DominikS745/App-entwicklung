@@ -151,7 +151,8 @@
                 android:gravity="center"
                 android:text="Weiter"
                 android:textSize="10pt"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:onClick="OnClickWeiter"/>
 
         </LinearLayout>
     </FrameLayout>

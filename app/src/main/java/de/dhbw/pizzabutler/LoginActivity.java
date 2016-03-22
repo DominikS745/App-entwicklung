@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -97,6 +98,15 @@ public class LoginActivity extends BaseActivity {
         }
         else{
             return false;
+        }
+    }
+
+    public void ausgabePasswortVergessen(int statusCode) {
+        if (statusCode == 200) {
+            Toast.makeText(this, "Ein neues Passwort wurde an ihre Email versandt.", Toast.LENGTH_SHORT).show();
+        }
+        else{
+            Toast.makeText(this, "Ein interner Serverfehler ist aufgetreten. Bitte probieren Sie es später erneut.", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -216,43 +226,51 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
+    class PasswortVergessenThroughBackend extends AsyncTask<Void, Void, Void> {
 
-    //Anbindung an das Backend muss noch erfolgen
-    public void onClickPasswortVergessen(View v) {
+        ResponseEntity<?> response;
+        String email;
 
-        //Aufruf wird nur ausgefuehrt, wenn das Email-Feld im Login nicht leer ist und den Email-Anforderungen entspricht
-        if (!(eingabeUser.getText().toString().isEmpty()) && eingabeUser.getText().toString().contains("@") && eingabeUser.getText().toString().contains(".")) {
+        public PasswortVergessenThroughBackend(String mEmail) {
+            email = mEmail;
+        }
 
+        @Override
+        protected Void doInBackground(Void... params){
             try {
-                ResponseEntity<?> response;
-
-                String url = "http://pizzaButlerBackend.krihi.com/user/resetPassword/";
+                final String url = "http://pizzaButlerBackend.krihi.com/resetPassword";
 
                 //Das zu versendende JSONObject
                 JSONObject obj = new JSONObject();
-                obj.put("email", eingabeUser.getText().toString());
+                obj.put("email", email);
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
                 response = restTemplate.postForEntity(url, obj, Object.class);
 
-                //Ausgabe des Statuscodes
-                System.out.println(response.getStatusCode());
-
-                if (response.getStatusCode().value() == 200) {
-                    Toast.makeText(this, "Ein neues Passwort wurde an ihre Email versandt.", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(this, "Ein interner Serverfehler ist aufgetreten. Bitte probieren Sie es später erneut.", Toast.LENGTH_SHORT).show();
-                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            //Ausgabe der entsprechenden Meldung
+            ausgabePasswortVergessen(response.getStatusCode().value());
+        }
+    }
+
+    //Logik nach Klick auf 'Passwort Vergessen'
+    public void onClickPasswortVergessen(View v) {
+
+        //Aufruf wird nur ausgefuehrt, wenn das Email-Feld im Login nicht leer ist und den Email-Anforderungen entspricht
+        if (!(eingabeUser.getText().toString().isEmpty()) && eingabeUser.getText().toString().contains("@") && eingabeUser.getText().toString().contains(".")) {
+            new PasswortVergessenThroughBackend(eingabeUser.getText().toString()).execute();
         }
         else{
             Toast.makeText(this, "Bitte geben Sie eine gültige Email-Adresse ein.", Toast.LENGTH_SHORT).show();
         }
     }
-
 }

@@ -1,23 +1,21 @@
 package de.dhbw.pizzabutler;
 
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.View;
 
-/**
- * Created by Marvin on 16.03.16.
- */
-public class WarenkorbActivity extends BaseActivity {
+public class BestaetigungActivity extends BaseActivity {
+
 
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navdrawer_warenkorb);
+        setContentView(R.layout.navdrawer_bestaetigung);
 
 
         //Icons und Text für NavDrawer initalisieren
@@ -28,9 +26,4 @@ public class WarenkorbActivity extends BaseActivity {
 
     }
 
-    //OnClick für Weiter Button
-    public void OnClickWeiter(View v){
-        Intent intent = new Intent(this, RolleActivity.class);
-        startActivity(intent);
-    }
 }

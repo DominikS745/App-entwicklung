@@ -32,6 +32,8 @@
         <activity android:name=".ListPizzariaActivity" />
         <activity android:name=".PizzariaProfilActivity" />
         <activity android:name=".WarenkorbActivity" />
+        <activity android:name=".RolleActivity" />
+        <activity android:name=".BestaetigungActivity"/>
     </application>
 
 </manifest>

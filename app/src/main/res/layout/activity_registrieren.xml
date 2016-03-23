@@ -26,6 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/vorname_hint"
+            android:maxLength="30"
             android:inputType="textCapWords" />
 
         <de.dhbw.pizzabutler_api.EditTextExtended
@@ -33,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nachname_hint"
+            android:maxLength="30"
             android:inputType="textCapWords" />
 
         <de.dhbw.pizzabutler_api.EditTextExtended
@@ -47,6 +49,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/nummer_hint"
+            android:maxLength="5"
             android:inputType="text" />
 
         <de.dhbw.pizzabutler_api.EditTextExtended
@@ -62,6 +65,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/ort_hint"
+            android:maxLength="30"
             android:inputType="textCapWords" />
 
         <de.dhbw.pizzabutler_api.EditTextExtended
@@ -69,6 +73,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/telnr_hint"
+            android:maxLength="20"
             android:inputType="number" />
 
         <de.dhbw.pizzabutler_api.EditTextExtended
@@ -83,6 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/passwort_hint"
+            android:maxLength="12"
             android:inputType="textPassword" />
 
         <EditText
@@ -90,6 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="@string/passwort_hint"
+            android:maxLength="12"
             android:inputType="textPassword" />
 
         <CheckBox

@@ -2,13 +2,20 @@ package de.dhbw.pizzabutler;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
 
+import org.springframework.util.support.Base64;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import de.dhbw.pizzabutler_entities.Pizzeria;
+import de.dhbw.pizzabutler_entities.Speisekarte;
 
 /**
  * Created by Marvin on 28.02.16.
@@ -34,6 +41,9 @@ public class PizzariaProfilActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navdrawer_pizzaria_profil);
 
+        Pizzeria pizzeria = (Pizzeria) getIntent().getSerializableExtra("pizzeria");
+        Speisekarte speisekarte = (Speisekarte) getIntent().getSerializableExtra("speisekarte");
+
         // get the listview
         expListView = (ExpandableListView) findViewById(R.id.listview_pizzaria_profil);
 
@@ -57,6 +67,19 @@ public class PizzariaProfilActivity extends BaseActivity {
     public void OnClickWeiter(View v) {
         Intent intent = new Intent (PizzariaProfilActivity.this, WarenkorbActivity.class);
         startActivity(intent);
+    }
+
+    //Verarbeitung des Bilds
+    public Bitmap processPicture(String base64) {
+        try {
+            byte[] byteArray = Base64.decode(base64);
+            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            return bitmap;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /*

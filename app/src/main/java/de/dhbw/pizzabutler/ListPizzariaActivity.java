@@ -23,6 +23,7 @@ import java.util.Arrays;
 
 import de.dhbw.pizzabutler_entities.Oeffnungszeiten;
 import de.dhbw.pizzabutler_entities.Pizzeria;
+import de.dhbw.pizzabutler_entities.Speisekarte;
 
 public class ListPizzariaActivity extends BaseActivity {
 
@@ -103,19 +104,6 @@ public class ListPizzariaActivity extends BaseActivity {
         }
     }
 
-    //Verarbeitung des Bilds
-    public Bitmap processPicture(String base64) {
-        try {
-            byte[] byteArray = Base64.decode(base64);
-            Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-            return bitmap;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     private class ListThroughBackend extends AsyncTask<Void, Void, Void> {
 
         ResponseEntity<Pizzeria[]> response;
@@ -155,7 +143,7 @@ public class ListPizzariaActivity extends BaseActivity {
     private class DetailThroughBackend extends AsyncTask<Void, Void, Void> {
 
         ResponseEntity<Pizzeria> response;
-        ResponseEntity<?> response_speisekarte;
+        ResponseEntity<Speisekarte> response_speisekarte;
         String id;
 
         public DetailThroughBackend(String pId) {
@@ -165,7 +153,7 @@ public class ListPizzariaActivity extends BaseActivity {
         @Override
         protected Void doInBackground(Void... params) {
             try {
-                //Definition einer URL
+                //Definition einer URL fuer die Pizzeria
                 String url = "http://pizzaButlerBackend.krihi.com/restaurant/";
 
                 url += id;
@@ -175,18 +163,16 @@ public class ListPizzariaActivity extends BaseActivity {
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
                 response = restTemplate.getForEntity(url, Pizzeria.class);
 
-                //Definition einer URL
-                String url_speisekarte = "http://pizzaButlerBackend.krihi.com/restaurant/speisekarte";
-
-                url_speisekarte += id;
+                //Definition einer URL fuer die Speisekarte
+                String url_speisekarte = url + "/speisekarte";
 
                 //Kommunikation mit Backend über ein REST-Template
-                //RestTemplate restTemplate_speisekarte = new RestTemplate();
-               // restTemplate_speisekarte.getMessageConverters().add(new GsonHttpMessageConverter());
-                //response_speisekarte = restTemplate_speisekarte.getForEntity(url, Speisekarte.class);
+                RestTemplate restTemplate_speisekarte = new RestTemplate();
+                restTemplate_speisekarte.getMessageConverters().add(new GsonHttpMessageConverter());
+                response_speisekarte = restTemplate_speisekarte.getForEntity(url_speisekarte, Speisekarte.class);
 
                 //Ausgabe des Statuscodes
-                System.out.println(response.getStatusCode());
+                System.out.println(response_speisekarte.getStatusCode());
 
             } catch (Exception e) {
                 Log.e("RegistrierenActivity", e.getMessage(), e);
@@ -197,23 +183,14 @@ public class ListPizzariaActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(Void result) {
-            //Starten der Detailansicht einer Pizzeria
-            // - Kommentierung entfernen und Activity-Bezeichnung anpassen,sobald implementiert
+            //Starten der Detailansicht einer Pizzeria + Speisekarte
             Intent detailansicht = new Intent(ListPizzariaActivity.this, PizzariaProfilActivity.class);
 
-            Bitmap bitmap = processPicture(response.getBody().getBild());
+            //Lieferung der Daten der Pizzeria-Details
+            detailansicht.putExtra("pizzeria", response.getBody());
 
-            detailansicht.putExtra("name", response.getBody().getName());
-            detailansicht.putExtra("beschreibung", response.getBody().getBeschreibung());
-            detailansicht.putExtra("mindestbestellwert", response.getBody().getMindestbestellwert());
-            detailansicht.putExtra("oeffnungszeiten", response.getBody().getOeffnungszeiten());
-            detailansicht.putExtra("strasse", response.getBody().getStrasse());
-            detailansicht.putExtra("hausnummer", response.getBody().getHausnummer());
-            detailansicht.putExtra("plz", response.getBody().getPlz());
-            detailansicht.putExtra("ort", response.getBody().getOrt());
-            detailansicht.putExtra("lieferkosten", response.getBody().getLieferkosten());
-            detailansicht.putExtra("email", response.getBody().getEmail());
-            detailansicht.putExtra("bild", bitmap);
+            //Lieferung der Speisekarte
+            detailansicht.putExtra("speisekarte" , response_speisekarte.getBody());
 
             startActivity(detailansicht);
         }

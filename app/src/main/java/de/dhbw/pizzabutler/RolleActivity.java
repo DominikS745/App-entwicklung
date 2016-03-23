@@ -43,13 +43,14 @@ public class RolleActivity extends BaseActivity {
     //On Click Methoden für die Buttons
 
     public void OnClickLogin(View v){
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, Login2Activity.class);
         startActivity(intent);
 
     }
 
     public void OnClickGast(View v){
-
+        Intent intent = new Intent(this, RegisterGastActivity.class);
+        startActivity(intent);
     }
 
     public void OnClickAbholen(View v){

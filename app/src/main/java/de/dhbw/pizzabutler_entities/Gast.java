@@ -2,12 +2,8 @@ package de.dhbw.pizzabutler_entities;
 
 import java.io.Serializable;
 
-/**
- * Created by Schagrat on 01.03.2016.
- */
-public class User implements Serializable{
-
-    private String userID;
+public class Gast implements Serializable{
+    private String gastID;
     private String anrede;
     private String vorname;
     private String nachname;
@@ -15,16 +11,15 @@ public class User implements Serializable{
     private String hausnummer;
     private String ort;
     private String plz;
-    private String passwort;
     private String email;
     private String telefonnummer;
 
-    public String getId() {
-        return userID;
+    public String getGastID() {
+        return gastID;
     }
 
-    public void setId(String userID) {
-        this.userID = userID;
+    public void setGastID(String gastID) {
+        this.gastID = gastID;
     }
 
     public String getAnrede() {
@@ -59,11 +54,11 @@ public class User implements Serializable{
         this.strasse = strasse;
     }
 
-    public String getHausnr() {
+    public String getHausnummer() {
         return hausnummer;
     }
 
-    public void setHausnr(String hnr) {
+    public void setHausnummer(String hausnummer) {
         this.hausnummer = hausnummer;
     }
 
@@ -81,14 +76,6 @@ public class User implements Serializable{
 
     public void setPlz(String plz) {
         this.plz = plz;
-    }
-
-    public String getPasswort() {
-        return passwort;
-    }
-
-    public void setPasswort(String passwort) {
-        this.passwort = passwort;
     }
 
     public String getEmail() {

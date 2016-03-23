@@ -1,11 +1,13 @@
 package de.dhbw.pizzabutler_entities;
 
+import java.io.Serializable;
+
 /**
  * Created by Schagrat on 02.03.2016.
  */
-public class Pizzeria {
+public class Pizzeria implements Serializable{
 
-    String id;
+    String restaurantID;
     String name;
     String beschreibung;
     Oeffnungszeiten[] oeffnungszeiten;
@@ -19,11 +21,11 @@ public class Pizzeria {
     String bild;
 
     public String getId() {
-        return id;
+        return restaurantID;
     }
 
     public void setId(String id) {
-        this.id = id;
+        this.restaurantID = id;
     }
 
     public String getName() {

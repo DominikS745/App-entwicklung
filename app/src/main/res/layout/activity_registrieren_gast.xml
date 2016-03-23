@@ -1,0 +1,101 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    >
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="@dimen/activity_vertical_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingTop="@dimen/activity_vertical_margin">
+
+        <Spinner
+            android:id="@+id/spinner_anrede"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/anrede"></Spinner>
+
+        <de.dhbw.pizzabutler_api.EditTextExtended
+            android:id="@+id/vorname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/vorname_hint"
+            android:maxLength="30"
+            android:inputType="textCapWords" />
+
+        <de.dhbw.pizzabutler_api.EditTextExtended
+            android:id="@+id/nachname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/nachname_hint"
+            android:maxLength="30"
+            android:inputType="textCapWords" />
+
+        <de.dhbw.pizzabutler_api.EditTextExtended
+            android:id="@+id/strasse"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/strasse_hint"
+            android:inputType="textCapWords" />
+
+        <de.dhbw.pizzabutler_api.EditTextExtended
+            android:id="@+id/hausnummer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/nummer_hint"
+            android:maxLength="5"
+            android:inputType="text" />
+
+        <de.dhbw.pizzabutler_api.EditTextExtended
+            android:id="@+id/plz"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/plz_hint"
+            android:maxLength="5"
+            android:inputType="number" />
+
+        <de.dhbw.pizzabutler_api.EditTextExtended
+            android:id="@+id/ort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ort_hint"
+            android:maxLength="30"
+            android:inputType="textCapWords" />
+
+        <de.dhbw.pizzabutler_api.EditTextExtended
+            android:id="@+id/telefonnummer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/telnr_hint"
+            android:maxLength="20"
+            android:inputType="number" />
+
+        <de.dhbw.pizzabutler_api.EditTextExtended
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/email_hint"
+            android:inputType="textEmailAddress" />
+
+        <CheckBox
+            android:id="@+id/agb_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/agb" />
+
+        <Button
+            android:id="@+id/weiter_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="registrierungAbschliessen"
+            android:text="@string/weiter"
+            android:enabled="false"/>
+
+    </LinearLayout>
+</ScrollView>

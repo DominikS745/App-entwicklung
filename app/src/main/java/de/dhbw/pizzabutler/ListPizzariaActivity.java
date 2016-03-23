@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
@@ -20,6 +21,7 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import de.dhbw.pizzabutler_entities.Oeffnungszeiten;
 import de.dhbw.pizzabutler_entities.Pizzeria;
 
 public class ListPizzariaActivity extends BaseActivity {
@@ -76,9 +78,9 @@ public class ListPizzariaActivity extends BaseActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
-                //Aufruf des Pizzaria Profils
-                Intent intent = new Intent(ListPizzariaActivity.this, PizzariaProfilActivity.class);
-                startActivity(intent);
+                //Backend-Aufruf der Detailansicht + Speisekarte
+                int restaurantID = (int) id;
+                new DetailThroughBackend(pizzerien[restaurantID].getId()).execute();
             }
 
         });
@@ -153,6 +155,7 @@ public class ListPizzariaActivity extends BaseActivity {
     private class DetailThroughBackend extends AsyncTask<Void, Void, Void> {
 
         ResponseEntity<Pizzeria> response;
+        ResponseEntity<?> response_speisekarte;
         String id;
 
         public DetailThroughBackend(String pId) {
@@ -163,12 +166,24 @@ public class ListPizzariaActivity extends BaseActivity {
         protected Void doInBackground(Void... params) {
             try {
                 //Definition einer URL
-                final String url = "http://pizzaButlerBackend.krihi.com/restaurant/id";
+                String url = "http://pizzaButlerBackend.krihi.com/restaurant/";
+
+                url += id;
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                response = restTemplate.getForEntity(url, Pizzeria.class, id);
+                response = restTemplate.getForEntity(url, Pizzeria.class);
+
+                //Definition einer URL
+                String url_speisekarte = "http://pizzaButlerBackend.krihi.com/restaurant/speisekarte";
+
+                url_speisekarte += id;
+
+                //Kommunikation mit Backend über ein REST-Template
+                //RestTemplate restTemplate_speisekarte = new RestTemplate();
+               // restTemplate_speisekarte.getMessageConverters().add(new GsonHttpMessageConverter());
+                //response_speisekarte = restTemplate_speisekarte.getForEntity(url, Speisekarte.class);
 
                 //Ausgabe des Statuscodes
                 System.out.println(response.getStatusCode());
@@ -189,14 +204,14 @@ public class ListPizzariaActivity extends BaseActivity {
             Bitmap bitmap = processPicture(response.getBody().getBild());
 
             detailansicht.putExtra("name", response.getBody().getName());
-            detailansicht.putExtra("anrede", response.getBody().getBeschreibung());
-            detailansicht.putExtra("vorname", response.getBody().getMindestbestellwert());
-            detailansicht.putExtra("nachname", response.getBody().getOeffnungszeiten());
+            detailansicht.putExtra("beschreibung", response.getBody().getBeschreibung());
+            detailansicht.putExtra("mindestbestellwert", response.getBody().getMindestbestellwert());
+            detailansicht.putExtra("oeffnungszeiten", response.getBody().getOeffnungszeiten());
             detailansicht.putExtra("strasse", response.getBody().getStrasse());
             detailansicht.putExtra("hausnummer", response.getBody().getHausnummer());
             detailansicht.putExtra("plz", response.getBody().getPlz());
             detailansicht.putExtra("ort", response.getBody().getOrt());
-            detailansicht.putExtra("passwort", response.getBody().getLieferkosten());
+            detailansicht.putExtra("lieferkosten", response.getBody().getLieferkosten());
             detailansicht.putExtra("email", response.getBody().getEmail());
             detailansicht.putExtra("bild", bitmap);
 

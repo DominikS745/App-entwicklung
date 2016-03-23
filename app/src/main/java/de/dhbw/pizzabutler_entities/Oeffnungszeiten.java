@@ -1,11 +1,12 @@
 package de.dhbw.pizzabutler_entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by Schagrat on 02.03.2016.
  */
-public class Oeffnungszeiten {
+public class Oeffnungszeiten implements Serializable{
 
     String tag;
     String von;

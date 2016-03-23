@@ -13,6 +13,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
@@ -51,11 +52,14 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.pizzaria_profil_child_item, null);
         }
+        //Look up child Item data for population (reference to views)
+        TextView Produkt = (TextView) convertView.findViewById(R.id.profil_ware);
+        Button ButtonPreisS = (Button) convertView.findViewById(R.id.button_preis_s);
+        Button ButtonPreisM = (Button) convertView.findViewById(R.id.button_preis_m);
+        Button ButtonPreisL = (Button) convertView.findViewById(R.id.button_preis_l);
 
-        TextView txtListChild = (TextView) convertView
-                .findViewById(R.id.profil_ware);
 
-        txtListChild.setText(childText);
+        Produkt.setText(childText);
         return convertView;
     }
 
@@ -89,11 +93,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.pizzaria_profil_group_item, null);
         }
+        //Look up group Item data for population (reference to views)
+        TextView Warengruppe = (TextView) convertView.findViewById(R.id.profil_warengruppe);
 
-        TextView lblListHeader = (TextView) convertView
-                .findViewById(R.id.profil_warengruppe);
-        lblListHeader.setTypeface(null, Typeface.BOLD);
-        lblListHeader.setText(headerTitle);
+
+        Warengruppe.setText(headerTitle);
 
         return convertView;
     }

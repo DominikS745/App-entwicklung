@@ -1,5 +1,7 @@
 package de.dhbw.pizzabutler;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -7,6 +9,7 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
+import android.widget.ImageView;
 
 import org.springframework.util.support.Base64;
 
@@ -26,7 +29,8 @@ public class PizzariaProfilActivity extends BaseActivity {
     //Variablen für Expandable List Adapter (Tutorial:http://www.androidhive.info/2013/07/android-expandable-list-view-tutorial/
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
-
+    Bitmap bild;
+    Pizzeria mPizzeria;
 
     //Custom Code
     List<String> listDataHeader;
@@ -41,8 +45,15 @@ public class PizzariaProfilActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navdrawer_pizzaria_profil);
 
+        //Daten für Anzeige erhalten
         Pizzeria pizzeria = (Pizzeria) getIntent().getSerializableExtra("pizzeria");
         Speisekarte speisekarte = (Speisekarte) getIntent().getSerializableExtra("speisekarte");
+        mPizzeria = pizzeria;
+
+        //Bild setzen
+        ImageView PizzariaBild = (ImageView) findViewById(R.id.pizzaria_bild);
+        bild = processPicture(pizzeria.getBild());
+        PizzariaBild.setImageBitmap(bild);
 
         // get the listview
         expListView = (ExpandableListView) findViewById(R.id.listview_pizzaria_profil);
@@ -65,7 +76,7 @@ public class PizzariaProfilActivity extends BaseActivity {
 
     //OnClick Funktion für Aufruf des Warenkorbs
     public void OnClickWeiter(View v) {
-        Intent intent = new Intent (PizzariaProfilActivity.this, WarenkorbActivity.class);
+        Intent intent = new Intent(PizzariaProfilActivity.this, WarenkorbActivity.class);
         startActivity(intent);
     }
 
@@ -116,6 +127,65 @@ public class PizzariaProfilActivity extends BaseActivity {
         listDataChild.put(listDataHeader.get(0), pizza); // Header, Child data
         listDataChild.put(listDataHeader.get(1), pasta);
         listDataChild.put(listDataHeader.get(2), comingSoon);
+    }
+
+
+    //On Click Methoden der Buttons für Informationen
+    public void OnClickHaus(View v) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(mPizzeria.getName() + "\n" + mPizzeria.getStrasse() + " " + mPizzeria.getHausnummer() + "\n"
+        +  mPizzeria.getPlz() + " " + mPizzeria.getOrt())
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int id) {
+                                //Aufruf der Einstellungen
+                                d.dismiss();
+                            }
+                        });
+        //Anzeigen des Dialogfeldes
+        builder.create().show();
+    }
+
+    public void OnClickTel(View v) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Telefon: Noch keine Methode für getTel verfügbar")
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int id) {
+                                //Aufruf der Einstellungen
+                                d.dismiss();
+                            }
+                        });
+        //Anzeigen des Dialogfeldes
+        builder.create().show();
+    }
+
+    public void OnClickUhr(View v) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Öffnungszeiten: \n" + "Dominik mach du das, ich kenn mich mit der Entity nicht aus :D")
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int id) {
+                                //Aufruf der Einstellungen
+                                d.dismiss();
+                            }
+                        });
+        //Anzeigen des Dialogfeldes
+        builder.create().show();
+    }
+
+    public void OnClickEuro(View v) {
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Lieferkosten: " + mPizzeria.getLieferkosten() + "€\n" + "Mindestbestellwert: " + mPizzeria.getMindestbestellwert() + " €")
+                .setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface d, int id) {
+                                //Aufruf der Einstellungen
+                                d.dismiss();
+                            }
+                        });
+        //Anzeigen des Dialogfeldes
+        builder.create().show();
     }
 
 }

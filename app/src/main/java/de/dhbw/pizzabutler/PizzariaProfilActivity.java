@@ -148,7 +148,7 @@ public class PizzariaProfilActivity extends BaseActivity {
 
     public void OnClickTel(View v) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Telefon: Noch keine Methode für getTel verfügbar")
+        builder.setMessage("Telefon: " + mPizzeria.getTelefonnummer())
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface d, int id) {
@@ -162,7 +162,14 @@ public class PizzariaProfilActivity extends BaseActivity {
 
     public void OnClickUhr(View v) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Öffnungszeiten: \n" + "Dominik mach du das, ich kenn mich mit der Entity nicht aus :D")
+        builder.setMessage("Öffnungszeiten: \n \n" + "Montag: " + mPizzeria.getOeffnungszeiten()[1].getVon() + "-" +mPizzeria.getOeffnungszeiten()[1].getBis()
+                        + "\nDienstag: " + mPizzeria.getOeffnungszeiten()[2].getVon() + "-" + mPizzeria.getOeffnungszeiten()[2].getBis()
+                        + "\nMittwoch: " + mPizzeria.getOeffnungszeiten()[3].getVon() + "-" +mPizzeria.getOeffnungszeiten()[3].getBis()
+                        + "\nDonnerstag: " + mPizzeria.getOeffnungszeiten()[4].getVon() + "-" +mPizzeria.getOeffnungszeiten()[4].getBis()
+                        + "\nFreitag: " + mPizzeria.getOeffnungszeiten()[5].getVon() + "-" +mPizzeria.getOeffnungszeiten()[5].getBis()
+                        + "\nSamstag: " + mPizzeria.getOeffnungszeiten()[6].getVon() + "-" +mPizzeria.getOeffnungszeiten()[6].getBis()
+                        + "\nSonntag: " + mPizzeria.getOeffnungszeiten()[0].getVon() + "-" +mPizzeria.getOeffnungszeiten()[0].getBis()
+        )
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface d, int id) {

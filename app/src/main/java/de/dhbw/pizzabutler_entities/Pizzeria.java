@@ -18,6 +18,7 @@ public class Pizzeria implements Serializable{
     String plz;
     String ort;
     String email;
+    String telefonnummer;
     String bild;
 
     public String getId() {
@@ -114,5 +115,13 @@ public class Pizzeria implements Serializable{
 
     public void setBild(String bild) {
         this.bild = bild;
+    }
+
+    public String getTelefonnummer() {
+        return telefonnummer;
+    }
+
+    public void setTelefonnummer(String telefonnummer) {
+        this.telefonnummer = telefonnummer;
     }
 }

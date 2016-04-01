@@ -70,12 +70,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         buttonPreisS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Produkt produkt = (Produkt) getChild(childPosition, groupPosition);
+                Produkt produkt = (Produkt) getChild(groupPosition, childPosition);
                 Variante variante = new Variante();
                 variante.setBezeichnung("klein");
                 Bestellposition bestellposition = new Bestellposition();
                 bestellposition.setProdukt(produkt);
                 bestellposition.setVariante(variante);
+                bestellposition.setPreis(produkt.getPreis()[0]);
                 addBestellung(bestellposition);
             }
         });
@@ -84,12 +85,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         buttonPreisM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Produkt produkt = (Produkt) getChild(childPosition, groupPosition);
+                Produkt produkt = (Produkt) getChild(groupPosition, childPosition);
                 Variante variante = new Variante();
                 variante.setBezeichnung("mittel");
                 Bestellposition bestellposition = new Bestellposition();
                 bestellposition.setProdukt(produkt);
                 bestellposition.setVariante(variante);
+                bestellposition.setPreis(produkt.getPreis()[1]);
                 addBestellung(bestellposition);
             }
         });
@@ -98,13 +100,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         buttonPreisL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Produkt produkt = (Produkt) getChild(childPosition, groupPosition);
-                System.out.println(produkt.getPreis());
+                Produkt produkt = (Produkt) getChild(groupPosition, childPosition);
                 Variante variante = new Variante();
                 variante.setBezeichnung("gross");
                 Bestellposition bestellposition = new Bestellposition();
                 bestellposition.setProdukt(produkt);
                 bestellposition.setVariante(variante);
+                bestellposition.setPreis(produkt.getPreis()[2]);
                 addBestellung(bestellposition);
             }
         });

@@ -68,8 +68,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="12pt"
-                        android:textStyle="bold"
-                        android:text="X.X €"/>
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
 

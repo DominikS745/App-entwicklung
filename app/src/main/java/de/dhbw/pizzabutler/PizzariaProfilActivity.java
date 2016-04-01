@@ -19,6 +19,7 @@ import java.util.List;
 
 import de.dhbw.pizzabutler_entities.Kategorie;
 import de.dhbw.pizzabutler_entities.Pizzeria;
+import de.dhbw.pizzabutler_entities.Produkt;
 import de.dhbw.pizzabutler_entities.Speisekarte;
 
 /**
@@ -37,7 +38,7 @@ public class PizzariaProfilActivity extends BaseActivity {
 
     //Custom Code
     List<String> listDataHeader;
-    HashMap<String, List<String>> listDataChild;
+    HashMap<String, List<Produkt>> listDataChild;
 
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
@@ -100,7 +101,7 @@ public class PizzariaProfilActivity extends BaseActivity {
      */
     private void prepareListData() {
         listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
+        listDataChild = new HashMap<String, List<Produkt>>();
 
         listDataHeader.clear();
         listDataChild.clear();
@@ -112,10 +113,10 @@ public class PizzariaProfilActivity extends BaseActivity {
             // Fügt Datensätze hinzu
             kategorie = speisekarte.getKategorien()[i];
             System.out.println(kategorie.getProdukte().length);
-            List<String> data = new ArrayList<String>();
+            List<Produkt> data = new ArrayList<Produkt>();
             for (int a = 0; a < kategorie.getProdukte().length; a++)
             {
-                data.add(kategorie.getProdukte()[a].getName());
+                data.add(kategorie.getProdukte()[a]);
                 System.out.println(kategorie.getProdukte()[a].getName());
             }
             listDataChild.put(listDataHeader.get(i), data);

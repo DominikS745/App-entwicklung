@@ -15,16 +15,19 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import de.dhbw.pizzabutler_entities.Produkt;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
     private Context _context;
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
-    private HashMap<String, List<String>> _listDataChild;
+    private HashMap<String, List<Produkt>> _listDataChild;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
-                                 HashMap<String, List<String>> listChildData) {
+                                 HashMap<String, List<Produkt>> listChildData) {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
@@ -42,10 +45,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final String childText = (String) getChild(groupPosition, childPosition);
+        final Produkt product = (Produkt) getChild(groupPosition, childPosition);
+        final float[] preise = product.getPreis();
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -54,12 +58,45 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
         //Look up child Item data for population (reference to views)
         TextView Produkt = (TextView) convertView.findViewById(R.id.profil_ware);
-        Button ButtonPreisS = (Button) convertView.findViewById(R.id.button_preis_s);
-        Button ButtonPreisM = (Button) convertView.findViewById(R.id.button_preis_m);
-        Button ButtonPreisL = (Button) convertView.findViewById(R.id.button_preis_l);
+        Button buttonPreisS = (Button) convertView.findViewById(R.id.button_preis_s);
+        Button buttonPreisM = (Button) convertView.findViewById(R.id.button_preis_m);
+        Button buttonPreisL = (Button) convertView.findViewById(R.id.button_preis_l);
 
+        //Implement onClick Listener für Button S
+        buttonPreisS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(_context, "ChildPosition: " + childPosition + " GroupPosition: " + groupPosition, Toast.LENGTH_SHORT).show();
 
-        Produkt.setText(childText);
+            }
+        });
+
+        //Implement OnClick Listener für Button M
+        buttonPreisM.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(_context, "ChildPosition: " + childPosition + " GroupPosition: " + groupPosition, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        //Implement OnClick Listener für Button L
+        buttonPreisL.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(_context, "ChildPosition: " + childPosition + " GroupPosition: " + groupPosition, Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        Produkt.setText(product.getName());
+        buttonPreisS.setText(String.valueOf(preise[0])+" €");
+        if (preise.length > 1){
+            buttonPreisM.setText(String.valueOf(preise[1])+" €");
+        }
+        if (preise.length > 2){
+            buttonPreisL.setText(String.valueOf(preise[2])+" €");
+        }
         return convertView;
     }
 

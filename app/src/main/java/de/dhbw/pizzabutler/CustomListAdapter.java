@@ -24,7 +24,6 @@ import de.dhbw.pizzabutler_entities.Pizzeria;
 
 public class CustomListAdapter extends ArrayAdapter<Pizzeria> {
     Context context;
-    String[] data;
     private static LayoutInflater inflater = null;
 
     public CustomListAdapter(Context context, ArrayList<Pizzeria> data) {

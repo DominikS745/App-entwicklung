@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -42,7 +43,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     @Override
-    public View getChildView(int groupPosition, final int childPosition,
+    public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         final String childText = (String) getChild(groupPosition, childPosition);
@@ -54,11 +55,20 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
         //Look up child Item data for population (reference to views)
         TextView Produkt = (TextView) convertView.findViewById(R.id.profil_ware);
-        Button ButtonPreisS = (Button) convertView.findViewById(R.id.button_preis_s);
-        Button ButtonPreisM = (Button) convertView.findViewById(R.id.button_preis_m);
-        Button ButtonPreisL = (Button) convertView.findViewById(R.id.button_preis_l);
+        Button buttonPreisS = (Button) convertView.findViewById(R.id.button_preis_s);
+        Button buttonPreisM = (Button) convertView.findViewById(R.id.button_preis_m);
+        Button buttonPreisL = (Button) convertView.findViewById(R.id.button_preis_l);
 
+        //Implement onClick Listener für Button S
+        buttonPreisS.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(_context, "ChildPosition: " + childPosition+ " GroupPosition: " + groupPosition, Toast.LENGTH_SHORT).show();
 
+            }
+        });
+
+        buttonPreisS.setText(childText);
         Produkt.setText(childText);
         return convertView;
     }

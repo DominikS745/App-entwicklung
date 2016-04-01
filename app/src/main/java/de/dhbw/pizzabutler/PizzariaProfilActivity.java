@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.dhbw.pizzabutler_entities.Bestellposition;
+import de.dhbw.pizzabutler_entities.Bestellung;
 import de.dhbw.pizzabutler_entities.Kategorie;
 import de.dhbw.pizzabutler_entities.Pizzeria;
 import de.dhbw.pizzabutler_entities.Produkt;
@@ -35,6 +37,7 @@ public class PizzariaProfilActivity extends BaseActivity {
     Pizzeria pizzeria;
     Kategorie kategorie;
     Speisekarte speisekarte;
+    Bestellung bestellung;
 
     //Custom Code
     List<String> listDataHeader;
@@ -79,7 +82,13 @@ public class PizzariaProfilActivity extends BaseActivity {
 
     //OnClick Funktion für Aufruf des Warenkorbs
     public void OnClickWeiter(View v) {
+        List<Bestellposition> bestellungen = listAdapter.getBestellungen();
         Intent intent = new Intent(PizzariaProfilActivity.this, WarenkorbActivity.class);
+        Bestellposition[] bestellpositionen = new Bestellposition[bestellungen.size()];
+        bestellungen.toArray(bestellpositionen);
+        bestellung = new Bestellung();
+        bestellung.setBestellpositionen(bestellpositionen);
+        intent.putExtra("warenkorb", bestellung);
         startActivity(intent);
     }
 
@@ -112,15 +121,12 @@ public class PizzariaProfilActivity extends BaseActivity {
 
             // Fügt Datensätze hinzu
             kategorie = speisekarte.getKategorien()[i];
-            System.out.println(kategorie.getProdukte().length);
             List<Produkt> data = new ArrayList<Produkt>();
             for (int a = 0; a < kategorie.getProdukte().length; a++)
             {
                 data.add(kategorie.getProdukte()[a]);
-                System.out.println(kategorie.getProdukte()[a].getName());
             }
             listDataChild.put(listDataHeader.get(i), data);
-            System.out.println(listDataChild.values());
         }
     }
 

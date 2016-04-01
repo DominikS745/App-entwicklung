@@ -4,20 +4,21 @@ package de.dhbw.pizzabutler;
  * Created by Marvin on 04.03.16.
  */
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import android.content.Context;
-import android.graphics.Typeface;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
+import de.dhbw.pizzabutler_entities.Bestellposition;
+import de.dhbw.pizzabutler_entities.Bestellung;
 import de.dhbw.pizzabutler_entities.Produkt;
+import de.dhbw.pizzabutler_entities.Variante;
 
 public class ExpandableListAdapter extends BaseExpandableListAdapter {
 
@@ -25,6 +26,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private List<String> _listDataHeader; // header titles
     // child data in format of header title, child title
     private HashMap<String, List<Produkt>> _listDataChild;
+    private List<Bestellposition> bestellungen;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
                                  HashMap<String, List<Produkt>> listChildData) {
@@ -48,14 +50,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        final Produkt product = (Produkt) getChild(groupPosition, childPosition);
-        final float[] preise = product.getPreis();
+        bestellungen = new ArrayList<Bestellposition>();
+        Produkt product = (Produkt) getChild(groupPosition, childPosition);
+        float[] preise = product.getPreis();
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             convertView = infalInflater.inflate(R.layout.pizzaria_profil_child_item, null);
         }
+
         //Look up child Item data for population (reference to views)
         TextView Produkt = (TextView) convertView.findViewById(R.id.profil_ware);
         Button buttonPreisS = (Button) convertView.findViewById(R.id.button_preis_s);
@@ -66,8 +70,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         buttonPreisS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(_context, "ChildPosition: " + childPosition + " GroupPosition: " + groupPosition, Toast.LENGTH_SHORT).show();
-
+                Produkt produkt = (Produkt) getChild(childPosition, groupPosition);
+                Variante variante = new Variante();
+                variante.setBezeichnung("klein");
+                Bestellposition bestellposition = new Bestellposition();
+                bestellposition.setProdukt(produkt);
+                bestellposition.setVariante(variante);
+                addBestellung(bestellposition);
             }
         });
 
@@ -75,8 +84,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         buttonPreisM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(_context, "ChildPosition: " + childPosition + " GroupPosition: " + groupPosition, Toast.LENGTH_SHORT).show();
-
+                Produkt produkt = (Produkt) getChild(childPosition, groupPosition);
+                Variante variante = new Variante();
+                variante.setBezeichnung("mittel");
+                Bestellposition bestellposition = new Bestellposition();
+                bestellposition.setProdukt(produkt);
+                bestellposition.setVariante(variante);
+                addBestellung(bestellposition);
             }
         });
 
@@ -84,18 +98,32 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         buttonPreisL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(_context, "ChildPosition: " + childPosition + " GroupPosition: " + groupPosition, Toast.LENGTH_SHORT).show();
-
+                Produkt produkt = (Produkt) getChild(childPosition, groupPosition);
+                System.out.println(produkt.getPreis());
+                Variante variante = new Variante();
+                variante.setBezeichnung("gross");
+                Bestellposition bestellposition = new Bestellposition();
+                bestellposition.setProdukt(produkt);
+                bestellposition.setVariante(variante);
+                addBestellung(bestellposition);
             }
         });
 
         Produkt.setText(product.getName());
-        buttonPreisS.setText(String.valueOf(preise[0])+" €");
+        buttonPreisS.setText(String.valueOf(preise[0]) + " €");
         if (preise.length > 1){
             buttonPreisM.setText(String.valueOf(preise[1])+" €");
         }
+        else{
+            buttonPreisM.setVisibility(View.INVISIBLE);
+            buttonPreisM.setClickable(false);
+        }
         if (preise.length > 2){
             buttonPreisL.setText(String.valueOf(preise[2])+" €");
+        }
+        else{
+            buttonPreisL.setVisibility(View.INVISIBLE);
+            buttonPreisL.setClickable(false);
         }
         return convertView;
     }
@@ -147,5 +175,13 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     @Override
     public boolean isChildSelectable(int groupPosition, int childPosition) {
         return true;
+    }
+
+    private void addBestellung(Bestellposition bestellposition){
+        bestellungen.add(bestellposition);
+    }
+
+    public List<Bestellposition> getBestellungen(){
+        return bestellungen;
     }
 }

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.dhbw.pizzabutler_entities.Kategorie;
 import de.dhbw.pizzabutler_entities.Pizzeria;
 import de.dhbw.pizzabutler_entities.Speisekarte;
 
@@ -30,7 +31,9 @@ public class PizzariaProfilActivity extends BaseActivity {
     ExpandableListAdapter listAdapter;
     ExpandableListView expListView;
     Bitmap bild;
-    Pizzeria mPizzeria;
+    Pizzeria pizzeria;
+    Kategorie kategorie;
+    Speisekarte speisekarte;
 
     //Custom Code
     List<String> listDataHeader;
@@ -46,9 +49,8 @@ public class PizzariaProfilActivity extends BaseActivity {
         setContentView(R.layout.navdrawer_pizzaria_profil);
 
         //Daten für Anzeige erhalten
-        Pizzeria pizzeria = (Pizzeria) getIntent().getSerializableExtra("pizzeria");
-        Speisekarte speisekarte = (Speisekarte) getIntent().getSerializableExtra("speisekarte");
-        mPizzeria = pizzeria;
+        pizzeria = (Pizzeria) getIntent().getSerializableExtra("pizzeria");
+        speisekarte = (Speisekarte) getIntent().getSerializableExtra("speisekarte");
 
         //Bild setzen
         ImageView PizzariaBild = (ImageView) findViewById(R.id.pizzaria_bild);
@@ -100,41 +102,33 @@ public class PizzariaProfilActivity extends BaseActivity {
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
 
-        // Adding child data
-        listDataHeader.add("Pizza");
-        listDataHeader.add("Pasta");
-        listDataHeader.add("Salat");
+        listDataHeader.clear();
+        listDataChild.clear();
 
-        // Adding child data
-        List<String> pizza = new ArrayList<String>();
-        pizza.add("Pizza Schinken");
-        pizza.add("Pizza Salami");
-        pizza.add("Pizza Käse");
-        pizza.add("Pizza Tuna");
+        // Fügt Kategorien hinzu
+        for (int i = 0; i < speisekarte.getKategorien().length; i++) {
+            listDataHeader.add(speisekarte.getKategorien()[i].getName());
 
-
-        List<String> pasta = new ArrayList<String>();
-        pasta.add("Spaghetti");
-        pasta.add("Noodles");
-        pasta.add("Noodles 2");
-
-        List<String> comingSoon = new ArrayList<String>();
-        comingSoon.add("Hier");
-        comingSoon.add("Noch");
-        comingSoon.add("Anderes");
-        comingSoon.add("Essen");
-
-        listDataChild.put(listDataHeader.get(0), pizza); // Header, Child data
-        listDataChild.put(listDataHeader.get(1), pasta);
-        listDataChild.put(listDataHeader.get(2), comingSoon);
+            // Fügt Datensätze hinzu
+            kategorie = speisekarte.getKategorien()[i];
+            System.out.println(kategorie.getProdukte().length);
+            List<String> data = new ArrayList<String>();
+            for (int a = 0; a < kategorie.getProdukte().length; a++)
+            {
+                data.add(kategorie.getProdukte()[a].getName());
+                System.out.println(kategorie.getProdukte()[a].getName());
+            }
+            listDataChild.put(listDataHeader.get(i), data);
+            System.out.println(listDataChild.values());
+        }
     }
 
 
     //On Click Methoden der Buttons für Informationen
     public void OnClickHaus(View v) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(mPizzeria.getName() + "\n" + mPizzeria.getStrasse() + " " + mPizzeria.getHausnummer() + "\n"
-        +  mPizzeria.getPlz() + " " + mPizzeria.getOrt())
+        builder.setMessage(pizzeria.getName() + "\n" + pizzeria.getStrasse() + " " + pizzeria.getHausnummer() + "\n"
+        +  pizzeria.getPlz() + " " + pizzeria.getOrt())
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface d, int id) {
@@ -148,7 +142,7 @@ public class PizzariaProfilActivity extends BaseActivity {
 
     public void OnClickTel(View v) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Telefon: " + mPizzeria.getTelefonnummer())
+        builder.setMessage("Telefon: " + pizzeria.getTelefonnummer())
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface d, int id) {
@@ -162,13 +156,13 @@ public class PizzariaProfilActivity extends BaseActivity {
 
     public void OnClickUhr(View v) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Öffnungszeiten: \n \n" + "Montag: " + mPizzeria.getOeffnungszeiten()[1].getVon() + "-" +mPizzeria.getOeffnungszeiten()[1].getBis()
-                        + "\nDienstag: " + mPizzeria.getOeffnungszeiten()[2].getVon() + "-" + mPizzeria.getOeffnungszeiten()[2].getBis()
-                        + "\nMittwoch: " + mPizzeria.getOeffnungszeiten()[3].getVon() + "-" +mPizzeria.getOeffnungszeiten()[3].getBis()
-                        + "\nDonnerstag: " + mPizzeria.getOeffnungszeiten()[4].getVon() + "-" +mPizzeria.getOeffnungszeiten()[4].getBis()
-                        + "\nFreitag: " + mPizzeria.getOeffnungszeiten()[5].getVon() + "-" +mPizzeria.getOeffnungszeiten()[5].getBis()
-                        + "\nSamstag: " + mPizzeria.getOeffnungszeiten()[6].getVon() + "-" +mPizzeria.getOeffnungszeiten()[6].getBis()
-                        + "\nSonntag: " + mPizzeria.getOeffnungszeiten()[0].getVon() + "-" +mPizzeria.getOeffnungszeiten()[0].getBis()
+        builder.setMessage("Öffnungszeiten: \n \n" + "Montag: " + pizzeria.getOeffnungszeiten()[1].getVon() + "-" +pizzeria.getOeffnungszeiten()[1].getBis()
+                        + "\nDienstag: " + pizzeria.getOeffnungszeiten()[2].getVon() + "-" + pizzeria.getOeffnungszeiten()[2].getBis()
+                        + "\nMittwoch: " + pizzeria.getOeffnungszeiten()[3].getVon() + "-" +pizzeria.getOeffnungszeiten()[3].getBis()
+                        + "\nDonnerstag: " + pizzeria.getOeffnungszeiten()[4].getVon() + "-" +pizzeria.getOeffnungszeiten()[4].getBis()
+                        + "\nFreitag: " + pizzeria.getOeffnungszeiten()[5].getVon() + "-" +pizzeria.getOeffnungszeiten()[5].getBis()
+                        + "\nSamstag: " + pizzeria.getOeffnungszeiten()[6].getVon() + "-" +pizzeria.getOeffnungszeiten()[6].getBis()
+                        + "\nSonntag: " + pizzeria.getOeffnungszeiten()[0].getVon() + "-" +pizzeria.getOeffnungszeiten()[0].getBis()
         )
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
@@ -183,7 +177,7 @@ public class PizzariaProfilActivity extends BaseActivity {
 
     public void OnClickEuro(View v) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Lieferkosten: " + mPizzeria.getLieferkosten() + "€\n" + "Mindestbestellwert: " + mPizzeria.getMindestbestellwert() + " €")
+        builder.setMessage("Lieferkosten: " + pizzeria.getLieferkosten() + "€\n" + "Mindestbestellwert: " + pizzeria.getMindestbestellwert() + " €")
                 .setPositiveButton("OK",
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface d, int id) {

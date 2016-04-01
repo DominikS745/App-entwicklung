@@ -55,11 +55,6 @@ public class ListPizzariaActivity extends BaseActivity {
             new ListThroughBackend(plzEditText.getText().toString()).execute();
         }
 
-		// Define Dummy Data
-		//Pizzeria dummy_pizzeria = new Pizzeria();
-		//dummy_pizzeria.setStrasse("Beispielstrasse");
-		//dummy_pizzeria.setName("Meine Pizzeriaiaia");
-
         // Construct the data source --> Must be an ArrayList
         ArrayList<Pizzeria> arrayOfPizzeria = new ArrayList<Pizzeria>();
 
@@ -91,7 +86,6 @@ public class ListPizzariaActivity extends BaseActivity {
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
         set(navMenuTitles, navMenuIcons);
-
     }
 
     public void pizzerienSuchen(View v) {
@@ -99,6 +93,7 @@ public class ListPizzariaActivity extends BaseActivity {
     }
 
     public void fillListWithData(Pizzeria[] pizzerien){
+        adapter.clear();
         for (int i = 0; i < pizzerien.length; i++){
             adapter.add(pizzerien[i]);
         }

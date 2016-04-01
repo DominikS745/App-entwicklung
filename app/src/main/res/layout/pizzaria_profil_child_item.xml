@@ -25,28 +25,31 @@
         android:layout_marginBottom="8dp">
 
         <Button
+            android:focusable="false"
             android:id="@+id/button_preis_s"
             android:layout_width="24pt"
             android:layout_height="16pt"
             android:layout_marginRight="8dp"
             android:gravity="center"
-            android:text="4,50 €" />
+            android:text="" />
 
         <Button
+            android:focusable="false"
             android:id="@+id/button_preis_m"
             android:layout_width="24pt"
             android:layout_height="16pt"
             android:layout_marginRight="8dp"
             android:gravity="center"
-            android:text="10,00 €" />
+            android:text="" />
 
         <Button
+            android:focusable="false"
             android:id="@+id/button_preis_l"
             android:layout_width="24pt"
             android:layout_height="16pt"
             android:layout_marginRight="8dp"
             android:gravity="center"
-            android:text="8,70 €" />
+            android:text="" />
     </LinearLayout>
 
 </LinearLayout>

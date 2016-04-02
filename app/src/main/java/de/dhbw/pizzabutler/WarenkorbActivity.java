@@ -18,13 +18,14 @@ public class WarenkorbActivity extends BaseActivity {
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
+    private Bestellung bestellung;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navdrawer_warenkorb);
 
-        Bestellung bestellung = (Bestellung) getIntent().getSerializableExtra("warenkorb");
+        bestellung = (Bestellung) getIntent().getSerializableExtra("warenkorb");
         double lieferkosten = getIntent().getDoubleExtra("lieferkosten", 0);
 
         //Icons und Text für NavDrawer initalisieren
@@ -50,6 +51,9 @@ public class WarenkorbActivity extends BaseActivity {
 
         gesamtpreis = bestellwert + lieferkosten;
 
+        //Füllen der Bestellung mit entsprechenden Werten
+        bestellung.setRechnungsbeitrag(((float) gesamtpreis));
+
         //Definition und Befüllen der Kostenfelder im Warenkorb
         TextView bestellwertView = (TextView) findViewById(R.id.bestellwert);
         bestellwertView.setText(String.valueOf(bestellwert));
@@ -63,6 +67,7 @@ public class WarenkorbActivity extends BaseActivity {
     //OnClick für Weiter Button
     public void OnClickWeiter(View v){
         Intent intent = new Intent(this, RolleActivity.class);
+        intent.putExtra("Bestellung", bestellung);
         startActivity(intent);
     }
 }

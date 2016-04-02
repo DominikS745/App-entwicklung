@@ -4,16 +4,30 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import de.dhbw.pizzabutler_entities.Bestellposition;
 import de.dhbw.pizzabutler_entities.Bestellung;
+import de.dhbw.pizzabutler_entities.Produkt;
+import de.dhbw.pizzabutler_entities.Zusatzbelag;
 
 /**
  * Created by Marvin on 16.03.16.
  */
 public class WarenkorbActivity extends BaseActivity {
+
+    private WarenkorbExpandableListAdapter listAdapter;
+    private ExpandableListView expListView;
+
+    //Custom Code
+    private List<String> listDataHeader;
+    private HashMap<String, List<String>> listDataChild;
 
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
@@ -33,6 +47,17 @@ public class WarenkorbActivity extends BaseActivity {
         navMenuIcons = getResources()
                 .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
         set(navMenuTitles, navMenuIcons);
+
+        // get the listview
+        expListView = (ExpandableListView) findViewById(R.id.listview_warenkorb);
+
+        // preparing list data
+        prepareListData();
+
+        listAdapter = new WarenkorbExpandableListAdapter(this, listDataHeader, listDataChild);
+
+        // setting list adapter
+        expListView.setAdapter(listAdapter);
 
         //Testausgabe
         Bestellposition[] positionen = bestellung.getBestellpositionen();
@@ -62,6 +87,31 @@ public class WarenkorbActivity extends BaseActivity {
         TextView gesamtpreisView = (TextView) findViewById(R.id.gesamtkosten);
         gesamtpreisView.setText(String.valueOf(gesamtpreis));
 
+    }
+
+    //Befüllen der Daten für die Liste
+    public void prepareListData(){
+        listDataHeader = new ArrayList<String>();
+        listDataChild = new HashMap<String, List<String>>();
+
+        listDataHeader.clear();
+        listDataChild.clear();
+
+        Bestellposition[] bestellpositionen = bestellung.getBestellpositionen();
+
+        for(int i = 0; i<bestellpositionen.length; i++){
+            List<String> data = new ArrayList<String>();
+            System.out.println(bestellpositionen[i].getProdukt().getName());
+            listDataHeader.add(bestellpositionen[i].getProdukt().getName());
+            data.add(0, String.valueOf(bestellpositionen[i].getPreis()));
+            data.add(1, bestellpositionen[i].getVariante().getBezeichnung());
+
+            //Zusatzbelag[] zusatzbelage = bestellpositionen[i].getZusatzbelag();
+            //for(int a = 0; a<zusatzbelage.length; a++){
+            //    data.add(a+2, String.valueOf(bestellpositionen[i].getZusatzbelag()[a]));
+            //}
+            listDataChild.put(listDataHeader.get(i), data);
+        }
     }
 
     //OnClick für Weiter Button

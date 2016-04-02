@@ -116,7 +116,7 @@ public class PizzariaProfilActivity extends BaseActivity {
         listDataHeader.clear();
         listDataChild.clear();
 
-        // Fügt Kategorien hinzu
+        // Fügt Kategorien hinzue
         for (int i = 0; i < speisekarte.getKategorien().length; i++) {
             listDataHeader.add(speisekarte.getKategorien()[i].getName());
 

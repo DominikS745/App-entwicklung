@@ -36,10 +36,10 @@
                     android:textStyle="bold" />
             </LinearLayout>
 
-            <ExpandableListView
+            <ListView
                 android:id="@+id/listview_warenkorb"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"></ExpandableListView>
+                android:layout_height="wrap_content"></ListView>
 
             <View
                 android:layout_marginTop="8dp"

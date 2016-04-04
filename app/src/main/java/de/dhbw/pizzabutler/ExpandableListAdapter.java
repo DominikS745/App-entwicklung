@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import de.dhbw.pizzabutler_entities.Bestellposition;
 import de.dhbw.pizzabutler_entities.Bestellung;
@@ -75,6 +76,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         buttonPreisS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast toast = Toast.makeText(_context, "Produkt zum Warenkorb hinzugefügt", Toast.LENGTH_SHORT);
+                toast.show();
                 Produkt produkt = (Produkt) getChild(groupPosition, childPosition);
                 Variante variante = new Variante();
                 variante.setBezeichnung("klein");
@@ -90,6 +93,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         buttonPreisM.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast toast = Toast.makeText(_context, "Produkt zum Warenkorb hinzugefügt", Toast.LENGTH_SHORT);
+                toast.show();
                 Produkt produkt = (Produkt) getChild(groupPosition, childPosition);
                 Variante variante = new Variante();
                 variante.setBezeichnung("mittel");
@@ -105,6 +110,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         buttonPreisL.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Toast toast = Toast.makeText(_context, "Produkt zum Warenkorb hinzugefügt", Toast.LENGTH_SHORT);
+                toast.show();
                 Produkt produkt = (Produkt) getChild(groupPosition, childPosition);
                 Variante variante = new Variante();
                 variante.setBezeichnung("gross");

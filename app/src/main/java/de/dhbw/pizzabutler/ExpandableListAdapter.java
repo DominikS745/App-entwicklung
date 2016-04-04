@@ -27,6 +27,11 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     // child data in format of header title, child title
     private HashMap<String, List<Produkt>> _listDataChild;
     private List<Bestellposition> bestellungen;
+    private Produkt product;
+    private float[] preise;
+    private Button buttonPreisS;
+    private Button buttonPreisM;
+    private Button buttonPreisL;
 
     public ExpandableListAdapter(Context context, List<String> listDataHeader,
                                  HashMap<String, List<Produkt>> listChildData) {
@@ -51,8 +56,8 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
         bestellungen = new ArrayList<Bestellposition>();
-        Produkt product = (Produkt) getChild(groupPosition, childPosition);
-        float[] preise = product.getPreis();
+        product = (Produkt) getChild(groupPosition, childPosition);
+        preise = product.getPreis();
 
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
@@ -61,10 +66,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         }
 
         //Look up child Item data for population (reference to views)
-        TextView Produkt = (TextView) convertView.findViewById(R.id.profil_ware);
-        Button buttonPreisS = (Button) convertView.findViewById(R.id.button_preis_s);
-        Button buttonPreisM = (Button) convertView.findViewById(R.id.button_preis_m);
-        Button buttonPreisL = (Button) convertView.findViewById(R.id.button_preis_l);
+        TextView produktET = (TextView) convertView.findViewById(R.id.profil_ware);
+        buttonPreisS = (Button) convertView.findViewById(R.id.button_preis_s);
+        buttonPreisM = (Button) convertView.findViewById(R.id.button_preis_m);
+        buttonPreisL = (Button) convertView.findViewById(R.id.button_preis_l);
 
         //Implement onClick Listener für Button S
         buttonPreisS.setOnClickListener(new View.OnClickListener() {
@@ -111,22 +116,27 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             }
         });
 
-        Produkt.setText(product.getName());
+        produktET.setText(product.getName());
         buttonPreisS.setText(String.valueOf(preise[0]) + " €");
-        if (preise.length > 1){
-            buttonPreisM.setText(String.valueOf(preise[1])+" €");
+        buttonPreisM.setClickable(false);
+        buttonPreisM.setVisibility(View.INVISIBLE);
+        buttonPreisL.setClickable(false);
+        buttonPreisL.setVisibility(View.INVISIBLE);
+
+        if(preise.length > 2) {
+            buttonPreisL.setClickable(true);
+            buttonPreisL.setVisibility(View.VISIBLE);
+            buttonPreisL.setText(String.valueOf(preise[2]) + "€");
+            buttonPreisM.setClickable(true);
+            buttonPreisM.setVisibility(View.VISIBLE);
+            buttonPreisM.setText(String.valueOf(preise[1]) + "€");
         }
-        else{
-            buttonPreisM.setVisibility(View.INVISIBLE);
-            buttonPreisM.setClickable(false);
+        else if(preise.length > 1) {
+            buttonPreisM.setClickable(true);
+            buttonPreisM.setVisibility(View.VISIBLE);
+            buttonPreisM.setText(String.valueOf(preise[1]) + "€");
         }
-        if (preise.length > 2){
-            buttonPreisL.setText(String.valueOf(preise[2])+" €");
-        }
-        else{
-            buttonPreisL.setVisibility(View.INVISIBLE);
-            buttonPreisL.setClickable(false);
-        }
+
         return convertView;
     }
 
@@ -161,10 +171,9 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
             convertView = infalInflater.inflate(R.layout.pizzaria_profil_group_item, null);
         }
         //Look up group Item data for population (reference to views)
-        TextView Warengruppe = (TextView) convertView.findViewById(R.id.profil_warengruppe);
+        TextView warengruppeET = (TextView) convertView.findViewById(R.id.profil_warengruppe);
 
-
-        Warengruppe.setText(headerTitle);
+        warengruppeET.setText(headerTitle);
 
         return convertView;
     }

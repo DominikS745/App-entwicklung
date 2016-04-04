@@ -111,7 +111,7 @@
                 android:background="@android:color/black" />
 
             <Button
-                android:background="@drawable/button_shape_warenkorb"
+                android:background="@drawable/button_states_warenkorb"
                 android:layout_width="124pt"
                 android:layout_height="16pt"
                 android:layout_marginTop="0dp"

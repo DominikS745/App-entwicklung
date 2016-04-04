@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import org.springframework.util.support.Base64;
 
@@ -83,14 +84,23 @@ public class PizzariaProfilActivity extends BaseActivity {
     //OnClick Funktion für Aufruf des Warenkorbs
     public void OnClickWeiter(View v) {
         List<Bestellposition> bestellungen = listAdapter.getBestellungen();
-        Intent intent = new Intent(PizzariaProfilActivity.this, WarenkorbActivity.class);
-        Bestellposition[] bestellpositionen = new Bestellposition[bestellungen.size()];
-        bestellungen.toArray(bestellpositionen);
-        bestellung = new Bestellung();
-        bestellung.setBestellpositionen(bestellpositionen);
-        intent.putExtra("lieferkosten", pizzeria.getLieferkosten());
-        intent.putExtra("warenkorb", bestellung);
-        startActivity(intent);
+        if(bestellungen == null) {
+            Toast.makeText(this, "Bitte bestellen Sie etwas.", Toast.LENGTH_SHORT).show();
+        }
+        else if(bestellungen.size() < 1){
+            Toast.makeText(this, "Bitte bestellen Sie etwas.", Toast.LENGTH_SHORT).show();
+        }
+
+        else{
+            Intent intent = new Intent(PizzariaProfilActivity.this, WarenkorbActivity.class);
+            Bestellposition[] bestellpositionen = new Bestellposition[bestellungen.size()];
+            bestellungen.toArray(bestellpositionen);
+            bestellung = new Bestellung();
+            bestellung.setBestellpositionen(bestellpositionen);
+            intent.putExtra("lieferkosten", pizzeria.getLieferkosten());
+            intent.putExtra("warenkorb", bestellung);
+            startActivity(intent);
+        }
     }
 
     //Verarbeitung des Bilds

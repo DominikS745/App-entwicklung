@@ -8,6 +8,7 @@ import android.widget.ExpandableListView;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -16,6 +17,7 @@ import java.util.List;
 import de.dhbw.pizzabutler_entities.Bestellposition;
 import de.dhbw.pizzabutler_entities.Bestellung;
 import de.dhbw.pizzabutler_entities.Produkt;
+import de.dhbw.pizzabutler_entities.WarenkorbItem;
 import de.dhbw.pizzabutler_entities.Zusatzbelag;
 
 /**
@@ -27,7 +29,7 @@ public class WarenkorbActivity extends BaseActivity {
     private ListView listView;
 
     //Custom Code
-    private ArrayList<String> data;
+    private ArrayList<WarenkorbItem> data;
 
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
@@ -51,11 +53,7 @@ public class WarenkorbActivity extends BaseActivity {
         // get the listview
         listView = (ListView) findViewById(R.id.listview_warenkorb);
 
-        // preparing list data
-        String produkt = "Test Produkt";
-        data = new ArrayList<String>();
-        data.add(produkt);
-        //prepareListData();
+        prepareListData();
 
         listAdapter = new WarenkorbListAdapter(this, data);
 
@@ -93,35 +91,30 @@ public class WarenkorbActivity extends BaseActivity {
     }
 
     //Befüllen der Daten für die Liste
-    /*
     public void prepareListData(){
-        listDataHeader = new ArrayList<String>();
-        listDataChild = new HashMap<String, List<String>>();
-
-        listDataHeader.clear();
-        listDataChild.clear();
+        data = new ArrayList<WarenkorbItem>();
 
         Bestellposition[] bestellpositionen = bestellung.getBestellpositionen();
 
         for(int i = 0; i<bestellpositionen.length; i++){
-            List<String> data = new ArrayList<String>();
+            WarenkorbItem warenkorbItem = new WarenkorbItem();
             System.out.println(bestellpositionen[i].getProdukt().getName());
-            listDataHeader.add(bestellpositionen[i].getProdukt().getName());
-            data.add(0, String.valueOf(bestellpositionen[i].getPreis()));
-            data.add(1, bestellpositionen[i].getVariante().getBezeichnung());
+            warenkorbItem.setBezeichnung(bestellpositionen[i].getProdukt().getName());
+            warenkorbItem.setPreis(bestellpositionen[i].getPreis());
+            warenkorbItem.setVariante(bestellpositionen[i].getVariante().getBezeichnung());
 
+            data.add(i, warenkorbItem);
             //Zusatzbelag[] zusatzbelage = bestellpositionen[i].getZusatzbelag();
             //for(int a = 0; a<zusatzbelage.length; a++){
             //    data.add(a+2, String.valueOf(bestellpositionen[i].getZusatzbelag()[a]));
             //}
-            listDataChild.put(listDataHeader.get(i), data);
         }
     }
-*/
+
     //OnClick für Weiter Button
     public void OnClickWeiter(View v){
         Intent intent = new Intent(this, RolleActivity.class);
-        //intent.putExtra("Bestellung", bestellung);
+        intent.putExtra("Bestellung", bestellung);
         startActivity(intent);
     }
 }

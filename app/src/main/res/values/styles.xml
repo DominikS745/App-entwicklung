@@ -21,26 +21,14 @@
 
     <!-- Button Style -->
     <style name="ButtonStyle">
-        <item name="android:background">@drawable/button_shape</item>
+        <item name="android:background">@drawable/custom_button_shape</item>
         <item name="android:textColor">@android:color/white</item>
         <!--<item name="android:textSize">24sp</item> -->
         <!--<item name="android:textStyle">bold</item> -->
         <item name="android:radius">8dp</item>
     </style>
 
-    <!-- Button Style für Start Screen -->
-    <style name="WelcomeButon">
-        <item name="android:background">@drawable/button_shape_start</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:textSize">24sp</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:radius">8dp</item>
-    </style>
-
-    <!--Button Style für den Warenkorb Button -->
-    <style name="WarenkorbButton">
-        <item name="android:background">@drawable/button_shape_warenkorb</item>
-    </style>
+    <!-- Andere Buttons, die nur einmal verwendet werden, sind direkt in der layout xml über das drawable referenziert. Hier wäre ein extra Style unnötig -->
 
     <!-- Action Bar Style -->
     <style name="CustomActionBar" parent="Theme.AppCompat.Light.DarkActionBar">

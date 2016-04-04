@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.HashMap;
@@ -85,7 +84,7 @@ public class WarenkorbExpandableListAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             LayoutInflater infalInflater = (LayoutInflater) this._context
                     .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            convertView = infalInflater.inflate(R.layout.warenkorb_group_item, null);
+            convertView = infalInflater.inflate(R.layout.warenkorb_list_item, null);
         }
         //Look up group Item data for population (reference to views)
         TextView ware = (TextView) convertView.findViewById(R.id.warenkorb_product_name);

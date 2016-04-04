@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -22,12 +23,11 @@ import de.dhbw.pizzabutler_entities.Zusatzbelag;
  */
 public class WarenkorbActivity extends BaseActivity {
 
-    private WarenkorbExpandableListAdapter listAdapter;
-    private ExpandableListView expListView;
+    private WarenkorbListAdapter listAdapter;
+    private ListView listView;
 
     //Custom Code
-    private List<String> listDataHeader;
-    private HashMap<String, List<String>> listDataChild;
+    private ArrayList<String> data;
 
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
@@ -49,15 +49,18 @@ public class WarenkorbActivity extends BaseActivity {
         set(navMenuTitles, navMenuIcons);
 
         // get the listview
-        expListView = (ExpandableListView) findViewById(R.id.listview_warenkorb);
+        listView = (ListView) findViewById(R.id.listview_warenkorb);
 
         // preparing list data
-        prepareListData();
+        String produkt = "Test Produkt";
+        data = new ArrayList<String>();
+        data.add(produkt);
+        //prepareListData();
 
-        listAdapter = new WarenkorbExpandableListAdapter(this, listDataHeader, listDataChild);
+        listAdapter = new WarenkorbListAdapter(this, data);
 
         // setting list adapter
-        expListView.setAdapter(listAdapter);
+        listView.setAdapter(listAdapter);
 
         //Testausgabe
         Bestellposition[] positionen = bestellung.getBestellpositionen();
@@ -90,6 +93,7 @@ public class WarenkorbActivity extends BaseActivity {
     }
 
     //Befüllen der Daten für die Liste
+    /*
     public void prepareListData(){
         listDataHeader = new ArrayList<String>();
         listDataChild = new HashMap<String, List<String>>();
@@ -113,11 +117,11 @@ public class WarenkorbActivity extends BaseActivity {
             listDataChild.put(listDataHeader.get(i), data);
         }
     }
-
+*/
     //OnClick für Weiter Button
     public void OnClickWeiter(View v){
         Intent intent = new Intent(this, RolleActivity.class);
-        intent.putExtra("Bestellung", bestellung);
+        //intent.putExtra("Bestellung", bestellung);
         startActivity(intent);
     }
 }

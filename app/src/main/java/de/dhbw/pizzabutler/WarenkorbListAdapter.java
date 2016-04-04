@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.springframework.util.support.Base64;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,10 +41,10 @@ public class WarenkorbListAdapter extends ArrayAdapter<String> {
         String data = getItem(position);
 
         if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.pizzaria_liste_item, parent, false);
+            convertView = LayoutInflater.from(getContext()).inflate(R.layout.warenkorb_list_item, parent, false);
         }
         // Lookup view for data population
-
+        TextView produkt = (TextView) convertView.findViewById(R.id.warenkorb_product_name);
 
         // Populate the data into the template view using the data object
 

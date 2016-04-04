@@ -24,7 +24,6 @@ import de.dhbw.pizzabutler_entities.Pizzeria;
 
 public class CustomListAdapter extends ArrayAdapter<Pizzeria> {
     Context context;
-    String[] data;
     private static LayoutInflater inflater = null;
 
     public CustomListAdapter(Context context, ArrayList<Pizzeria> data) {
@@ -72,11 +71,8 @@ public class CustomListAdapter extends ArrayAdapter<Pizzeria> {
         try {
             byte[] byteArray = Base64.decode(base64);
             Bitmap bitmap = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-            //Provisorische Anzeige (die vermutlich das Layout etwas zerlegt. Später löschen!
-            //ImageView image = (ImageView) findViewById(R.id.imageView1);
-            //image.setImageBitmap(bitmap);
-
             return bitmap;
+
         } catch (Exception e) {
             e.printStackTrace();
         }

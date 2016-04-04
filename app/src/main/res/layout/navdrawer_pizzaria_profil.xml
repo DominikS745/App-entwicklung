@@ -33,9 +33,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8pt"
                     android:inputType="number"
-                    android:hint="**POSTLEITZAHL**"
+                    android:hint="**PLZ**"
                     android:textColor="@android:color/white"
-                    android:textSize="16dp">
+                    android:textSize="16dp"
+                    android:maxLength="5">
 
                     <!--<requestFocus /> -->
                 </EditText>
@@ -49,13 +50,15 @@
                     android:src="@drawable/ic_search_white" />
             </LinearLayout>
 
-            <TextView
-                android:layout_width="match_parent"
+            <ImageView
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:id="@+id/pizzaria_bild"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:src="@drawable/pizzabutler_erroricon_old"
                 android:gravity="center"
-                android:text="PIZZARIA BILD"
-                android:textSize="24pt"
-                android:textStyle="bold" />
+                 />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -69,9 +72,11 @@
                     android:layout_marginLeft="8dp"
                     android:layout_marginRight="8dp"
                     android:scaleType="fitXY"
-                    android:src="@drawable/haus_icon" />
+                    android:src="@drawable/haus_icon"
+                    android:onClick="OnClickHaus"/>
 
                 <ImageView
+                    android:onClick="OnClickTel"
                     android:layout_width="24pt"
                     android:layout_height="24pt"
                     android:layout_marginLeft="8dp"
@@ -80,6 +85,7 @@
                     android:src="@drawable/phone_icon" />
 
                 <ImageView
+                    android:onClick="OnClickUhr"
                     android:layout_width="24pt"
                     android:layout_height="24pt"
                     android:layout_marginLeft="8dp"
@@ -88,6 +94,7 @@
                     android:src="@drawable/uhr_icon" />
 
                 <ImageView
+                    android:onClick="OnClickEuro"
                     android:layout_width="24pt"
                     android:layout_height="24pt"
                     android:layout_marginLeft="8dp"
@@ -99,9 +106,23 @@
             <View
                 android:layout_width="fill_parent"
                 android:layout_height="2dp"
-                android:layout_marginBottom="8pt"
-                android:layout_marginTop="8pt"
+                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
                 android:background="@android:color/black" />
+
+            <Button
+                android:background="@drawable/button_states_warenkorb"
+                android:layout_width="124pt"
+                android:layout_height="16pt"
+                android:layout_marginTop="0dp"
+                android:layout_marginBottom="8dp"
+                android:layout_gravity="center"
+                android:padding="4dp"
+                android:gravity="center"
+                android:onClick="OnClickWeiter"
+                android:text="Weiter zum Warenkorb"
+                android:textSize="10pt"
+                android:textStyle="bold" />
 
             <ExpandableListView
                 android:id="@+id/listview_pizzaria_profil"
@@ -110,17 +131,6 @@
 
             </ExpandableListView>
 
-
-            <Button
-                style="@style/WarenkorbButton"
-                android:layout_width="match_parent"
-                android:layout_height="16pt"
-                android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:onClick="OnClickWeiter"
-                android:text="Weiter zum Warenkorb"
-                android:textSize="10pt"
-                android:textStyle="bold" />
 
         </LinearLayout>
     </FrameLayout>

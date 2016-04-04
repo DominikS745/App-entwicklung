@@ -83,22 +83,6 @@
             android:hint="@string/email_hint"
             android:inputType="textEmailAddress" />
 
-        <EditText
-            android:id="@+id/passwort_register"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/passwort_hint"
-            android:maxLength="12"
-            android:inputType="textPassword" />
-
-        <EditText
-            android:id="@+id/passwort_match"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/passwort_hint"
-            android:maxLength="12"
-            android:inputType="textPassword" />
-
         <CheckBox
             android:id="@+id/agb_check"
             android:layout_width="wrap_content"

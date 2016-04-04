@@ -11,13 +11,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-import org.json.JSONObject;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
+
 import de.dhbw.pizzabutler_entities.User;
 
-public class LoginActivity extends BaseActivity {
+public class Login2Activity extends BaseActivity {
     //Variablen für das Auslesen der Usereingaben
     private EditText eingabeUser;
     private EditText eingabePasswort;
@@ -28,14 +29,14 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        SharedPreferences session = getSharedPreferences("id" , MODE_PRIVATE);
+        SharedPreferences session = getSharedPreferences("id", MODE_PRIVATE);
 
-        if(!(session.getString("id", "")).equals("")){
+        if (!(session.getString("id", "")).equals("")) {
             new UserThroughBackend(session.getString("id", "")).execute();
         }
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.navdrawer_login);
+        setContentView(R.layout.navdrawer_login_2);
 
         //Icons und Text für NavDrawer initalisieren
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
@@ -46,17 +47,6 @@ public class LoginActivity extends BaseActivity {
         //Übergabe der Eingabefelder in Variablen
         eingabeUser = (EditText) findViewById(R.id.benutzername);
         eingabePasswort = (EditText) findViewById(R.id.passwort_login);
-    }
-
-    /**
-     * Aufruf der Aktivitaet RegistrierenActivity
-     *
-     * @param v Standard View
-     */
-    public void registrieren(View v) {
-
-        Intent registrieren = new Intent(this, RegistrierenActivity.class);
-        startActivity(registrieren);
     }
 
     /**
@@ -95,12 +85,57 @@ public class LoginActivity extends BaseActivity {
         }
     }
 
-    public void ausgabePasswortVergessen(int statusCode) {
-        if (statusCode == 200) {
-            Toast.makeText(this, "Ein neues Passwort wurde an ihre Email versandt.", Toast.LENGTH_SHORT).show();
+    class UserThroughBackend extends AsyncTask<Void, Void, Void> {
+
+        ResponseEntity<User> response;
+        String id;
+
+        public UserThroughBackend(String mId) {
+            id = mId;
         }
-        else{
-            Toast.makeText(this, "Ein interner Serverfehler ist aufgetreten. Bitte probieren Sie es später erneut.", Toast.LENGTH_SHORT).show();
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            try {
+                //Definition einer URL
+                String url = "http://pizzabutlerbackend.krihi.com/user/";
+
+                url += id;
+
+                //Kommunikation mit Backend über ein REST-Template
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
+                response = restTemplate.getForEntity(url, User.class);
+
+                //Ausgabe des Mock-Wertes
+                System.out.println(response.getStatusCode());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            //Starten einer neuen Activity: NutzerDatenAnzeigen
+            Intent nutzerDatenAnzeigen = new Intent(Login2Activity.this, NutzerDatenActivity.class);
+
+            nutzerDatenAnzeigen.putExtra("id", response.getBody().getId());
+            nutzerDatenAnzeigen.putExtra("anrede", response.getBody().getAnrede());
+            nutzerDatenAnzeigen.putExtra("vorname", response.getBody().getVorname());
+            nutzerDatenAnzeigen.putExtra("nachname", response.getBody().getNachname());
+            nutzerDatenAnzeigen.putExtra("strasse", response.getBody().getStrasse());
+            nutzerDatenAnzeigen.putExtra("hausnummer", response.getBody().getHausnr());
+            nutzerDatenAnzeigen.putExtra("plz", response.getBody().getPlz());
+            nutzerDatenAnzeigen.putExtra("ort", response.getBody().getOrt());
+            nutzerDatenAnzeigen.putExtra("telefonnummer", response.getBody().getTelefonnummer());
+            nutzerDatenAnzeigen.putExtra("passwort", response.getBody().getPasswort());
+            nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
+
+            startActivity(nutzerDatenAnzeigen);
         }
     }
 
@@ -148,7 +183,7 @@ public class LoginActivity extends BaseActivity {
             editor.commit();
 
             //Starten einer neuen Activity: NutzerDatenAnzeigen
-            Intent nutzerDatenAnzeigen = new Intent(LoginActivity.this, NutzerDatenActivity.class);
+            Intent nutzerDatenAnzeigen = new Intent(Login2Activity.this, NutzerDatenActivity.class);
 
             nutzerDatenAnzeigen.putExtra("id", response.getBody().getId());
             nutzerDatenAnzeigen.putExtra("anrede", response.getBody().getAnrede());
@@ -163,108 +198,6 @@ public class LoginActivity extends BaseActivity {
             nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
 
             startActivity(nutzerDatenAnzeigen);
-        }
-    }
-
-    class UserThroughBackend extends AsyncTask<Void, Void, Void> {
-
-        ResponseEntity<User> response;
-        String id;
-
-        public UserThroughBackend(String mId) {
-            id = mId;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-
-            try {
-                //Definition einer URL
-                String url = "http://pizzabutlerbackend.krihi.com/user/";
-
-                url += id;
-
-                //Kommunikation mit Backend über ein REST-Template
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                response = restTemplate.getForEntity(url, User.class);
-
-                //Ausgabe des Mock-Wertes
-                System.out.println(response.getStatusCode());
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            //Starten einer neuen Activity: NutzerDatenAnzeigen
-            Intent nutzerDatenAnzeigen = new Intent(LoginActivity.this, NutzerDatenActivity.class);
-
-            nutzerDatenAnzeigen.putExtra("id", response.getBody().getId());
-            nutzerDatenAnzeigen.putExtra("anrede", response.getBody().getAnrede());
-            nutzerDatenAnzeigen.putExtra("vorname", response.getBody().getVorname());
-            nutzerDatenAnzeigen.putExtra("nachname", response.getBody().getNachname());
-            nutzerDatenAnzeigen.putExtra("strasse", response.getBody().getStrasse());
-            nutzerDatenAnzeigen.putExtra("hausnummer", response.getBody().getHausnr());
-            nutzerDatenAnzeigen.putExtra("plz", response.getBody().getPlz());
-            nutzerDatenAnzeigen.putExtra("ort", response.getBody().getOrt());
-            nutzerDatenAnzeigen.putExtra("telefonnummer", response.getBody().getTelefonnummer());
-            nutzerDatenAnzeigen.putExtra("passwort", response.getBody().getPasswort());
-            nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
-
-            startActivity(nutzerDatenAnzeigen);
-        }
-    }
-
-    class PasswortVergessenThroughBackend extends AsyncTask<Void, Void, Void> {
-
-        ResponseEntity<?> response;
-        String email;
-
-        public PasswortVergessenThroughBackend(String mEmail) {
-            email = mEmail;
-        }
-
-        @Override
-        protected Void doInBackground(Void... params){
-            try {
-                final String url = "http://pizzaButlerBackend.krihi.com/resetPassword";
-
-                //Das zu versendende JSONObject
-                JSONObject obj = new JSONObject();
-                obj.put("email", email);
-
-                //Kommunikation mit Backend über ein REST-Template
-                RestTemplate restTemplate = new RestTemplate();
-                restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                response = restTemplate.postForEntity(url, obj, Object.class);
-
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            //Ausgabe der entsprechenden Meldung
-            ausgabePasswortVergessen(response.getStatusCode().value());
-        }
-    }
-
-    //Logik nach Klick auf 'Passwort Vergessen'
-    public void onClickPasswortVergessen(View v) {
-
-        //Aufruf wird nur ausgefuehrt, wenn das Email-Feld im Login nicht leer ist und den Email-Anforderungen entspricht
-        if (!(eingabeUser.getText().toString().isEmpty()) && eingabeUser.getText().toString().contains("@") && eingabeUser.getText().toString().contains(".")) {
-            new PasswortVergessenThroughBackend(eingabeUser.getText().toString()).execute();
-        }
-        else{
-            Toast.makeText(this, "Bitte geben Sie eine gültige Email-Adresse ein.", Toast.LENGTH_SHORT).show();
         }
     }
 }

@@ -32,6 +32,7 @@ public class NutzerDatenActivity extends BaseActivity {
         String hausnummer = getIntent().getStringExtra("hausnummer");
         String plz = getIntent().getStringExtra("plz");
         String ort = getIntent().getStringExtra("ort");
+        String telefonnummer = getIntent().getStringExtra("telefonnummer");
         String email = getIntent().getStringExtra("email");
         String passwort = getIntent().getStringExtra("passwort");
         boolean agb_check = getIntent().getBooleanExtra("agb_check", false);
@@ -43,7 +44,7 @@ public class NutzerDatenActivity extends BaseActivity {
 
         TextView nutzerDaten = (TextView) findViewById(R.id.nutzerdaten);
         nutzerDaten.setText("ID: " + id + " " + nameDisplayText + anrede + " " + vorname + " " + nachname + "\n"
-                + adresseDisplayText + strasse + " " + hausnummer + " " + plz + " " + ort + "\n" + emailDisplayText + email
+                + adresseDisplayText + strasse + " " + hausnummer + "\n" + "Telefonnummer: " + telefonnummer + plz + " " + ort + "\n" + emailDisplayText + email
                 + "\n" + agbCheckDisplayText);
 
     }

@@ -18,12 +18,15 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
 
+import de.dhbw.pizzabutler_entities.Bestellung;
+
 public class RolleActivity extends BaseActivity {
 
 
     //Diese beiden Variablen für NavDrawer
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
+    private Bestellung bestellung;
 
 
     @Override
@@ -31,7 +34,7 @@ public class RolleActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navdrawer_rolle_bestellung);
 
-
+        bestellung = (Bestellung) getIntent().getSerializableExtra("bestellung");
         //Icons und Text für NavDrawer initalisieren
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
         navMenuIcons = getResources()
@@ -43,17 +46,21 @@ public class RolleActivity extends BaseActivity {
     //On Click Methoden für die Buttons
 
     public void OnClickLogin(View v){
-        Intent intent = new Intent(this, LoginActivity.class);
+        Intent intent = new Intent(this, Login2Activity.class);
+        intent.putExtra("bestellung", bestellung);
         startActivity(intent);
 
     }
 
     public void OnClickGast(View v){
-
+        Intent intent = new Intent(this, RegisterGastActivity.class);
+        intent.putExtra("bestellung", bestellung);
+        startActivity(intent);
     }
 
     public void OnClickAbholen(View v){
         Intent intent = new Intent(this, BestaetigungActivity.class);
+        intent.putExtra("bestellung", bestellung);
         startActivity(intent);
     }
 

@@ -2,8 +2,6 @@ package de.dhbw.pizzabutler;
 
 import android.content.Intent;
 import android.content.res.TypedArray;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,17 +9,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
-import org.springframework.util.support.Base64;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import de.dhbw.pizzabutler_entities.Oeffnungszeiten;
+import de.dhbw.pizzabutler_adapter.CustomListAdapter;
 import de.dhbw.pizzabutler_entities.Pizzeria;
 import de.dhbw.pizzabutler_entities.Speisekarte;
 

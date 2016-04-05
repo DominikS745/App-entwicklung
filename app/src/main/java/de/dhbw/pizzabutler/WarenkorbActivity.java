@@ -4,21 +4,15 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.ExpandableListView;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
+import de.dhbw.pizzabutler_adapter.WarenkorbListAdapter;
 import de.dhbw.pizzabutler_entities.Bestellposition;
 import de.dhbw.pizzabutler_entities.Bestellung;
-import de.dhbw.pizzabutler_entities.Produkt;
 import de.dhbw.pizzabutler_entities.WarenkorbItem;
-import de.dhbw.pizzabutler_entities.Zusatzbelag;
 
 /**
  * Created by Marvin on 16.03.16.

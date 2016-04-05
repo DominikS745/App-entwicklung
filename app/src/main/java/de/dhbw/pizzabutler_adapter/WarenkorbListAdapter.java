@@ -1,4 +1,4 @@
-package de.dhbw.pizzabutler;
+package de.dhbw.pizzabutler_adapter;
 
 /**
  * Created by Marvin on 04.03.16.
@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.dhbw.pizzabutler.R;
 import de.dhbw.pizzabutler_entities.Pizzeria;
 import de.dhbw.pizzabutler_entities.WarenkorbItem;
 

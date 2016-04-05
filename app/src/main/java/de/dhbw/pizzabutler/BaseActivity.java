@@ -20,6 +20,9 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.dhbw.pizzabutler_adapter.NavDrawerItem;
+import de.dhbw.pizzabutler_adapter.NavDrawerListAdapter;
+
 /**
  * Created by Marvin on 17.10.15.
  */

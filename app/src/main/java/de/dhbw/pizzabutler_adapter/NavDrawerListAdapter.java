@@ -1,4 +1,4 @@
-package de.dhbw.pizzabutler;
+package de.dhbw.pizzabutler_adapter;
 
 /**
  * Created by Marvin on 17.10.15.
@@ -15,6 +15,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import de.dhbw.pizzabutler.R;
 
 public class NavDrawerListAdapter extends BaseAdapter {
 

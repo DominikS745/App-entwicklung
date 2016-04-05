@@ -1,4 +1,4 @@
-package de.dhbw.pizzabutler;
+package de.dhbw.pizzabutler_adapter;
 
 /**
  * Created by Marvin on 04.03.16.
@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import de.dhbw.pizzabutler.R;
 import de.dhbw.pizzabutler_entities.Bestellposition;
 import de.dhbw.pizzabutler_entities.Bestellung;
 import de.dhbw.pizzabutler_entities.Produkt;

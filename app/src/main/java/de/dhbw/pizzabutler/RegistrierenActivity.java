@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
@@ -476,17 +478,17 @@ public class RegistrierenActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             try {
                 //Das zu versendende JSONObjekt
-                JSONObject obj = new JSONObject();
-                obj.put("anrede", anrede);
-                obj.put("vorname", vorname);
-                obj.put("nachname", nachname);
-                obj.put("strasse", strasse);
-                obj.put("hausnr", hausnummer);
-                obj.put("plz", plz);
-                obj.put("ort", ort);
-                obj.put("telefonnummer", telefonnummer);
-                obj.put("passwort", passwort);
-                obj.put("email", email);
+                JsonObject obj = new JsonObject();
+                obj.addProperty("anrede", anrede);
+                obj.addProperty("vorname", vorname);
+                obj.addProperty("nachname", nachname);
+                obj.addProperty("strasse", strasse);
+                obj.addProperty("hausnr", hausnummer);
+                obj.addProperty("plz", plz);
+                obj.addProperty("ort", ort);
+                obj.addProperty("telefonnummer", telefonnummer);
+                obj.addProperty("passwort", passwort);
+                obj.addProperty("email", email);
 
                 //Definition einer URL
                 final String url = "http://pizzaButlerBackend.krihi.com/user/";

@@ -11,7 +11,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.gson.JsonObject;
+
 import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -232,15 +238,16 @@ public class LoginActivity extends BaseActivity {
         @Override
         protected Void doInBackground(Void... params){
             try {
-                final String url = "http://pizzaButlerBackend.krihi.com/resetPassword";
+                final String url = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/resetPassword";
 
                 //Das zu versendende JSONObject
-                JSONObject obj = new JSONObject();
-                obj.put("email", email);
+                JsonObject obj = new JsonObject();
+                obj.addProperty("email", email);
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
+
                 response = restTemplate.postForEntity(url, obj, Object.class);
 
             } catch (Exception e) {

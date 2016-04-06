@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    >
+    android:background="@android:color/white">
 
 
     <LinearLayout
@@ -100,6 +100,7 @@
             android:inputType="textPassword" />
 
         <CheckBox
+            android:layout_marginTop="16dp"
             android:id="@+id/agb_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -107,11 +108,14 @@
 
         <Button
             android:id="@+id/weiter_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:layout_width="88dp"
+            android:layout_height="40dp"
             android:onClick="registrierungAbschliessen"
             android:text="@string/weiter"
-            android:enabled="false"/>
+            android:textSize="8pt"
+            android:enabled="false"
+            android:gravity="center"/>
 
     </LinearLayout>
 </ScrollView>

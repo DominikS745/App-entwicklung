@@ -40,6 +40,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
+        bestellungen = new ArrayList<Bestellposition>();
     }
 
     @Override
@@ -57,7 +58,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        bestellungen = new ArrayList<Bestellposition>();
         product = (Produkt) getChild(groupPosition, childPosition);
         preise = product.getPreis();
 
@@ -197,6 +197,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     private void addBestellung(Bestellposition bestellposition){
+        System.out.println(bestellungen.size());
         bestellungen.add(bestellposition);
     }
 

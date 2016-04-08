@@ -61,12 +61,8 @@ public class WarenkorbActivity extends BaseActivity {
         double gesamtpreis = 0;
 
         for(int i = 0; i<positionen.length; i++) {
-            System.out.println("---------------");
-            System.out.println(positionen[i].getPreis());
-            System.out.println(positionen[i].getProdukt().getName());
-            System.out.println(positionen[i].getVariante().getBezeichnung());
             bestellwert = bestellwert + positionen[i].getPreis();
-            //zusatzbelaege to To
+            //zusatzbelaege to Do
         }
 
         gesamtpreis = bestellwert + lieferkosten;
@@ -96,7 +92,7 @@ public class WarenkorbActivity extends BaseActivity {
             warenkorbItem.setBezeichnung(bestellpositionen[i].getProdukt().getName());
             warenkorbItem.setPreis(bestellpositionen[i].getPreis());
             warenkorbItem.setVariante(bestellpositionen[i].getVariante().getBezeichnung());
-
+            warenkorbItem.setAnzahl(1);
             data.add(i, warenkorbItem);
             //Zusatzbelag[] zusatzbelage = bestellpositionen[i].getZusatzbelag();
             //for(int a = 0; a<zusatzbelage.length; a++){

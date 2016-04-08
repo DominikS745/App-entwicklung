@@ -197,7 +197,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     }
 
     private void addBestellung(Bestellposition bestellposition){
-        System.out.println(bestellungen.size());
         bestellungen.add(bestellposition);
     }
 

@@ -13,6 +13,7 @@ import de.dhbw.pizzabutler_adapter.WarenkorbListAdapter;
 import de.dhbw.pizzabutler_entities.Bestellposition;
 import de.dhbw.pizzabutler_entities.Bestellung;
 import de.dhbw.pizzabutler_entities.WarenkorbItem;
+import de.dhbw.pizzabutler_entities.Zusatzbelag;
 
 /**
  * Created by Marvin on 16.03.16.
@@ -37,6 +38,7 @@ public class WarenkorbActivity extends BaseActivity {
 
         bestellung = (Bestellung) getIntent().getSerializableExtra("warenkorb");
         double lieferkosten = getIntent().getDoubleExtra("lieferkosten", 0);
+        Zusatzbelag[] zusatzbelage = (Zusatzbelag[]) getIntent().getSerializableExtra("zusatzbelage");
 
         //Icons und Text für NavDrawer initalisieren
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
@@ -49,7 +51,7 @@ public class WarenkorbActivity extends BaseActivity {
 
         prepareListData();
 
-        listAdapter = new WarenkorbListAdapter(this, data);
+        listAdapter = new WarenkorbListAdapter(WarenkorbActivity.this, data, zusatzbelage);
 
         // setting list adapter
         listView.setAdapter(listAdapter);
@@ -88,11 +90,11 @@ public class WarenkorbActivity extends BaseActivity {
 
         for(int i = 0; i<bestellpositionen.length; i++){
             WarenkorbItem warenkorbItem = new WarenkorbItem();
-            System.out.println(bestellpositionen[i].getProdukt().getName());
             warenkorbItem.setBezeichnung(bestellpositionen[i].getProdukt().getName());
             warenkorbItem.setPreis(bestellpositionen[i].getPreis());
             warenkorbItem.setVariante(bestellpositionen[i].getVariante().getBezeichnung());
             warenkorbItem.setAnzahl(1);
+
             data.add(i, warenkorbItem);
             //Zusatzbelag[] zusatzbelage = bestellpositionen[i].getZusatzbelag();
             //for(int a = 0; a<zusatzbelage.length; a++){

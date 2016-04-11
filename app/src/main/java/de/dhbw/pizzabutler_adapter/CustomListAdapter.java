@@ -90,8 +90,9 @@ public class CustomListAdapter extends ArrayAdapter<Pizzeria> {
     private String berechneOeffnungszeit(Oeffnungszeiten[] data) {
         String status = null;
         GregorianCalendar calendar = new GregorianCalendar();
-        //Sonntag = 0
-        int tag = calendar.get(Calendar.DAY_OF_WEEK);
+        //Sonntag = 1
+        int tag = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+
         //Stunden entsprechen den realen Stunden
         int stunde = calendar.get(Calendar.HOUR_OF_DAY);
         //Minuten entsprechen den realen Minuten

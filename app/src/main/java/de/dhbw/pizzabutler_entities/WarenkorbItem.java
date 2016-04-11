@@ -8,6 +8,7 @@ public class WarenkorbItem {
     private double preis;
     private String variante;
     private int anzahl;
+    private Zusatzbelag[] zusatzbelage;
 
     public String getBezeichnung() {
         return bezeichnung;
@@ -39,5 +40,13 @@ public class WarenkorbItem {
 
     public void setAnzahl(int anzahl) {
         this.anzahl = anzahl;
+    }
+
+    public Zusatzbelag[] getZusatzbelage() {
+        return zusatzbelage;
+    }
+
+    public void setZusatzbelage(Zusatzbelag[] zusatzbelage) {
+        this.zusatzbelage = zusatzbelage;
     }
 }

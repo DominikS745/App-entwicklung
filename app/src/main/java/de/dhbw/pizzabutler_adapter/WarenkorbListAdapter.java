@@ -4,16 +4,24 @@ package de.dhbw.pizzabutler_adapter;
  * Created by Marvin on 04.03.16.
  */
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import de.dhbw.pizzabutler.R;
+import de.dhbw.pizzabutler.WarenkorbActivity;
 import de.dhbw.pizzabutler_entities.WarenkorbItem;
+import de.dhbw.pizzabutler_entities.Zusatzbelag;
 
 public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
 
@@ -22,11 +30,16 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
     private TextView anzahlMenge;
     Context context;
     private static LayoutInflater inflater = null;
+    private Zusatzbelag[] zusatzbelage;
+    private ArrayList<Integer> selectedItems;
+    private boolean[] checkedValues;
 
 
-    public WarenkorbListAdapter(Context context, ArrayList<WarenkorbItem> data) {
-        super(context, 0, data);
+    public WarenkorbListAdapter(Context mContext, ArrayList<WarenkorbItem> data, Zusatzbelag[] zusatzbelags) {
+        super(mContext, 0, data);
+        context = mContext;
         warenliste = data;
+        zusatzbelage = zusatzbelags;
     }
 
     @Override
@@ -62,61 +75,105 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
         variante.setText(data.getVariante());
         preis.setText(String.valueOf(data.getPreis()));
 
-        //onClickListener für die Bearbeitung der Extras
+        //onClickListener für das Hinzufügen von Produkten
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println(warenliste.get(position).getAnzahl());
                 warenliste.get(position).setAnzahl(warenliste.get(position).getAnzahl() + 1);
-                //Ansatz stimmt, aber a) lädt zu langsam und b) nicht funktional für alle TextViews/Produkte
+                notifyDataSetChanged();
             }
         });
 
-        //onClickListener für das Hinzufügen von Produkten
+        //onClickListener für das Hinzufügen von Extras (bei Pizzen)
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //hier einen Dialog aufrufen und kosten verändern
-                System.out.println("test");
-            }
+                //Auslesen der möglichen Zusatzbeläge
+                Zusatzbelag[] belage = warenliste.get(position).getZusatzbelage();
+
+                //Befüllung der möglichen Zusatzbeläge
+                CharSequence[] items = new CharSequence[zusatzbelage.length];
+                for (int i = 0; i < zusatzbelage.length; i++) {
+                    items[i] = zusatzbelage[i].getName() + " (" + zusatzbelage[i].getPreis() + " €)";
+                }
+
+                // arraylist to keep the selected items
+                selectedItems = new ArrayList<Integer>();
+                checkedValues = new boolean[zusatzbelage.length];
+
+                //bereits markierte Belage erkennen
+                if(belage != null) {
+                    for(int a = 0; a < belage.length; a++){
+                        System.out.println(belage[a].getName());
+                        for(int b = 0; b < zusatzbelage.length; b++){
+                            if(belage[a].getName().equals(zusatzbelage[b].getName())){
+                                selectedItems.add(b);
+                                checkedValues[b] = true;
+                            }
+                        }
+                    }
+
+                    //Befüllen der false-Werte der checkedValues
+                    for(int c = 0; c < checkedValues.length; c++){
+                        if(checkedValues[c] != true){
+                            checkedValues[c] = false;
+                        }
+                    }
+                }
+                //keine Vorbelegung der Checkboxen
+                else{
+                    checkedValues = null;
+                }
+
+                //Dialog zur Änderung der Zusatzbeläge
+                AlertDialog dialog = new AlertDialog.Builder(context)
+                        .setTitle("Wählen Sie zusätzliche Beläge.")
+                        .setMultiChoiceItems(items, checkedValues, new DialogInterface.OnMultiChoiceClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int indexSelected, boolean isChecked) {
+                                if (isChecked) {
+                                    // If the user checked the item, add it to the selected items
+                                    selectedItems.add(indexSelected);
+                                } else if (selectedItems.contains(indexSelected)) {
+                                    // Else, if the item is already in the array, remove it
+                                    selectedItems.remove(Integer.valueOf(indexSelected));
+                                }
+                            }
+                        }).setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int id) {
+                                //Preis anpassen
+                                Zusatzbelag[] belage = new Zusatzbelag[selectedItems.size()];
+                                for(int i = 0; i<selectedItems.size(); i++){
+                                    System.out.println(selectedItems.get(i));
+                                    belage[i] = zusatzbelage[selectedItems.get(i)];
+                                }
+                                warenliste.get(position).setZusatzbelage(belage);
+                                changePriceFromExtra(selectedItems);
+                             }}).create();
+        dialog.show();
+        }
         });
 
         //onClickListener für das Löschen von Produkten
         deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int ergebnis = deleteProduct();
-                if(ergebnis == 0) {
-
+                warenliste.get(position).setAnzahl(warenliste.get(position).getAnzahl() - 1);
+                if(warenliste.get(position).getAnzahl() == 0) {
+                    //lösche komplettes Element aus der View
                 }
+                notifyDataSetChanged();
             }
         });
 
-
         // Return the completed view to render on screen
         return convertView;
-
     }
 
-    private void addProduct(){
-
-        //int ergebnis = Integer.parseInt(String.valueOf(anzahlMenge.getText())) + 1;
-        //anzahlMenge.setText(String.valueOf(ergebnis));
-        System.out.println("müsste geaddet worden sein");
+    private void changePriceFromExtra(ArrayList zusatzbelage){
+        for(int i = 0; i<zusatzbelage.size(); i++){
+            System.out.println(zusatzbelage.get(i));
+        }
     }
-
-    private int deleteProduct(){
-
-       // int ergebnis = Integer.parseInt(String.valueOf(anzahlMenge.getText())) - 1;
-
-       // if(ergebnis > 0){
-          //  anzahlMenge.setText(String.valueOf(ergebnis));
-          //  return ergebnis;
-      //  }
-      //  else{
-            return 0;
-        //}
-
-    }
-
 }

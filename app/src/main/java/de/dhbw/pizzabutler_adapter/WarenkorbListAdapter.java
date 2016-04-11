@@ -20,6 +20,8 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import de.dhbw.pizzabutler.R;
 import de.dhbw.pizzabutler.WarenkorbActivity;
+import de.dhbw.pizzabutler_entities.Bestellposition;
+import de.dhbw.pizzabutler_entities.Produkt;
 import de.dhbw.pizzabutler_entities.WarenkorbItem;
 import de.dhbw.pizzabutler_entities.Zusatzbelag;
 
@@ -33,27 +35,29 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
     private Zusatzbelag[] zusatzbelage;
     private ArrayList<Integer> selectedItems;
     private boolean[] checkedValues;
+    private Bestellposition[] bestellpositionen;
 
+    private TextView preis;
 
-    public WarenkorbListAdapter(Context mContext, ArrayList<WarenkorbItem> data, Zusatzbelag[] zusatzbelags) {
+    public WarenkorbListAdapter(Context mContext, ArrayList<WarenkorbItem> data, Zusatzbelag[] zusatzbelags, Bestellposition[] mBestellpositionen) {
         super(mContext, 0, data);
         context = mContext;
-        warenliste = data;
+        if(warenliste == null){
+            warenliste = data;
+        }
         zusatzbelage = zusatzbelags;
+        bestellpositionen = mBestellpositionen;
     }
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-
-        //Get Item Data for this position
-        data = getItem(position);
 
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.warenkorb_list_item, parent, false);
         }
         // Lookup view for data population
         TextView produkt = (TextView) convertView.findViewById(R.id.warenkorb_product_name);
-        TextView preis = (TextView) convertView.findViewById(R.id.warenkorb_produkt_preis);
+        preis = (TextView) convertView.findViewById(R.id.warenkorb_produkt_preis);
         TextView variante = (TextView) convertView.findViewById(R.id.warenkorb_variante);
         Button button = (Button) convertView.findViewById(R.id.warenkorb_extras_aendern);
         Button addButton = (Button) convertView.findViewById(R.id.addButton);
@@ -63,23 +67,24 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
         button.setVisibility(View.INVISIBLE);
         button.setClickable(false);
 
-        if(data.getBezeichnung().contains("Pizza")){
+        if(warenliste.get(position).getBezeichnung().contains("Pizza")){
             button.setVisibility(View.VISIBLE);
             button.setClickable(true);
         }
 
-        anzahlMenge.setText(String.valueOf(data.getAnzahl()));
+        anzahlMenge.setText(String.valueOf(warenliste.get(position).getAnzahl()));
 
         // Populate the data into the template view using the data object
-        produkt.setText(data.getBezeichnung());
-        variante.setText(data.getVariante());
-        preis.setText(String.valueOf(data.getPreis()));
+        produkt.setText(warenliste.get(position).getBezeichnung());
+        variante.setText(warenliste.get(position).getVariante());
+        preis.setText(String.valueOf(warenliste.get(position).getPreis()));
 
         //onClickListener für das Hinzufügen von Produkten
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 warenliste.get(position).setAnzahl(warenliste.get(position).getAnzahl() + 1);
+                changePrice(position);
                 notifyDataSetChanged();
             }
         });
@@ -145,14 +150,13 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
                                 //Preis anpassen
                                 Zusatzbelag[] belage = new Zusatzbelag[selectedItems.size()];
                                 for(int i = 0; i<selectedItems.size(); i++){
-                                    System.out.println(selectedItems.get(i));
                                     belage[i] = zusatzbelage[selectedItems.get(i)];
                                 }
                                 warenliste.get(position).setZusatzbelage(belage);
-                                changePriceFromExtra(selectedItems);
+                                changePrice(position);
                              }}).create();
-        dialog.show();
-        }
+             dialog.show();
+             }
         });
 
         //onClickListener für das Löschen von Produkten
@@ -161,7 +165,10 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
             public void onClick(View v) {
                 warenliste.get(position).setAnzahl(warenliste.get(position).getAnzahl() - 1);
                 if(warenliste.get(position).getAnzahl() == 0) {
-                    //lösche komplettes Element aus der View
+                    warenliste.remove(position);
+                }
+                else{
+                    changePrice(position);
                 }
                 notifyDataSetChanged();
             }
@@ -171,9 +178,36 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
         return convertView;
     }
 
-    private void changePriceFromExtra(ArrayList zusatzbelage){
-        for(int i = 0; i<zusatzbelage.size(); i++){
-            System.out.println(zusatzbelage.get(i));
+    private void changePrice(int position){
+
+        double basispreis = 0;
+
+        for(int a = 0; a<bestellpositionen.length; a++){
+            if (bestellpositionen[a].getProdukt().getName().equals(warenliste.get(position).getBezeichnung())){
+                basispreis = bestellpositionen[a].getPreis();
+            }
         }
+        int anzahl = warenliste.get(position).getAnzahl();
+        Zusatzbelag[] extras = warenliste.get(position).getZusatzbelage();
+        double belegpreis = 0;
+
+        if(extras != null) {
+            for (int i = 0; i < extras.length; i++) {
+                belegpreis = belegpreis + extras[i].getPreis();
+
+            }
+        }
+        double endpreis = (basispreis + belegpreis) * anzahl;
+        endpreis = Math.floor(endpreis * 100) / 100;
+        warenliste.get(position).setPreis(endpreis);
+        notifyDataSetChanged();
+    }
+
+    public ArrayList<WarenkorbItem> getWarenliste() {
+        return warenliste;
+    }
+
+    public void setWarenliste(ArrayList<WarenkorbItem> warenliste) {
+        this.warenliste = warenliste;
     }
 }

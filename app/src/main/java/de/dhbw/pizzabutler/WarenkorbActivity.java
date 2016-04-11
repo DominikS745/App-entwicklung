@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
 import de.dhbw.pizzabutler_adapter.WarenkorbListAdapter;
 import de.dhbw.pizzabutler_entities.Bestellposition;
 import de.dhbw.pizzabutler_entities.Bestellung;
+import de.dhbw.pizzabutler_entities.Produkt;
 import de.dhbw.pizzabutler_entities.WarenkorbItem;
 import de.dhbw.pizzabutler_entities.Zusatzbelag;
 
@@ -30,6 +32,8 @@ public class WarenkorbActivity extends BaseActivity {
     private String[] navMenuTitles;
     private TypedArray navMenuIcons;
     private Bestellung bestellung;
+    private Bestellposition[] bestellpositions;
+    private double mindestbestellwert;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +42,13 @@ public class WarenkorbActivity extends BaseActivity {
 
         bestellung = (Bestellung) getIntent().getSerializableExtra("warenkorb");
         double lieferkosten = getIntent().getDoubleExtra("lieferkosten", 0);
+        mindestbestellwert = getIntent().getDoubleExtra("mindestbestellwert", 0);
         Zusatzbelag[] zusatzbelage = (Zusatzbelag[]) getIntent().getSerializableExtra("zusatzbelage");
+        bestellpositions = new Bestellposition[bestellung.getBestellpositionen().length];
+
+        for(int i = 0; i<bestellung.getBestellpositionen().length; i++){
+            bestellpositions[i] = bestellung.getBestellpositionen()[i];
+        }
 
         //Icons und Text für NavDrawer initalisieren
         navMenuTitles = getResources().getStringArray(R.array.nav_drawer_items); // load titles from strings.xml
@@ -51,7 +61,7 @@ public class WarenkorbActivity extends BaseActivity {
 
         prepareListData();
 
-        listAdapter = new WarenkorbListAdapter(WarenkorbActivity.this, data, zusatzbelage);
+        listAdapter = new WarenkorbListAdapter(WarenkorbActivity.this, data, zusatzbelage, bestellpositions);
 
         // setting list adapter
         listView.setAdapter(listAdapter);
@@ -96,17 +106,29 @@ public class WarenkorbActivity extends BaseActivity {
             warenkorbItem.setAnzahl(1);
 
             data.add(i, warenkorbItem);
-            //Zusatzbelag[] zusatzbelage = bestellpositionen[i].getZusatzbelag();
-            //for(int a = 0; a<zusatzbelage.length; a++){
-            //    data.add(a+2, String.valueOf(bestellpositionen[i].getZusatzbelag()[a]));
-            //}
         }
     }
 
     //OnClick für Weiter Button
     public void OnClickWeiter(View v){
-        Intent intent = new Intent(this, RolleActivity.class);
-        intent.putExtra("Bestellung", bestellung);
-        startActivity(intent);
+
+        if(listAdapter.getWarenliste() == null) {
+            Toast.makeText(this, "Bitte bestellen Sie etwas." ,Toast.LENGTH_SHORT).show();
+        }
+        else{
+            ArrayList<WarenkorbItem> warenliste = listAdapter.getWarenliste();
+            double preis = 0;
+            for(int i = 0; i<warenliste.size(); i++){
+                preis = preis + warenliste.get(i).getPreis();
+            }
+            if(preis < mindestbestellwert){
+                Toast.makeText(this, "Bitte bestellen Sie etwas über dem Mindestbestellwert von " + mindestbestellwert + " €." ,Toast.LENGTH_SHORT).show();
+            }
+            else{
+                Intent intent = new Intent(this, RolleActivity.class);
+                intent.putExtra("Bestellung", bestellung);
+                startActivity(intent);
+            }
+        }
     }
 }

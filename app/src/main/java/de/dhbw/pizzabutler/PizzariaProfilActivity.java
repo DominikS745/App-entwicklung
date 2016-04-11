@@ -98,6 +98,7 @@ public class PizzariaProfilActivity extends BaseActivity {
             bestellungen.toArray(bestellpositionen);
             bestellung = new Bestellung();
             bestellung.setBestellpositionen(bestellpositionen);
+            intent.putExtra("mindestbestellwert" , pizzeria.getMindestbestellwert());
             intent.putExtra("zusatzbelage" , speisekarte.getKategorien()[0].getZusatzbelaege());
             intent.putExtra("lieferkosten", pizzeria.getLieferkosten());
             intent.putExtra("warenkorb", bestellung);

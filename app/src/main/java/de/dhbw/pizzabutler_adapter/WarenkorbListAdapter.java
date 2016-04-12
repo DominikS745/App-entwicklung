@@ -7,21 +7,17 @@ package de.dhbw.pizzabutler_adapter;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.provider.Settings;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import de.dhbw.pizzabutler.R;
-import de.dhbw.pizzabutler.WarenkorbActivity;
 import de.dhbw.pizzabutler_entities.Bestellposition;
-import de.dhbw.pizzabutler_entities.Produkt;
 import de.dhbw.pizzabutler_entities.WarenkorbItem;
 import de.dhbw.pizzabutler_entities.Zusatzbelag;
 
@@ -36,6 +32,8 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
     private ArrayList<Integer> selectedItems;
     private boolean[] checkedValues;
     private Bestellposition[] bestellpositionen;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     private TextView preis;
 
@@ -47,6 +45,7 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
         }
         zusatzbelage = zusatzbelags;
         bestellpositionen = mBestellpositionen;
+        preferences = context.getSharedPreferences("bestellwert", Context.MODE_PRIVATE);
     }
 
     @Override
@@ -85,6 +84,7 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
             public void onClick(View v) {
                 warenliste.get(position).setAnzahl(warenliste.get(position).getAnzahl() + 1);
                 changePrice(position);
+                calculatePrice();
                 notifyDataSetChanged();
             }
         });
@@ -154,6 +154,7 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
                                 }
                                 warenliste.get(position).setZusatzbelage(belage);
                                 changePrice(position);
+                                calculatePrice();
                              }}).create();
              dialog.show();
              }
@@ -166,9 +167,11 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
                 warenliste.get(position).setAnzahl(warenliste.get(position).getAnzahl() - 1);
                 if(warenliste.get(position).getAnzahl() == 0) {
                     warenliste.remove(position);
+                    calculatePrice();
                 }
                 else{
                     changePrice(position);
+                    calculatePrice();
                 }
                 notifyDataSetChanged();
             }
@@ -209,5 +212,18 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
 
     public void setWarenliste(ArrayList<WarenkorbItem> warenliste) {
         this.warenliste = warenliste;
+    }
+
+    public void calculatePrice() {
+        double bestellwert = 0;
+        for(int i = 0; i<warenliste.size(); i++) {
+            bestellwert = bestellwert + warenliste.get(i).getPreis();
+        }
+        bestellwert = Math.floor(bestellwert * 100) / 100;
+
+        //Speichern des Bestellwertes
+        editor = preferences.edit();
+        editor.putFloat("bestellwert", ((float) bestellwert));
+        editor.commit();
     }
 }

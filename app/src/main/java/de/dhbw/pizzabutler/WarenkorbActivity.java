@@ -1,19 +1,23 @@
 package de.dhbw.pizzabutler;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
 
+
 import de.dhbw.pizzabutler_adapter.WarenkorbListAdapter;
 import de.dhbw.pizzabutler_entities.Bestellposition;
 import de.dhbw.pizzabutler_entities.Bestellung;
-import de.dhbw.pizzabutler_entities.Produkt;
 import de.dhbw.pizzabutler_entities.WarenkorbItem;
 import de.dhbw.pizzabutler_entities.Zusatzbelag;
 
@@ -34,6 +38,24 @@ public class WarenkorbActivity extends BaseActivity {
     private Bestellung bestellung;
     private Bestellposition[] bestellpositions;
     private double mindestbestellwert;
+    private double bestellwert;
+    private double lieferkosten;
+    private double gesamtpreis;
+
+    //Listener und Preferences Element (Vorsorge gegen Garbage Collection)
+    private SharedPreferences.OnSharedPreferenceChangeListener listener;
+    private SharedPreferences preferences;
+
+
+    //GUI-Elemente
+    private TextView gesamtpreisView;
+    private TextView lieferkostenView;
+    private TextView bestellwertView;
+    private CheckBox paypalCB;
+    private CheckBox ecCB;
+    private CheckBox barCB;
+    private CheckBox abholungCB;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +63,7 @@ public class WarenkorbActivity extends BaseActivity {
         setContentView(R.layout.navdrawer_warenkorb);
 
         bestellung = (Bestellung) getIntent().getSerializableExtra("warenkorb");
-        double lieferkosten = getIntent().getDoubleExtra("lieferkosten", 0);
+        lieferkosten = getIntent().getDoubleExtra("lieferkosten", 0);
         mindestbestellwert = getIntent().getDoubleExtra("mindestbestellwert", 0);
         Zusatzbelag[] zusatzbelage = (Zusatzbelag[]) getIntent().getSerializableExtra("zusatzbelage");
         bestellpositions = new Bestellposition[bestellung.getBestellpositionen().length];
@@ -56,6 +78,107 @@ public class WarenkorbActivity extends BaseActivity {
                 .obtainTypedArray(R.array.nav_drawer_icons);//load icons from strings.xml
         set(navMenuTitles, navMenuIcons);
 
+        //Startangabe der Preisberechnung
+        Bestellposition[] positionen = bestellung.getBestellpositionen();
+
+        bestellwert = 0;
+        gesamtpreis = 0;
+
+        for(int i = 0; i<positionen.length; i++) {
+            bestellwert = bestellwert + positionen[i].getPreis();
+        }
+
+        gesamtpreis = bestellwert + lieferkosten;
+
+        //Füllen der Bestellung mit entsprechenden Werten
+        bestellung.setRechnungsbeitrag(((float) gesamtpreis));
+
+        //Definition und Befüllen der Kostenfelder im Warenkorb
+        bestellwertView = (TextView) findViewById(R.id.bestellwert);
+        bestellwertView.setText(String.valueOf(bestellwert));
+        lieferkostenView = (TextView) findViewById(R.id.lieferkosten);
+        lieferkostenView.setText(String.valueOf(lieferkosten));
+        gesamtpreisView = (TextView) findViewById(R.id.gesamtkosten);
+        gesamtpreisView.setText(String.valueOf(gesamtpreis));
+
+        //Definition der Checkboxen
+        paypalCB = (CheckBox) findViewById(R.id.checkbox_paypal);
+        barCB = (CheckBox) findViewById(R.id.checkbox_bar);
+        ecCB = (CheckBox) findViewById(R.id.checkbox_EC);
+        abholungCB = (CheckBox) findViewById(R.id.checkbox_abholung);
+
+        //Definition der Listener für die Checkboxen
+        paypalCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+           @Override
+           public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+
+               if(paypalCB.isChecked()) {
+                   Toast.makeText(getApplicationContext(), "Sie bezahlen mit Paypal." , Toast.LENGTH_SHORT).show();
+                   barCB.setClickable(false);
+                   ecCB.setClickable(false);
+               }
+               else {
+                   barCB.setClickable(true);
+                   ecCB.setClickable(true);
+               }
+           }
+           }
+        );
+        ecCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+           @Override
+           public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+
+               if(ecCB.isChecked()) {
+                   Toast.makeText(getApplicationContext(), "Sie bezahlen mit EC-Karte." , Toast.LENGTH_SHORT).show();
+                   barCB.setClickable(false);
+                   paypalCB.setClickable(false);
+               }
+               else {
+                   barCB.setClickable(true);
+                   paypalCB.setClickable(true);
+               }
+           }
+       }
+        );
+        barCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+           @Override
+           public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+
+               if(barCB.isChecked()) {
+                   Toast.makeText(getApplicationContext(), "Sie bezahlen mit Bargeld." , Toast.LENGTH_SHORT).show();
+                   paypalCB.setClickable(false);
+                   ecCB.setClickable(false);
+               }
+               else {
+                   paypalCB.setClickable(true);
+                   ecCB.setClickable(true);
+               }
+           }
+       }
+        );
+        abholungCB.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+                                                  @Override
+                                                  public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+
+                                                      if (abholungCB.isChecked()) {
+                                                          Toast.makeText(getApplicationContext(), "Sie holen Ihre Bestellung selbst ab.", Toast.LENGTH_SHORT).show();
+                                                          lieferkosten = 0;
+                                                          lieferkostenView.setText(String.valueOf(lieferkosten));
+                                                          berechneKostenAnzeige();
+                                                      } else {
+                                                          lieferkosten = getIntent().getDoubleExtra("lieferkosten", 0);
+                                                          lieferkosten = Math.floor(lieferkosten * 100) / 100;
+                                                          lieferkostenView.setText(String.valueOf(lieferkosten));
+                                                          berechneKostenAnzeige();
+                                                      }
+                                                  }
+                                              }
+        );
+
         // get the listview
         listView = (ListView) findViewById(R.id.listview_warenkorb);
 
@@ -66,30 +189,20 @@ public class WarenkorbActivity extends BaseActivity {
         // setting list adapter
         listView.setAdapter(listAdapter);
 
-        //Testausgabe
-        Bestellposition[] positionen = bestellung.getBestellpositionen();
+        preferences = getSharedPreferences("bestellwert", Context.MODE_PRIVATE);
 
-        double bestellwert = 0;
-        double gesamtpreis = 0;
+        //Register SharedPreferences Listener
+        listener = new SharedPreferences.OnSharedPreferenceChangeListener() {
+            public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+                float ergebnis = prefs.getFloat(key, 0);
+                bestellwert = ergebnis;
+                bestellwert = Math.floor(bestellwert * 100) / 100;
+                bestellwertView.setText(String.valueOf(bestellwert));
+                berechneKostenAnzeige();
+            }
+        };
 
-        for(int i = 0; i<positionen.length; i++) {
-            bestellwert = bestellwert + positionen[i].getPreis();
-            //zusatzbelaege to Do
-        }
-
-        gesamtpreis = bestellwert + lieferkosten;
-
-        //Füllen der Bestellung mit entsprechenden Werten
-        bestellung.setRechnungsbeitrag(((float) gesamtpreis));
-
-        //Definition und Befüllen der Kostenfelder im Warenkorb
-        TextView bestellwertView = (TextView) findViewById(R.id.bestellwert);
-        bestellwertView.setText(String.valueOf(bestellwert));
-        TextView lieferkostenView = (TextView) findViewById(R.id.lieferkosten);
-        lieferkostenView.setText(String.valueOf(lieferkosten));
-        TextView gesamtpreisView = (TextView) findViewById(R.id.gesamtkosten);
-        gesamtpreisView.setText(String.valueOf(gesamtpreis));
-
+        preferences.registerOnSharedPreferenceChangeListener(listener);
     }
 
     //Befüllen der Daten für die Liste
@@ -117,11 +230,7 @@ public class WarenkorbActivity extends BaseActivity {
         }
         else{
             ArrayList<WarenkorbItem> warenliste = listAdapter.getWarenliste();
-            double preis = 0;
-            for(int i = 0; i<warenliste.size(); i++){
-                preis = preis + warenliste.get(i).getPreis();
-            }
-            if(preis < mindestbestellwert){
+            if(bestellwert < mindestbestellwert){
                 Toast.makeText(this, "Bitte bestellen Sie etwas über dem Mindestbestellwert von " + mindestbestellwert + " €." ,Toast.LENGTH_SHORT).show();
             }
             else{
@@ -130,5 +239,12 @@ public class WarenkorbActivity extends BaseActivity {
                 startActivity(intent);
             }
         }
+    }
+
+    public void berechneKostenAnzeige(){
+        gesamtpreis = lieferkosten + bestellwert;
+        gesamtpreis = Math.floor(gesamtpreis * 100) / 100;
+        gesamtpreisView.setText(String.valueOf(gesamtpreis));
+        bestellung.setRechnungsbeitrag((float) gesamtpreis);
     }
 }

@@ -168,6 +168,7 @@
                         android:src="@drawable/paypal" />
 
                     <CheckBox
+                        android:id="@+id/checkbox_paypal"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -188,6 +189,7 @@
                         android:src="@drawable/ic_payment_black_24dp" />
 
                     <CheckBox
+                        android:id="@+id/checkbox_EC"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center" />
@@ -206,6 +208,7 @@
                         android:src="@drawable/money_icon" />
 
                     <CheckBox
+                        android:id="@+id/checkbox_bar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center" />
@@ -230,6 +233,7 @@
                             android:src="@drawable/ic_time_to_leave_black_24dp" />
 
                         <CheckBox
+                            android:id="@+id/checkbox_abholung"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center" />

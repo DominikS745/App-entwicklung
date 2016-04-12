@@ -23,9 +23,43 @@
             android:background="@android:color/white">
 
             <TextView
-                android:id="@+id/nutzerdaten"
+                android:id="@+id/nutzerdaten_ID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/nutzerdaten_Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/nutzerdaten_Adresse_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/nutzerdaten_Adresse_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/nutzerdaten_telefonnummer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/nutzerdaten_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <Button
+                android:layout_width="80dp"
+                android:layout_height="40dp"
+                android:onClick="onClickStart"
+                android:text="Los gehts!"
+                android:layout_margin="8dp"
+                android:textSize="8pt"
+                android:gravity="center"/>
 
             <Button
                 android:layout_width="80dp"

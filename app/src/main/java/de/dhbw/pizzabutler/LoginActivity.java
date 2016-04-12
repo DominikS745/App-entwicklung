@@ -127,12 +127,16 @@ public class LoginActivity extends BaseActivity {
 
             try {
                 //Definition einer URL
-                final String url = "http://pizzabutlerbackend.krihi.com/user/login/";
+                final String url = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login/";
+
+                JsonObject obj = new JsonObject();
+                obj.addProperty("email", email);
+                obj.addProperty("passwort", passwort);
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                response = restTemplate.getForEntity(url, User.class, email, passwort );
+                response = restTemplate.postForEntity(url, obj, User.class);
 
                 //Ausgabe des Mock-Wertes
                 System.out.println(response.getStatusCode());
@@ -186,7 +190,7 @@ public class LoginActivity extends BaseActivity {
 
             try {
                 //Definition einer URL
-                String url = "http://pizzabutlerbackend.krihi.com/user/";
+                String url = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user";
 
                 url += id;
 

@@ -46,6 +46,7 @@ public class WarenkorbActivity extends BaseActivity {
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
     private SharedPreferences preferences;
 
+    private boolean checkZahlung;
 
     //GUI-Elemente
     private TextView gesamtpreisView;
@@ -84,6 +85,8 @@ public class WarenkorbActivity extends BaseActivity {
         bestellwert = 0;
         gesamtpreis = 0;
 
+        checkZahlung = false;
+
         for(int i = 0; i<positionen.length; i++) {
             bestellwert = bestellwert + positionen[i].getPreis();
         }
@@ -117,10 +120,12 @@ public class WarenkorbActivity extends BaseActivity {
                    Toast.makeText(getApplicationContext(), "Sie bezahlen mit Paypal." , Toast.LENGTH_SHORT).show();
                    barCB.setClickable(false);
                    ecCB.setClickable(false);
+                   checkZahlung = true;
                }
                else {
                    barCB.setClickable(true);
                    ecCB.setClickable(true);
+                   checkZahlung = false;
                }
            }
            }
@@ -134,10 +139,12 @@ public class WarenkorbActivity extends BaseActivity {
                    Toast.makeText(getApplicationContext(), "Sie bezahlen mit EC-Karte." , Toast.LENGTH_SHORT).show();
                    barCB.setClickable(false);
                    paypalCB.setClickable(false);
+                   checkZahlung = true;
                }
                else {
                    barCB.setClickable(true);
                    paypalCB.setClickable(true);
+                   checkZahlung = false;
                }
            }
        }
@@ -151,10 +158,12 @@ public class WarenkorbActivity extends BaseActivity {
                    Toast.makeText(getApplicationContext(), "Sie bezahlen mit Bargeld." , Toast.LENGTH_SHORT).show();
                    paypalCB.setClickable(false);
                    ecCB.setClickable(false);
+                   checkZahlung = true;
                }
                else {
                    paypalCB.setClickable(true);
                    ecCB.setClickable(true);
+                   checkZahlung = false;
                }
            }
        }
@@ -225,18 +234,24 @@ public class WarenkorbActivity extends BaseActivity {
     //OnClick für Weiter Button
     public void OnClickWeiter(View v){
 
+
         if(listAdapter.getWarenliste() == null) {
             Toast.makeText(this, "Bitte bestellen Sie etwas." ,Toast.LENGTH_SHORT).show();
         }
         else{
-            ArrayList<WarenkorbItem> warenliste = listAdapter.getWarenliste();
-            if(bestellwert < mindestbestellwert){
-                Toast.makeText(this, "Bitte bestellen Sie etwas über dem Mindestbestellwert von " + mindestbestellwert + " €." ,Toast.LENGTH_SHORT).show();
+
+            if(checkZahlung == false){
+                Toast.makeText(this, "Bitte wählen Sie eine Zahlungsmethode aus." , Toast.LENGTH_SHORT).show();
             }
-            else{
-                Intent intent = new Intent(this, RolleActivity.class);
-                intent.putExtra("Bestellung", bestellung);
-                startActivity(intent);
+            else {
+                ArrayList<WarenkorbItem> warenliste = listAdapter.getWarenliste();
+                if (bestellwert < mindestbestellwert) {
+                    Toast.makeText(this, "Bitte bestellen Sie etwas über dem Mindestbestellwert von " + mindestbestellwert + " €.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Intent intent = new Intent(this, RolleActivity.class);
+                    intent.putExtra("Bestellung", bestellung);
+                    startActivity(intent);
+                }
             }
         }
     }

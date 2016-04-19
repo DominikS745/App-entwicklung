@@ -8,8 +8,7 @@ import java.io.Serializable;
 public class Produkt implements Serializable {
     private int produktID;
     private String name;
-    private String beschreibung;
-    private float[] preis;
+    private Preis[] preise;
 
     public int getProduktID() {
         return produktID;
@@ -27,19 +26,11 @@ public class Produkt implements Serializable {
         this.name = name;
     }
 
-    public String getBeschreibung() {
-        return beschreibung;
+    public Preis[] getPreis() {
+        return preise;
     }
 
-    public void setBeschreibung(String beschreibung) {
-        this.beschreibung = beschreibung;
-    }
-
-    public float[] getPreis() {
-        return preis;
-    }
-
-    public void setPreis(float[] preis) {
-        this.preis = preis;
+    public void setPreis(Preis[] preis) {
+        this.preise = preise;
     }
 }

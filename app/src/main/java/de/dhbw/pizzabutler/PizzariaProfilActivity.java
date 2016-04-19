@@ -102,6 +102,7 @@ public class PizzariaProfilActivity extends BaseActivity {
             intent.putExtra("zusatzbelage" , speisekarte.getKategorien()[0].getZusatzbelaege());
             intent.putExtra("lieferkosten", pizzeria.getLieferkosten());
             intent.putExtra("warenkorb", bestellung);
+            intent.putExtra("restaurantID" , pizzeria.getId());
             startActivity(intent);
         }
     }
@@ -177,6 +178,8 @@ public class PizzariaProfilActivity extends BaseActivity {
 
     public void OnClickUhr(View v) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        
         builder.setMessage("Öffnungszeiten: \n \n" + "Montag: " + pizzeria.getOeffnungszeiten()[1].getVon() + "-" +pizzeria.getOeffnungszeiten()[1].getBis()
                         + "\nDienstag: " + pizzeria.getOeffnungszeiten()[2].getVon() + "-" + pizzeria.getOeffnungszeiten()[2].getBis()
                         + "\nMittwoch: " + pizzeria.getOeffnungszeiten()[3].getVon() + "-" +pizzeria.getOeffnungszeiten()[3].getBis()

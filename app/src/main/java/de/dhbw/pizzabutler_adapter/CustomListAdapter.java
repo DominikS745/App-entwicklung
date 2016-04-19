@@ -63,6 +63,7 @@ public class CustomListAdapter extends ArrayAdapter<Pizzeria> {
         PizzariaLieferkosten.setText(data.getLieferkosten().toString());
         PizzariaMindestbestellwert.setText(data.getMindestbestellwert().toString());
         PizzariaStatus.setText(berechneOeffnungszeit(data.getOeffnungszeiten()));
+
         ratingBar.setRating(data.getBewertung());
 
         //Aufbereiten des Bilds
@@ -108,6 +109,7 @@ public class CustomListAdapter extends ArrayAdapter<Pizzeria> {
         }
         else{
             status = "geschlossen";
+
         }
 
         return status;

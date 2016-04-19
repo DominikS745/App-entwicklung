@@ -158,10 +158,6 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(intent1);
                 break;
             case 2:
-                Intent intent2 = new Intent(this, PizzariaProfilActivity.class);
-                startActivity(intent2);
-                break;
-            case 3:
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, getString(R.string.twitter_post));

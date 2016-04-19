@@ -92,6 +92,7 @@ public class ListPizzariaActivity extends BaseActivity {
         for (int i = 0; i < pizzerien.length; i++){
             adapter.add(pizzerien[i]);
         }
+        adapter.notifyDataSetChanged();
     }
 
     private class ListThroughBackend extends AsyncTask<Void, Void, Void> {
@@ -105,7 +106,17 @@ public class ListPizzariaActivity extends BaseActivity {
         protected Void doInBackground(Void... params) {
             try {
                 //Definition einer URL
-                final String url = "http://pizzaButlerBackend.krihi.com/restaurant";
+                String url = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/restaurant/restaurantliste/";
+
+                if (null == plz || plz.isEmpty()) {
+                    getIntent().getStringExtra("plz");
+                }
+
+                if (null == plz || plz.isEmpty()) {
+                    plz = "68163";
+                }
+
+                url += plz;
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
@@ -144,7 +155,7 @@ public class ListPizzariaActivity extends BaseActivity {
         protected Void doInBackground(Void... params) {
             try {
                 //Definition einer URL fuer die Pizzeria
-                String url = "http://pizzaButlerBackend.krihi.com/restaurant/";
+                String url = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/restaurant/";
 
                 url += id;
 
@@ -173,6 +184,7 @@ public class ListPizzariaActivity extends BaseActivity {
 
         @Override
         protected void onPostExecute(Void result) {
+
             //Starten der Detailansicht einer Pizzeria + Speisekarte
             Intent detailansicht = new Intent(ListPizzariaActivity.this, PizzariaProfilActivity.class);
 

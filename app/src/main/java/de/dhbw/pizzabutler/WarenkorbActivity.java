@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import de.dhbw.pizzabutler_adapter.WarenkorbListAdapter;
 import de.dhbw.pizzabutler_entities.Bestellposition;
 import de.dhbw.pizzabutler_entities.Bestellung;
+import de.dhbw.pizzabutler_entities.Produkt;
 import de.dhbw.pizzabutler_entities.WarenkorbItem;
 import de.dhbw.pizzabutler_entities.Zusatzbelag;
 
@@ -42,6 +43,8 @@ public class WarenkorbActivity extends BaseActivity {
     private double lieferkosten;
     private double gesamtpreis;
 
+    private boolean abholung;
+
     //Listener und Preferences Element (Vorsorge gegen Garbage Collection)
     private SharedPreferences.OnSharedPreferenceChangeListener listener;
     private SharedPreferences preferences;
@@ -56,13 +59,15 @@ public class WarenkorbActivity extends BaseActivity {
     private CheckBox ecCB;
     private CheckBox barCB;
     private CheckBox abholungCB;
-
+    private String restaurantID;
+    private String zahlungsart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.navdrawer_warenkorb);
 
+        restaurantID = getIntent().getStringExtra("restaurantID");
         bestellung = (Bestellung) getIntent().getSerializableExtra("warenkorb");
         lieferkosten = getIntent().getDoubleExtra("lieferkosten", 0);
         mindestbestellwert = getIntent().getDoubleExtra("mindestbestellwert", 0);
@@ -71,6 +76,7 @@ public class WarenkorbActivity extends BaseActivity {
 
         for(int i = 0; i<bestellung.getBestellpositionen().length; i++){
             bestellpositions[i] = bestellung.getBestellpositionen()[i];
+            bestellung.getBestellpositionen()[i].setAnzahl(1);
         }
 
         //Icons und Text für NavDrawer initalisieren
@@ -121,6 +127,7 @@ public class WarenkorbActivity extends BaseActivity {
                    barCB.setClickable(false);
                    ecCB.setClickable(false);
                    checkZahlung = true;
+                   zahlungsart = "Paypal";
                }
                else {
                    barCB.setClickable(true);
@@ -140,6 +147,7 @@ public class WarenkorbActivity extends BaseActivity {
                    barCB.setClickable(false);
                    paypalCB.setClickable(false);
                    checkZahlung = true;
+                   zahlungsart = "EC-Karte";
                }
                else {
                    barCB.setClickable(true);
@@ -159,6 +167,7 @@ public class WarenkorbActivity extends BaseActivity {
                    paypalCB.setClickable(false);
                    ecCB.setClickable(false);
                    checkZahlung = true;
+                   zahlungsart = "Barzahlung";
                }
                else {
                    paypalCB.setClickable(true);
@@ -177,11 +186,13 @@ public class WarenkorbActivity extends BaseActivity {
                                                           Toast.makeText(getApplicationContext(), "Sie holen Ihre Bestellung selbst ab.", Toast.LENGTH_SHORT).show();
                                                           lieferkosten = 0;
                                                           lieferkostenView.setText(String.valueOf(lieferkosten));
+                                                          abholung = true;
                                                           berechneKostenAnzeige();
                                                       } else {
                                                           lieferkosten = getIntent().getDoubleExtra("lieferkosten", 0);
                                                           lieferkosten = Math.floor(lieferkosten * 100) / 100;
                                                           lieferkostenView.setText(String.valueOf(lieferkosten));
+                                                          abholung = false;
                                                           berechneKostenAnzeige();
                                                       }
                                                   }
@@ -224,9 +235,8 @@ public class WarenkorbActivity extends BaseActivity {
             WarenkorbItem warenkorbItem = new WarenkorbItem();
             warenkorbItem.setBezeichnung(bestellpositionen[i].getProdukt().getName());
             warenkorbItem.setPreis(bestellpositionen[i].getPreis());
-            warenkorbItem.setVariante(bestellpositionen[i].getVariante().getBezeichnung());
             warenkorbItem.setAnzahl(1);
-
+            warenkorbItem.setVariante(bestellpositionen[i].getVariante().getGroesse());
             data.add(i, warenkorbItem);
         }
     }
@@ -249,7 +259,21 @@ public class WarenkorbActivity extends BaseActivity {
                     Toast.makeText(this, "Bitte bestellen Sie etwas über dem Mindestbestellwert von " + mindestbestellwert + " €.", Toast.LENGTH_SHORT).show();
                 } else {
                     Intent intent = new Intent(this, RolleActivity.class);
+                    bestellung.setRechnungsbeitrag((float) bestellwert);
+
+                    Bestellposition[] bestellpositionen = bestellung.getBestellpositionen();
+
+                    for(int i = 0; i<bestellpositionen.length; i++) {
+                        bestellpositionen[i].setAnzahl(warenliste.get(i).getAnzahl());
+                        bestellpositionen[i].setPreis((float)warenliste.get(i).getPreis());
+                        bestellpositionen[i].setProduktbezeichnung(warenliste.get(i).getBezeichnung());
+                        bestellpositionen[i].setVariantenbezeichnung(warenliste.get(i).getVariante());
+                    }
+
                     intent.putExtra("Bestellung", bestellung);
+                    intent.putExtra("restaurantID", restaurantID);
+                    intent.putExtra("zahlungsweise", zahlungsart);
+                    intent.putExtra("lieferung", abholung);
                     startActivity(intent);
                 }
             }

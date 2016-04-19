@@ -34,7 +34,7 @@
                     android:layout_marginTop="8pt"
                     android:inputType="number"
                     android:maxLength="5"
-                    android:hint="**POSTLEITZAHL**"
+                    android:hint="**PLZ**"
                     android:textColor="@android:color/white"
                     android:textSize="16dp">
 

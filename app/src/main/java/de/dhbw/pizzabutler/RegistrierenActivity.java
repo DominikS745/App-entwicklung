@@ -61,6 +61,9 @@ public class RegistrierenActivity extends AppCompatActivity {
     private boolean jHilf = false;
     private boolean kHilf = false;
 
+    //Variable zur Exception-Überprüfung
+    private int i = 0;
+
     //Error Icon Object
     Drawable errorIcon;
 
@@ -497,10 +500,13 @@ public class RegistrierenActivity extends AppCompatActivity {
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                response = restTemplate.postForEntity(url, obj, User.class);
-
-                //Ausgabe des Statuscodes
-                System.out.println(response.getStatusCode());
+                try {
+                    response = restTemplate.postForEntity(url, obj, User.class);
+                    i = 0;
+                }
+                catch(Exception e){
+                    i = -1;
+                }
 
             } catch (Exception e) {
                 Log.e("RegistrierenActivity", e.getMessage(), e);
@@ -512,7 +518,7 @@ public class RegistrierenActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
 
-            if(response.getStatusCode().value() != 200){
+            if(i == -1){
                 Toast.makeText(getApplicationContext(), "Dieser User existiert bereits." , Toast.LENGTH_SHORT).show();
             }
             else {

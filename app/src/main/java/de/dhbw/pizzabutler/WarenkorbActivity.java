@@ -61,6 +61,7 @@ public class WarenkorbActivity extends BaseActivity {
     private CheckBox abholungCB;
     private String restaurantID;
     private String zahlungsart;
+    private ArrayList<WarenkorbItem> warenliste;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -254,7 +255,7 @@ public class WarenkorbActivity extends BaseActivity {
                 Toast.makeText(this, "Bitte wählen Sie eine Zahlungsmethode aus." , Toast.LENGTH_SHORT).show();
             }
             else {
-                ArrayList<WarenkorbItem> warenliste = listAdapter.getWarenliste();
+                warenliste = listAdapter.getWarenliste();
                 if (bestellwert < mindestbestellwert) {
                     Toast.makeText(this, "Bitte bestellen Sie etwas über dem Mindestbestellwert von " + mindestbestellwert + " €.", Toast.LENGTH_SHORT).show();
                 } else {
@@ -265,7 +266,7 @@ public class WarenkorbActivity extends BaseActivity {
 
                     for(int i = 0; i<bestellpositionen.length; i++) {
                         bestellpositionen[i].setAnzahl(warenliste.get(i).getAnzahl());
-                        bestellpositionen[i].setPreis((float)warenliste.get(i).getPreis());
+                        bestellpositionen[i].setPreis((float) warenliste.get(i).getPreis());
                         bestellpositionen[i].setProduktbezeichnung(warenliste.get(i).getBezeichnung());
                         bestellpositionen[i].setVariantenbezeichnung(warenliste.get(i).getVariante());
                     }

@@ -264,7 +264,7 @@ public class WarenkorbActivity extends BaseActivity {
 
                     Bestellposition[] bestellpositionen = bestellung.getBestellpositionen();
 
-                    for(int i = 0; i<bestellpositionen.length; i++) {
+                    for(int i = 0; i<warenliste.size(); i++) {
                         bestellpositionen[i].setAnzahl(warenliste.get(i).getAnzahl());
                         bestellpositionen[i].setPreis((float) warenliste.get(i).getPreis());
                         bestellpositionen[i].setProduktbezeichnung(warenliste.get(i).getBezeichnung());

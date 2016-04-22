@@ -69,11 +69,19 @@
         <item>Login</item>
         <item>Pizzaria Übersicht</item>
         <item>Teilen</item>
+        <item>Datenschutz</item>
+        <item>AGB</item>
+        <item>Impressum</item>
+
     </string-array>
     <array name="nav_drawer_icons">
         <item>@drawable/ic_account_circle_white</item>
         <item>@drawable/ic_local_grocery_store_white</item>
         <item>@drawable/ic_action_share</item>
+        <item>@drawable/icon_lock</item>
+        <item>@drawable/icon_description</item>
+        <item>@drawable/icon_info</item>
+
     </array>
 
 

@@ -7,7 +7,11 @@ import java.io.Serializable;
  */
 public class Variante implements Serializable{
     private int varianteID;
-    private String bezeichnung;
+    private String groesse;
+
+    public Variante(String mGroesse) {
+        groesse = mGroesse;
+    }
 
     public int getVarianteID() {
         return varianteID;
@@ -17,11 +21,11 @@ public class Variante implements Serializable{
         this.varianteID = varianteID;
     }
 
-    public String getBezeichnung() {
-        return bezeichnung;
+    public String getGroesse() {
+        return groesse;
     }
 
-    public void setBezeichnung(String bezeichnung) {
-        this.bezeichnung = bezeichnung;
+    public void setGroesse(String groesse) {
+        this.groesse = groesse;
     }
 }

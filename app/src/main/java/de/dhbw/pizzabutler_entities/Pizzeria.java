@@ -20,6 +20,7 @@ public class Pizzeria implements Serializable{
     String email;
     String telefonnummer;
     String bild;
+    float bewertung;
 
     public String getId() {
         return restaurantID;
@@ -123,5 +124,21 @@ public class Pizzeria implements Serializable{
 
     public void setTelefonnummer(String telefonnummer) {
         this.telefonnummer = telefonnummer;
+    }
+
+    public String getRestaurantID() {
+        return restaurantID;
+    }
+
+    public void setRestaurantID(String restaurantID) {
+        this.restaurantID = restaurantID;
+    }
+
+    public float getBewertung() {
+        return bewertung;
+    }
+
+    public void setBewertung(float bewertung) {
+        this.bewertung = bewertung;
     }
 }

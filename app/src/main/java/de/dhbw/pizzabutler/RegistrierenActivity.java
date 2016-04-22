@@ -20,6 +20,8 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
+
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
@@ -58,6 +60,9 @@ public class RegistrierenActivity extends AppCompatActivity {
     private boolean iHilf = false;
     private boolean jHilf = false;
     private boolean kHilf = false;
+
+    //Variable zur Exception-Überprüfung
+    private int i = 0;
 
     //Error Icon Object
     Drawable errorIcon;
@@ -476,28 +481,32 @@ public class RegistrierenActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             try {
                 //Das zu versendende JSONObjekt
-                JSONObject obj = new JSONObject();
-                obj.put("anrede", anrede);
-                obj.put("vorname", vorname);
-                obj.put("nachname", nachname);
-                obj.put("strasse", strasse);
-                obj.put("hausnr", hausnummer);
-                obj.put("plz", plz);
-                obj.put("ort", ort);
-                obj.put("telefonnummer", telefonnummer);
-                obj.put("passwort", passwort);
-                obj.put("email", email);
+                JsonObject obj = new JsonObject();
+                obj.addProperty("anrede", anrede);
+                obj.addProperty("vorname", vorname);
+                obj.addProperty("nachname", nachname);
+                obj.addProperty("strasse", strasse);
+                obj.addProperty("hausnummer", hausnummer);
+                obj.addProperty("plz", plz);
+                obj.addProperty("ort", ort);
+                obj.addProperty("telefonnummer", telefonnummer);
+                obj.addProperty("geburtsdatum", "01.01.2001");
+                obj.addProperty("passwort", passwort);
+                obj.addProperty("email", email);
 
                 //Definition einer URL
-                final String url = "http://pizzaButlerBackend.krihi.com/user/";
+                final String url = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/reguser";
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                response = restTemplate.postForEntity(url, obj, User.class);
-
-                //Ausgabe des Statuscodes
-                System.out.println(response.getStatusCode());
+                try {
+                    response = restTemplate.postForEntity(url, obj, User.class);
+                    i = 0;
+                }
+                catch(Exception e){
+                    i = -1;
+                }
 
             } catch (Exception e) {
                 Log.e("RegistrierenActivity", e.getMessage(), e);
@@ -509,28 +518,33 @@ public class RegistrierenActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Void result) {
 
-            //Setzen der User-ID (verhält sich ähnlich einer Session)
-            SharedPreferences session = getSharedPreferences("id", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = session.edit();
-            editor.putString("id", response.getBody().getId());
-            editor.commit();
+            if(i == -1){
+                Toast.makeText(getApplicationContext(), "Dieser User existiert bereits." , Toast.LENGTH_SHORT).show();
+            }
+            else {
+                //Setzen der User-ID (verhält sich ähnlich einer Session)
+                SharedPreferences session = getSharedPreferences("id", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = session.edit();
+                editor.putString("id", response.getBody().getId());
+                editor.commit();
 
-            //Starten einer neuen Activity: NutzerDatenAnzeigen
-            Intent nutzerDatenAnzeigen = new Intent(RegistrierenActivity.this, NutzerDatenActivity.class);
+                //Starten einer neuen Activity: NutzerDatenAnzeigen
+                Intent nutzerDatenAnzeigen = new Intent(RegistrierenActivity.this, NutzerDatenActivity.class);
 
-            nutzerDatenAnzeigen.putExtra("id", response.getBody().getId());
-            nutzerDatenAnzeigen.putExtra("anrede", response.getBody().getAnrede());
-            nutzerDatenAnzeigen.putExtra("vorname", response.getBody().getVorname());
-            nutzerDatenAnzeigen.putExtra("nachname", response.getBody().getNachname());
-            nutzerDatenAnzeigen.putExtra("strasse", response.getBody().getStrasse());
-            nutzerDatenAnzeigen.putExtra("hausnummer", response.getBody().getHausnr());
-            nutzerDatenAnzeigen.putExtra("plz", response.getBody().getPlz());
-            nutzerDatenAnzeigen.putExtra("ort", response.getBody().getOrt());
-            nutzerDatenAnzeigen.putExtra("telefonnummer", response.getBody().getTelefonnummer());
-            nutzerDatenAnzeigen.putExtra("passwort", response.getBody().getPasswort());
-            nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
+                nutzerDatenAnzeigen.putExtra("id", response.getBody().getId());
+                nutzerDatenAnzeigen.putExtra("anrede", response.getBody().getAnrede());
+                nutzerDatenAnzeigen.putExtra("vorname", response.getBody().getVorname());
+                nutzerDatenAnzeigen.putExtra("nachname", response.getBody().getNachname());
+                nutzerDatenAnzeigen.putExtra("strasse", response.getBody().getStrasse());
+                nutzerDatenAnzeigen.putExtra("hausnummer", response.getBody().getHausnr());
+                nutzerDatenAnzeigen.putExtra("plz", response.getBody().getPlz());
+                nutzerDatenAnzeigen.putExtra("ort", response.getBody().getOrt());
+                nutzerDatenAnzeigen.putExtra("telefonnummer", response.getBody().getTelefonnummer());
+                nutzerDatenAnzeigen.putExtra("passwort", response.getBody().getPasswort());
+                nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
 
-            startActivity(nutzerDatenAnzeigen);
+                startActivity(nutzerDatenAnzeigen);
+            }
         }
     }
 }

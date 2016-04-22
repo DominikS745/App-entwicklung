@@ -25,28 +25,38 @@ public class NutzerDatenActivity extends BaseActivity {
         set(navMenuTitles, navMenuIcons);
 
         String id = getIntent().getStringExtra("id");
+
         String anrede = getIntent().getStringExtra("anrede");
         String vorname = getIntent().getStringExtra("vorname");
         String nachname = getIntent().getStringExtra("nachname");
+
         String strasse = getIntent().getStringExtra("strasse");
         String hausnummer = getIntent().getStringExtra("hausnummer");
+
         String plz = getIntent().getStringExtra("plz");
         String ort = getIntent().getStringExtra("ort");
+
         String telefonnummer = getIntent().getStringExtra("telefonnummer");
         String email = getIntent().getStringExtra("email");
-        String passwort = getIntent().getStringExtra("passwort");
-        boolean agb_check = getIntent().getBooleanExtra("agb_check", false);
 
         String nameDisplayText = getString(R.string.name);
         String adresseDisplayText = getString(R.string.adresse);
         String emailDisplayText = getString(R.string.email);
         String agbCheckDisplayText = getString(R.string.zustimmungAGB);
 
-        TextView nutzerDaten = (TextView) findViewById(R.id.nutzerdaten);
-        nutzerDaten.setText("ID: " + id + " " + nameDisplayText + anrede + " " + vorname + " " + nachname + "\n"
-                + adresseDisplayText + strasse + " " + hausnummer + "\n" + "Telefonnummer: " + telefonnummer + plz + " " + ort + "\n" + emailDisplayText + email
-                + "\n" + agbCheckDisplayText);
+        TextView nutzerdaten_id = (TextView) findViewById(R.id.nutzerdaten_ID);
+        TextView nutzerdaten_name = (TextView) findViewById(R.id.nutzerdaten_Name);
+        TextView nutzerdaten_adresse_1 = (TextView) findViewById(R.id.nutzerdaten_Adresse_1);
+        TextView nutzerdaten_adresse_2 = (TextView) findViewById(R.id.nutzerdaten_Adresse_2);
+        TextView nutzerdaten_telnr = (TextView) findViewById(R.id.nutzerdaten_telefonnummer);
+        TextView nutzerdaten_email = (TextView) findViewById(R.id.nutzerdaten_email);
 
+        nutzerdaten_id.setText("Ihre User-ID: " + id);
+        nutzerdaten_name.setText("Ihr Name: " + anrede + " " + vorname + " " + nachname);
+        nutzerdaten_adresse_1.setText("Ihre Adresse: " + strasse + " " + hausnummer);
+        nutzerdaten_adresse_2.setText(plz + " " + ort);
+        nutzerdaten_telnr.setText("Ihre Telefonnummer: " + telefonnummer);
+        nutzerdaten_email.setText("Ihre Email-Adresse: " + email);
     }
 
     public void onClickLogout(View v) {
@@ -60,5 +70,12 @@ public class NutzerDatenActivity extends BaseActivity {
 
         startActivity(logout);
     }
+
+    public void onClickStart(View v) {
+        Intent intent = new Intent(this, StartActivity.class);
+        startActivity(intent);
+    }
+
+
 
 }

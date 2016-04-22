@@ -20,6 +20,9 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
@@ -28,8 +31,10 @@ import org.springframework.web.client.RestTemplate;
 import java.util.regex.Pattern;
 
 import de.dhbw.pizzabutler_api.EditTextExtended;
+import de.dhbw.pizzabutler_entities.Bestellung;
 import de.dhbw.pizzabutler_entities.Gast;
 import de.dhbw.pizzabutler_entities.User;
+import de.dhbw.pizzabutler_entities.Zusatzbelag;
 
 public class RegisterGastActivity extends AppCompatActivity {
 
@@ -56,6 +61,22 @@ public class RegisterGastActivity extends AppCompatActivity {
     private boolean hHilf = false;
     private boolean jHilf = false;
 
+    private String json_email;
+    private String json_ID;
+    private String json_strasse;
+    private String json_hausnummer;
+    private String json_plz;
+    private String json_ort;
+
+    private String zahlungsart;
+    private String restaurantID;
+    private boolean lieferung;
+
+    private Intent nutzerDatenAnzeigen;
+
+
+    private Bestellung bestellung;
+
     //Error Icon Object
     Drawable errorIcon;
 
@@ -76,6 +97,8 @@ public class RegisterGastActivity extends AppCompatActivity {
         agb_check_CB = (CheckBox) findViewById(R.id.agb_check);
         accept_button = (Button) findViewById(R.id.weiter_button);
 
+        bestellung = (Bestellung) getIntent().getSerializableExtra("bestellung");
+
         /**
          * Validierung der Eingabedaten;
          * überprüft die verschiedenen Eingabefelder nach erfolgter Eingabe mit Ausnahme der Straße und Checkbox
@@ -88,6 +111,11 @@ public class RegisterGastActivity extends AppCompatActivity {
         final String regexDName = "^[A-ZÖÜÄ]{1}[a-züäöß]+[\\s-]{1}[A-ZÖÜÄ]{1}[a-züäoß]+$";
         final String regexPlz = "^[0-9]{5}$";
         final String regexHnr = "^[0-9]+[a-z]?$";
+
+        bestellung = (Bestellung) getIntent().getSerializableExtra("bestellung");
+        zahlungsart = getIntent().getStringExtra("zahlungsart");
+        lieferung = getIntent().getBooleanExtra("lieferung", false);
+        restaurantID = getIntent().getStringExtra("restaurantID");
 
         /**
          * Instantiierung des Drawable ErrorIcon
@@ -348,7 +376,7 @@ public class RegisterGastActivity extends AppCompatActivity {
             //Uebergabe der Daten in die innere Klasse RegisterThroughBackend
             new RegisterThroughBackend(anredeSp.getSelectedItem().toString(), vornameET.getText().toString(),
                     nachnameET.getText().toString(), strasseET.getText().toString(),
-                    hausnummerET.getText().toString(), plzET.getText().toString(), ortET.getText().toString(),
+                    hausnummerET.getText().toString(), ortET.getText().toString(), plzET.getText().toString(),
                     telefonnummerET.getText().toString(), emailET.getText().toString()).execute();
         }
     }
@@ -378,6 +406,10 @@ public class RegisterGastActivity extends AppCompatActivity {
         else{
             return false;
         }
+    }
+
+    public void sendBestellung() {
+        new BestellungThroughBackend().execute();
     }
 
     private class RegisterThroughBackend extends AsyncTask<Void, Void, Void> {
@@ -410,23 +442,24 @@ public class RegisterGastActivity extends AppCompatActivity {
         protected Void doInBackground(Void... params) {
             try {
                 //Das zu versendende JSONObjekt
-                JSONObject obj = new JSONObject();
-                obj.put("anrede", anrede);
-                obj.put("vorname", vorname);
-                obj.put("nachname", nachname);
-                obj.put("strasse", strasse);
-                obj.put("hausnr", hausnummer);
-                obj.put("plz", plz);
-                obj.put("ort", ort);
-                obj.put("telefonnummer", telefonnummer);
-                obj.put("email", email);
+                JsonObject obj = new JsonObject();
+                obj.addProperty("anrede", anrede);
+                obj.addProperty("vorname", vorname);
+                obj.addProperty("nachname", nachname);
+                obj.addProperty("strasse", strasse);
+                obj.addProperty("hausnummer", hausnummer);
+                obj.addProperty("plz", plz);
+                obj.addProperty("ort", ort);
+                obj.addProperty("telefonnummer", telefonnummer);
+                obj.addProperty("email", email);
 
                 //Definition einer URL
-                final String url = "http://pizzaButlerBackend.krihi.com/gast/";
+                final String url = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/gast";
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
+
                 response = restTemplate.postForEntity(url, obj, Gast.class);
 
                 //Ausgabe des Statuscodes
@@ -443,8 +476,17 @@ public class RegisterGastActivity extends AppCompatActivity {
         protected void onPostExecute(Void result) {
 
             //Starten einer neuen Activity: NutzerDatenAnzeigen
-            Intent nutzerDatenAnzeigen = new Intent(RegisterGastActivity.this, NutzerDatenActivity.class);
+            nutzerDatenAnzeigen = new Intent(RegisterGastActivity.this, BestaetigungActivity.class);
 
+            json_email = response.getBody().getEmail();
+            json_ID = response.getBody().getGastID();
+            json_strasse = response.getBody().getStrasse();
+            json_hausnummer = response.getBody().getHausnummer();
+            json_plz = response.getBody().getPlz();
+            json_ort = response.getBody().getOrt();
+
+
+            nutzerDatenAnzeigen.putExtra("bestellung" , bestellung);
             nutzerDatenAnzeigen.putExtra("id", response.getBody().getGastID());
             nutzerDatenAnzeigen.putExtra("anrede", response.getBody().getAnrede());
             nutzerDatenAnzeigen.putExtra("vorname", response.getBody().getVorname());
@@ -456,6 +498,116 @@ public class RegisterGastActivity extends AppCompatActivity {
             nutzerDatenAnzeigen.putExtra("telefonnummer", response.getBody().getTelefonnummer());
             nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
 
+            sendBestellung();
+        }
+    }
+
+    class BestellungThroughBackend extends AsyncTask<Void, Void, Void> {
+
+        public BestellungThroughBackend(Void... params) {
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+
+            ResponseEntity<String> response;
+
+            try {
+                //Definition einer URL
+                final String url = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/bestellung/send";
+
+                int variantenID = 0;
+
+                JsonObject obj = new JsonObject();
+                obj.addProperty("userID", 0);
+                obj.addProperty("gastID", json_ID);
+                obj.addProperty("strasse", json_strasse);
+                obj.addProperty("email", json_email);
+                obj.addProperty("hausnummer", json_hausnummer);
+                obj.addProperty("plz", json_plz);
+                obj.addProperty("ort", json_ort);
+                obj.addProperty("restaurantID", restaurantID);
+                obj.addProperty("bestellzeitpunkt", "");
+                obj.addProperty("bestellinfo", "");
+                obj.addProperty("rechnungsbetrag", bestellung.getRechnungsbeitrag());
+                obj.addProperty("lieferung", lieferung);
+
+                JsonArray jArray = new JsonArray();
+
+                for(int i = 0; i<bestellung.getBestellpositionen().length; i++){
+                    JsonObject object = new JsonObject();
+                    object.addProperty("anzahl", bestellung.getBestellpositionen()[i].getAnzahl());
+                    object.addProperty("preis", bestellung.getBestellpositionen()[i].getPreis());
+
+                    if(bestellung.getBestellpositionen()[i].getVariantenbezeichnung().equals("klein")){
+                        variantenID = 1;
+                    }
+                    else if(bestellung.getBestellpositionen()[i].getVariantenbezeichnung().equals("mittel")){
+                        variantenID = 2;
+                    }
+                    else if(bestellung.getBestellpositionen()[i].getVariantenbezeichnung().equals("groß")){
+                        variantenID = 3;
+                    }
+
+                    JsonObject produktObject = new JsonObject();
+                    produktObject.addProperty("bezeichnung", bestellung.getBestellpositionen()[i].getProduktbezeichnung());
+                    produktObject.addProperty("beschreibung", "");
+                    produktObject.addProperty("produktID", 0);
+
+                    JsonArray vArray = new JsonArray();
+                    JsonObject vObject_1 = new JsonObject();
+                    vObject_1.addProperty("varianteID", 0);
+                    vObject_1.addProperty("preis", "");
+                    JsonObject vObject_2 = new JsonObject();
+                    vObject_2.addProperty("varianteID", 0);
+                    vObject_2.addProperty("preis", "");
+
+                    produktObject.add("varianten", vArray);
+
+                    object.add("produkt", produktObject);
+                    JsonObject variantenObject = new JsonObject();
+                    variantenObject.addProperty("varianteID", variantenID);
+                    variantenObject.addProperty("bezeichnung", "");
+                    object.add("variante", variantenObject);
+
+                    JsonArray zArray = new JsonArray();
+                    Zusatzbelag[] belaege = bestellung.getBestellpositionen()[i].getZusatzbelag();
+                    if(belaege != null) {
+                        for (int a = 0; a < belaege.length; a++) {
+                            JsonObject zObject = new JsonObject();
+                            zObject.addProperty("zusatzbelagID", 0);
+                            zObject.addProperty("name", bestellung.getBestellpositionen()[i].getZusatzbelag()[a].getName());
+                            zObject.addProperty("preis", bestellung.getBestellpositionen()[i].getZusatzbelag()[a].getPreis());
+                            zArray.add(zObject);
+                        }
+                    }
+                    object.add("zusatzbelag", zArray);
+                    jArray.add(object);
+                }
+
+                obj.add("bestellpositionen" , jArray);
+                System.out.println(obj.toString());
+
+                //Kommunikation mit Backend über ein REST-Template
+                RestTemplate restTemplate = new RestTemplate();
+                restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
+                response = restTemplate.postForEntity(url, obj, String.class);
+
+                //Ausgabe des Mock-Wertes
+                System.out.println(response.getStatusCode());
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void result) {
+            //Starten einer neuen Activity: NutzerDatenAnzeigen
+            nutzerDatenAnzeigen.putExtra("zahlungsart", zahlungsart);
             startActivity(nutzerDatenAnzeigen);
         }
     }

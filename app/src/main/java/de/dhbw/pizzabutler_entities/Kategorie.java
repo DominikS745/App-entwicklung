@@ -9,7 +9,7 @@ public class Kategorie implements Serializable {
 
     int kategorieID;
     String name;
-    String[] variante;
+    Variante[] variante;
     Produkt[] produkte;
     Zusatzbelag[] zusatzbelaege;
 
@@ -29,11 +29,11 @@ public class Kategorie implements Serializable {
         this.name = name;
     }
 
-    public String[] getVariante() {
+    public Variante[] getVariante() {
         return variante;
     }
 
-    public void setVariante(String[] variante) {
+    public void setVariante(Variante[] variante) {
         this.variante = variante;
     }
 

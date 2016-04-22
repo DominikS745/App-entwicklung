@@ -11,7 +11,7 @@
 
     <TextView
         android:id="@+id/profil_ware"
-        android:layout_width="wrap_content"
+        android:layout_width="64pt"
         android:layout_height="wrap_content"
         android:text="Kind Item"
         android:textSize="8pt"

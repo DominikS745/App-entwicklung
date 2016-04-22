@@ -20,6 +20,9 @@ import android.widget.RelativeLayout;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.dhbw.pizzabutler_adapter.NavDrawerItem;
+import de.dhbw.pizzabutler_adapter.NavDrawerListAdapter;
+
 /**
  * Created by Marvin on 17.10.15.
  */
@@ -155,14 +158,23 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(intent1);
                 break;
             case 2:
-                Intent intent2 = new Intent(this, PizzariaProfilActivity.class);
-                startActivity(intent2);
-                break;
-            case 3:
                 Intent share = new Intent(Intent.ACTION_SEND);
                 share.setType("text/plain");
                 share.putExtra(Intent.EXTRA_TEXT, getString(R.string.twitter_post));
                 startActivity(Intent.createChooser(share, "Share with"));
+                break;
+            case 3:
+                Intent intent3 = new Intent(this,DatenschutzActivity.class);
+                startActivity(intent3);
+                break;
+            case 4:
+                Intent intent4 = new Intent(this,AgbActivity.class);
+                startActivity(intent4);
+                break;
+            case 5:
+                Intent intent5 = new Intent(this,ImpressumActivity.class);
+                startActivity(intent5);
+                break;
             default:
                 break;
         }

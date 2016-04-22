@@ -11,7 +11,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.google.gson.JsonObject;
+
 import org.json.JSONObject;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.json.GsonHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
@@ -121,12 +127,24 @@ public class LoginActivity extends BaseActivity {
 
             try {
                 //Definition einer URL
-                final String url = "http://pizzabutlerbackend.krihi.com/user/login/";
+                String url = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/login/";
+
+                JsonObject obj = new JsonObject();
+                obj.addProperty("email", email);
+                obj.addProperty("passwort", passwort);
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
-                response = restTemplate.getForEntity(url, User.class, email, passwort );
+                response = restTemplate.postForEntity(url, obj, User.class);
+
+                //LoginID zum Abgreifen der Daten nutzen
+                String id = response.getBody().getId();
+                url = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/";
+                url += id;
+
+                response = restTemplate.getForEntity(url, User.class);
+
 
                 //Ausgabe des Mock-Wertes
                 System.out.println(response.getStatusCode());
@@ -141,28 +159,33 @@ public class LoginActivity extends BaseActivity {
         @Override
         protected void onPostExecute(Void result) {
 
-            //Setzen der User-ID (verhält sich ähnlich einer Session)
-            SharedPreferences session = getSharedPreferences("id", Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = session.edit();
-            editor.putString("id", response.getBody().getId());
-            editor.commit();
+            if(response.getStatusCode().value() == 200) {
+                //Setzen der User-ID (verhält sich ähnlich einer Session)
+                SharedPreferences session = getSharedPreferences("id", Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = session.edit();
+                editor.putString("id", response.getBody().getId());
+                editor.commit();
 
-            //Starten einer neuen Activity: NutzerDatenAnzeigen
-            Intent nutzerDatenAnzeigen = new Intent(LoginActivity.this, NutzerDatenActivity.class);
+                //Starten einer neuen Activity: NutzerDatenAnzeigen
+                Intent nutzerDatenAnzeigen = new Intent(LoginActivity.this, NutzerDatenActivity.class);
 
-            nutzerDatenAnzeigen.putExtra("id", response.getBody().getId());
-            nutzerDatenAnzeigen.putExtra("anrede", response.getBody().getAnrede());
-            nutzerDatenAnzeigen.putExtra("vorname", response.getBody().getVorname());
-            nutzerDatenAnzeigen.putExtra("nachname", response.getBody().getNachname());
-            nutzerDatenAnzeigen.putExtra("strasse", response.getBody().getStrasse());
-            nutzerDatenAnzeigen.putExtra("hausnummer", response.getBody().getHausnr());
-            nutzerDatenAnzeigen.putExtra("plz", response.getBody().getPlz());
-            nutzerDatenAnzeigen.putExtra("ort", response.getBody().getOrt());
-            nutzerDatenAnzeigen.putExtra("telefonnummer", response.getBody().getTelefonnummer());
-            nutzerDatenAnzeigen.putExtra("passwort", response.getBody().getPasswort());
-            nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
+                nutzerDatenAnzeigen.putExtra("id", response.getBody().getId());
+                nutzerDatenAnzeigen.putExtra("anrede", response.getBody().getAnrede());
+                nutzerDatenAnzeigen.putExtra("vorname", response.getBody().getVorname());
+                nutzerDatenAnzeigen.putExtra("nachname", response.getBody().getNachname());
+                nutzerDatenAnzeigen.putExtra("strasse", response.getBody().getStrasse());
+                nutzerDatenAnzeigen.putExtra("hausnummer", response.getBody().getHausnr());
+                nutzerDatenAnzeigen.putExtra("plz", response.getBody().getPlz());
+                nutzerDatenAnzeigen.putExtra("ort", response.getBody().getOrt());
+                nutzerDatenAnzeigen.putExtra("telefonnummer", response.getBody().getTelefonnummer());
+                nutzerDatenAnzeigen.putExtra("passwort", response.getBody().getPasswort());
+                nutzerDatenAnzeigen.putExtra("email", response.getBody().getEmail());
 
-            startActivity(nutzerDatenAnzeigen);
+                startActivity(nutzerDatenAnzeigen);
+            }
+            else{
+                Toast.makeText(getApplicationContext(), "Username oder Passwort falsch." , Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -180,7 +203,7 @@ public class LoginActivity extends BaseActivity {
 
             try {
                 //Definition einer URL
-                String url = "http://pizzabutlerbackend.krihi.com/user/";
+                String url = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/user/";
 
                 url += id;
 
@@ -232,15 +255,16 @@ public class LoginActivity extends BaseActivity {
         @Override
         protected Void doInBackground(Void... params){
             try {
-                final String url = "http://pizzaButlerBackend.krihi.com/resetPassword";
+                final String url = "http://pizzabutlerentwbak.krihi.com/entwicklung/rest/resetPassword";
 
                 //Das zu versendende JSONObject
-                JSONObject obj = new JSONObject();
-                obj.put("email", email);
+                JsonObject obj = new JsonObject();
+                obj.addProperty("email", email);
 
                 //Kommunikation mit Backend über ein REST-Template
                 RestTemplate restTemplate = new RestTemplate();
                 restTemplate.getMessageConverters().add(new GsonHttpMessageConverter());
+
                 response = restTemplate.postForEntity(url, obj, Object.class);
 
             } catch (Exception e) {

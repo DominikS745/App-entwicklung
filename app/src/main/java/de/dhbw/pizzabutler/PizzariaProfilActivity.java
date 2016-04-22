@@ -14,10 +14,15 @@ import android.widget.Toast;
 
 import org.springframework.util.support.Base64;
 
+import java.sql.Time;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
+import de.dhbw.pizzabutler_adapter.ExpandableListAdapter;
 import de.dhbw.pizzabutler_entities.Bestellposition;
 import de.dhbw.pizzabutler_entities.Bestellung;
 import de.dhbw.pizzabutler_entities.Kategorie;
@@ -97,8 +102,11 @@ public class PizzariaProfilActivity extends BaseActivity {
             bestellungen.toArray(bestellpositionen);
             bestellung = new Bestellung();
             bestellung.setBestellpositionen(bestellpositionen);
+            intent.putExtra("mindestbestellwert" , pizzeria.getMindestbestellwert());
+            intent.putExtra("zusatzbelage" , speisekarte.getKategorien()[0].getZusatzbelaege());
             intent.putExtra("lieferkosten", pizzeria.getLieferkosten());
             intent.putExtra("warenkorb", bestellung);
+            intent.putExtra("restaurantID" , pizzeria.getId());
             startActivity(intent);
         }
     }
@@ -174,23 +182,45 @@ public class PizzariaProfilActivity extends BaseActivity {
 
     public void OnClickUhr(View v) {
         final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Öffnungszeiten: \n \n" + "Montag: " + pizzeria.getOeffnungszeiten()[1].getVon() + "-" +pizzeria.getOeffnungszeiten()[1].getBis()
-                        + "\nDienstag: " + pizzeria.getOeffnungszeiten()[2].getVon() + "-" + pizzeria.getOeffnungszeiten()[2].getBis()
-                        + "\nMittwoch: " + pizzeria.getOeffnungszeiten()[3].getVon() + "-" +pizzeria.getOeffnungszeiten()[3].getBis()
-                        + "\nDonnerstag: " + pizzeria.getOeffnungszeiten()[4].getVon() + "-" +pizzeria.getOeffnungszeiten()[4].getBis()
-                        + "\nFreitag: " + pizzeria.getOeffnungszeiten()[5].getVon() + "-" +pizzeria.getOeffnungszeiten()[5].getBis()
-                        + "\nSamstag: " + pizzeria.getOeffnungszeiten()[6].getVon() + "-" +pizzeria.getOeffnungszeiten()[6].getBis()
-                        + "\nSonntag: " + pizzeria.getOeffnungszeiten()[0].getVon() + "-" +pizzeria.getOeffnungszeiten()[0].getBis()
-        )
-                .setPositiveButton("OK",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface d, int id) {
-                                //Aufruf der Einstellungen
-                                d.dismiss();
-                            }
-                        });
-        //Anzeigen des Dialogfeldes
-        builder.create().show();
+        try {
+            //Date-Konvertierung
+            Date moVonDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[1].getVon())));
+            Date moBisDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[1].getBis())));
+            Date diVonDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[2].getVon())));
+            Date diBisDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[2].getBis())));
+            Date miVonDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[3].getVon())));
+            Date miBisDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[3].getBis())));
+            Date doVonDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[4].getVon())));
+            Date doBisDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[4].getBis())));
+            Date frVonDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[5].getVon())));
+            Date frBisDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[5].getBis())));
+            Date saVonDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[6].getVon())));
+            Date saBisDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[6].getBis())));
+            Date soVonDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[0].getVon())));
+            Date soBisDate = new SimpleDateFormat("HHmm").parse(String.format("%04d", Integer.valueOf(pizzeria.getOeffnungszeiten()[0].getBis())));
+
+            SimpleDateFormat sdf = new SimpleDateFormat("HH:mm" , Locale.GERMAN);
+            builder.setMessage("Öffnungszeiten: \n \n" + "Montag: " + sdf.format(moVonDate) + "-" + sdf.format(moBisDate)
+                            + "\nDienstag: " + sdf.format(diVonDate) + "-" + sdf.format(diBisDate)
+                            + "\nMittwoch: " + sdf.format(miVonDate) + "-" + sdf.format(miBisDate)
+                            + "\nDonnerstag: " + sdf.format(doVonDate) + "-" + sdf.format(doBisDate)
+                            + "\nFreitag: " + sdf.format(frVonDate) + "-" + sdf.format(frBisDate)
+                            + "\nSamstag: " + sdf.format(saVonDate) + "-" + sdf.format(saBisDate)
+                            + "\nSonntag: " + sdf.format(soVonDate) + "-" + sdf.format(soBisDate)
+            )
+                    .setPositiveButton("OK",
+                            new DialogInterface.OnClickListener() {
+                                public void onClick(DialogInterface d, int id) {
+                                    //Aufruf der Einstellungen
+                                    d.dismiss();
+                                }
+                            });
+            //Anzeigen des Dialogfeldes
+            builder.create().show();
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     public void OnClickEuro(View v) {
@@ -206,5 +236,4 @@ public class PizzariaProfilActivity extends BaseActivity {
         //Anzeigen des Dialogfeldes
         builder.create().show();
     }
-
 }

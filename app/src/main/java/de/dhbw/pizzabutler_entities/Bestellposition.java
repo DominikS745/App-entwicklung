@@ -7,10 +7,13 @@ import java.io.Serializable;
  */
 public class Bestellposition implements Serializable{
     private int bestellpositionID;
+    private int anzahl;
     private float preis;
     private Produkt produkt;
     private Variante variante;
     private Zusatzbelag[] zusatzbelag;
+    private String produktbezeichnung;
+    private String variantenbezeichnung;
 
     public int getBestellpositionID() {
         return bestellpositionID;
@@ -50,5 +53,29 @@ public class Bestellposition implements Serializable{
 
     public void setZusatzbelag(Zusatzbelag[] zusatzbelag) {
         this.zusatzbelag = zusatzbelag;
+    }
+
+    public int getAnzahl() {
+        return anzahl;
+    }
+
+    public void setAnzahl(int anzahl) {
+        this.anzahl = anzahl;
+    }
+
+    public String getProduktbezeichnung() {
+        return produktbezeichnung;
+    }
+
+    public void setProduktbezeichnung(String produktbezeichnung) {
+        this.produktbezeichnung = produktbezeichnung;
+    }
+
+    public String getVariantenbezeichnung() {
+        return variantenbezeichnung;
+    }
+
+    public void setVariantenbezeichnung(String variantenbezeichnung) {
+        this.variantenbezeichnung = variantenbezeichnung;
     }
 }

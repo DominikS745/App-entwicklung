@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class Speisekarte implements Serializable {
 
     private Kategorie[] kategorien;
+    private Variante[] variante;
 
     public Kategorie[] getKategorien() {
         return kategorien;
@@ -15,5 +16,13 @@ public class Speisekarte implements Serializable {
 
     public void setKategorien(Kategorie[] kategorien) {
         this.kategorien = kategorien;
+    }
+
+    public Variante[] getVariante() {
+        return variante;
+    }
+
+    public void setVariante(Variante[] variante) {
+        this.variante = variante;
     }
 }

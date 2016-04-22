@@ -1,4 +1,4 @@
-package de.dhbw.pizzabutler;
+package de.dhbw.pizzabutler_adapter;
 
 /**
  * Created by Marvin on 04.03.16.
@@ -16,8 +16,10 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import de.dhbw.pizzabutler.R;
 import de.dhbw.pizzabutler_entities.Bestellposition;
 import de.dhbw.pizzabutler_entities.Bestellung;
+import de.dhbw.pizzabutler_entities.Preis;
 import de.dhbw.pizzabutler_entities.Produkt;
 import de.dhbw.pizzabutler_entities.Variante;
 
@@ -29,7 +31,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     private HashMap<String, List<Produkt>> _listDataChild;
     private List<Bestellposition> bestellungen;
     private Produkt product;
-    private float[] preise;
+    private Preis[] preise;
     private Button buttonPreisS;
     private Button buttonPreisM;
     private Button buttonPreisL;
@@ -39,6 +41,7 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         this._context = context;
         this._listDataHeader = listDataHeader;
         this._listDataChild = listChildData;
+        bestellungen = new ArrayList<Bestellposition>();
     }
 
     @Override
@@ -56,7 +59,6 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
     public View getChildView(final int groupPosition, final int childPosition,
                              boolean isLastChild, View convertView, ViewGroup parent) {
 
-        bestellungen = new ArrayList<Bestellposition>();
         product = (Produkt) getChild(groupPosition, childPosition);
         preise = product.getPreis();
 
@@ -79,12 +81,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 Toast toast = Toast.makeText(_context, "Produkt zum Warenkorb hinzugefügt", Toast.LENGTH_SHORT);
                 toast.show();
                 Produkt produkt = (Produkt) getChild(groupPosition, childPosition);
-                Variante variante = new Variante();
-                variante.setBezeichnung("klein");
                 Bestellposition bestellposition = new Bestellposition();
                 bestellposition.setProdukt(produkt);
-                bestellposition.setVariante(variante);
-                bestellposition.setPreis(produkt.getPreis()[0]);
+                bestellposition.setPreis(produkt.getPreis()[0].getPreis());
+                bestellposition.setVariante(new Variante("klein"));
                 addBestellung(bestellposition);
             }
         });
@@ -96,12 +96,10 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 Toast toast = Toast.makeText(_context, "Produkt zum Warenkorb hinzugefügt", Toast.LENGTH_SHORT);
                 toast.show();
                 Produkt produkt = (Produkt) getChild(groupPosition, childPosition);
-                Variante variante = new Variante();
-                variante.setBezeichnung("mittel");
                 Bestellposition bestellposition = new Bestellposition();
                 bestellposition.setProdukt(produkt);
-                bestellposition.setVariante(variante);
-                bestellposition.setPreis(produkt.getPreis()[1]);
+                bestellposition.setPreis(produkt.getPreis()[1].getPreis());
+                bestellposition.setVariante(new Variante("mittel"));
                 addBestellung(bestellposition);
             }
         });
@@ -113,18 +111,16 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
                 Toast toast = Toast.makeText(_context, "Produkt zum Warenkorb hinzugefügt", Toast.LENGTH_SHORT);
                 toast.show();
                 Produkt produkt = (Produkt) getChild(groupPosition, childPosition);
-                Variante variante = new Variante();
-                variante.setBezeichnung("gross");
                 Bestellposition bestellposition = new Bestellposition();
                 bestellposition.setProdukt(produkt);
-                bestellposition.setVariante(variante);
-                bestellposition.setPreis(produkt.getPreis()[2]);
+                bestellposition.setPreis(produkt.getPreis()[2].getPreis());
+                bestellposition.setVariante(new Variante("groß"));
                 addBestellung(bestellposition);
             }
         });
 
         produktET.setText(product.getName());
-        buttonPreisS.setText(String.valueOf(preise[0]) + " €");
+        buttonPreisS.setText(String.valueOf(preise[0].getPreis()) + " €");
         buttonPreisM.setClickable(false);
         buttonPreisM.setVisibility(View.INVISIBLE);
         buttonPreisL.setClickable(false);
@@ -133,15 +129,15 @@ public class ExpandableListAdapter extends BaseExpandableListAdapter {
         if(preise.length > 2) {
             buttonPreisL.setClickable(true);
             buttonPreisL.setVisibility(View.VISIBLE);
-            buttonPreisL.setText(String.valueOf(preise[2]) + "€");
+            buttonPreisL.setText(String.valueOf(preise[2].getPreis()) + "€");
             buttonPreisM.setClickable(true);
             buttonPreisM.setVisibility(View.VISIBLE);
-            buttonPreisM.setText(String.valueOf(preise[1]) + "€");
+            buttonPreisM.setText(String.valueOf(preise[1].getPreis()) + "€");
         }
         else if(preise.length > 1) {
             buttonPreisM.setClickable(true);
             buttonPreisM.setVisibility(View.VISIBLE);
-            buttonPreisM.setText(String.valueOf(preise[1]) + "€");
+            buttonPreisM.setText(String.valueOf(preise[1].getPreis()) + "€");
         }
 
         return convertView;

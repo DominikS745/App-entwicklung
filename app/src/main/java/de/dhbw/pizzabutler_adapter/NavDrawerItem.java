@@ -1,4 +1,4 @@
-package de.dhbw.pizzabutler;
+package de.dhbw.pizzabutler_adapter;
 
 /**
  * Created by Marvin on 17.10.15.

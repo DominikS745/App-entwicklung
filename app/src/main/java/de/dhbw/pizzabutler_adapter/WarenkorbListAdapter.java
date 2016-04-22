@@ -32,6 +32,7 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
     private ArrayList<Integer> selectedItems;
     private boolean[] checkedValues;
     private Bestellposition[] bestellpositionen;
+    private double temp;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
 
@@ -76,7 +77,11 @@ public class WarenkorbListAdapter extends ArrayAdapter<WarenkorbItem> {
         // Populate the data into the template view using the data object
         produkt.setText(warenliste.get(position).getBezeichnung());
         variante.setText(warenliste.get(position).getVariante());
-        preis.setText(String.valueOf(warenliste.get(position).getPreis()));
+        temp = warenliste.get(position).getPreis();
+        temp = Math.floor(temp * 100) / 100;
+        preis.setText(String.valueOf(temp));
+
+        preis.setText(String.valueOf(temp));
 
         //onClickListener für das Hinzufügen von Produkten
         addButton.setOnClickListener(new View.OnClickListener() {

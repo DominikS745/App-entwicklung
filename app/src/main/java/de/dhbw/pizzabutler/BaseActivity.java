@@ -164,17 +164,17 @@ public class BaseActivity extends AppCompatActivity {
                 startActivity(Intent.createChooser(share, "Share with"));
                 break;
             case 3:
-                Intent intent3 = new Intent(this,DatenschutzActivity.class);
-                startActivity(intent3);
-                break;
+                    Intent intent3 = new Intent(this,DatenschutzActivity.class);
+                    startActivity(intent3);
+                    break;
             case 4:
-                Intent intent4 = new Intent(this,AgbActivity.class);
-                startActivity(intent4);
-                break;
+                    Intent intent4 = new Intent(this,AgbActivity.class);
+                    startActivity(intent4);
+                    break;
             case 5:
-                Intent intent5 = new Intent(this,ImpressumActivity.class);
-                startActivity(intent5);
-                break;
+                    Intent intent5 = new Intent(this,ImpressumActivity.class);
+                    startActivity(intent5);
+                    break;
             default:
                 break;
         }
